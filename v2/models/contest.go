@@ -4,60 +4,21 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// Contest Contest
-//
-// swagger:model Contest
 type Contest struct {
-
-	// compilers
-	Compilers []string `json:"compilers"`
-
-	// duration
-	Duration *Duration `json:"duration,omitempty"`
-
-	// enabled
-	Enabled bool `json:"enabled,omitempty"`
-
-	// end time
-	// Format: date-time
-	EndTime strfmt.DateTime `json:"endTime,omitempty"`
-
-	// finished
-	Finished bool `json:"finished,omitempty"`
-
-	// id
-	// Required: true
-	ID *int64 `json:"id"`
-
-	// infinite
-	Infinite bool `json:"infinite,omitempty"`
-
-	// monitor
-	Monitor *MonitorConfiguration `json:"monitor,omitempty"`
-
-	// monitor plugin
-	MonitorPlugin string `json:"monitorPlugin,omitempty"`
-
-	// name
-	Name string `json:"name,omitempty"`
-
-	// owner
-	Owner *User `json:"owner,omitempty"`
-
-	// problem set Id
-	ProblemSetID string `json:"problemSetId,omitempty"`
-
-	// start time
-	// Format: date-time
-	StartTime strfmt.DateTime `json:"startTime,omitempty"`
-
-	// testing settings
+	ID              *int64                  `json:"id"`
+	Compilers       []string                `json:"compilers"`
+	Duration        *Duration               `json:"duration,omitempty"`
+	Enabled         bool                    `json:"enabled,omitempty"`
+	EndTime         strfmt.DateTime         `json:"endTime,omitempty"`
+	Finished        bool                    `json:"finished,omitempty"`
+	Infinite        bool                    `json:"infinite,omitempty"`
+	Monitor         *MonitorConfiguration   `json:"monitor,omitempty"`
+	MonitorPlugin   string                  `json:"monitorPlugin,omitempty"`
+	Name            string                  `json:"name,omitempty"`
+	Owner           *User                   `json:"owner,omitempty"`
+	ProblemSetID    string                  `json:"problemSetId,omitempty"`
+	StartTime       strfmt.DateTime         `json:"startTime,omitempty"`
 	TestingSettings *ContestTestingSettings `json:"testingSettings,omitempty"`
-
-	// time control type
-	// Enum: [USUAL VIRTUAL]
-	TimeControlType string `json:"timeControlType,omitempty"`
-
-	// time limited
-	TimeLimited bool `json:"timeLimited,omitempty"`
+	TimeControlType string                  `json:"timeControlType,omitempty"`
+	TimeLimited     bool                    `json:"timeLimited,omitempty"`
 }

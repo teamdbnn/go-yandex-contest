@@ -1,10 +1,10 @@
 package models
 
 type AccessLevel struct {
+	ID                                 *int64  `json:"id"`
 	CheckerSettingsModificationAllowed *bool   `json:"checkerSettingsModificationAllowed"`
 	ContestLimit                       int32   `json:"contestLimit,omitempty"`
 	FileSizeUploadLimit                int64   `json:"fileSizeUploadLimit,omitempty"`
-	ID                                 *int64  `json:"id"`
 	IsGroupCreationAllowed             *bool   `json:"isGroupCreationAllowed"`
 	IsProblemsetModificationAllowed    *bool   `json:"isProblemsetModificationAllowed"`
 	Name                               *string `json:"name"`

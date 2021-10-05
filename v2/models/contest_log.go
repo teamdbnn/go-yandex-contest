@@ -5,20 +5,9 @@ import (
 )
 
 type ContestLog struct {
-
-	// events
-	Events []*Event `json:"events"`
-
-	// generation time
-	// Format: date-time
-	GenerationTime strfmt.DateTime `json:"generationTime,omitempty"`
-
-	// problems
-	Problems []Problem `json:"problems"`
-
-	// settings
-	Settings *ContestSettings `json:"settings,omitempty"`
-
-	// users
-	Users []*User `json:"users"`
+	Events         []*Event         `json:"events"`
+	GenerationTime strfmt.DateTime  `json:"generationTime,omitempty"`
+	Problems       []Problem        `json:"problems"`
+	Settings       *ContestSettings `json:"settings,omitempty"`
+	Users          []*User          `json:"users"`
 }

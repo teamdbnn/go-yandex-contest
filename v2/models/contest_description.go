@@ -1,16 +1,8 @@
 package models
 
 type ContestDescription struct {
-
-	// duration
-	Duration int64 `json:"duration,omitempty"`
-
-	// name
-	Name string `json:"name,omitempty"`
-
-	// start time
+	Duration  int64  `json:"duration,omitempty"`
+	Name      string `json:"name,omitempty"`
 	StartTime string `json:"startTime,omitempty"`
-
-	// type
-	Type string `json:"type,omitempty"`
+	Type      string `json:"type,omitempty"`
 }
