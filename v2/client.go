@@ -3,7 +3,6 @@ package yacontest
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -11,11 +10,12 @@ import (
 	"github.com/teamdbnn/go-yandex-contest/v2/common"
 )
 
+// Client Define API client
 type Client struct {
 	OAuthToken string
 	BaseURL    string
 	UserAgent  string
-	HttpClient *http.Client
+	HTTPClient *http.Client
 	Debug      bool
 	Logger     logger
 	TimeOffset int64
@@ -25,21 +25,26 @@ type doFunc func(req *http.Request) (*http.Response, error)
 type logger func(format string, v ...interface{})
 
 const (
-	baseApiMainUrl = "https://api.contest.yandex.net/api/public/v2"
+	baseAPIMainURL = "https://api.contest.yandex.net/api/public/v2"
 )
 
+// NewClient Create new http client
 func NewClient(outhToken string) *Client {
 	return &Client{
 		OAuthToken: outhToken,
-		BaseURL:    baseApiMainUrl,
+		BaseURL:    baseAPIMainURL,
+		UserAgent:  "Yandex-Contest/golang",
+		HTTPClient: http.DefaultClient,
 	}
 }
 
+// WithLogger add logger
 func (c *Client) WithLogger(l logger) *Client {
 	c.Logger = l
 	return c
 }
 
+// debug Put data in log
 func (c *Client) debug(format string, v ...interface{}) {
 	if !c.Debug || c.Logger == nil {
 		return
@@ -97,7 +102,7 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 	c.debug("request: %#v", req)
 	f := c.do
 	if f == nil {
-		f = c.HttpClient.Do
+		f = c.HTTPClient.Do
 	}
 	res, err := f(req)
 	if err != nil {
@@ -119,16 +124,15 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 
 	if res.StatusCode >= http.StatusBadRequest {
 		apiErr := new(common.APIError)
-		e := json.Unmarshal(data, apiErr)
-		if e != nil {
-			c.debug("failed to unmarshall json: %s", e)
-		}
+		apiErr.Code = int64(res.StatusCode)
+		apiErr.Message = string(data)
 		return nil, apiErr
 	}
 
 	return data, nil
 }
 
+// NewGetContestItemService Init contest item Service
 func (c *Client) NewGetContestItemService() *GetContestItemService {
 	return &GetContestItemService{c: c}
 }
