@@ -7,27 +7,17 @@ import (
 	"net/url"
 )
 
-type secType int
-
-const (
-	secTypeNone secType = iota
-	secTypeAPIKey
-	secTypeSigned // if the 'timestamp' parameter is required
-)
-
 type params map[string]interface{}
 
 // request define an API request
 type request struct {
-	method     string
-	endpoint   string
-	query      url.Values
-	form       url.Values
-	recvWindow int64
-	secType    secType
-	header     http.Header
-	body       io.Reader
-	fullURL    string
+	method   string
+	endpoint string
+	query    url.Values
+	form     url.Values
+	header   http.Header
+	body     io.Reader
+	fullURL  string
 }
 
 // addParam add param with key/value to query string
@@ -86,13 +76,6 @@ func (r *request) validate() (err error) {
 
 // RequestOption define optuin type for request
 type RequestOption func(*request)
-
-// WithRecvWindow set recvWindow param for the request
-func WithRecvWindow(recvWindow int64) RequestOption {
-	return func(r *request) {
-		r.recvWindow = recvWindow
-	}
-}
 
 // WithHeader set or add a header value to the request
 func WithHeader(key, value string, replace bool) RequestOption {
