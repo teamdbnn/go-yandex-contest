@@ -12,6 +12,7 @@ require (
 	github.com/mailru/easyjson v0.7.1 // indirect
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
+	github.com/pkg/errors v0.9.1
 	go.mongodb.org/mongo-driver v1.5.1 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )

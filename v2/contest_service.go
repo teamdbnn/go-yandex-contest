@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/teamdbnn/go-yandex-contest/v2/models"
 )
 
 // GetContestItemService Get Contest item info
@@ -22,7 +20,7 @@ func (s *GetContestItemService) Contest(contest int64) *GetContestItemService {
 }
 
 // Do Send request
-func (s *GetContestItemService) Do(ctx context.Context, opts ...RequestOption) (res *models.ContestDescription, err error) {
+func (s *GetContestItemService) Do(ctx context.Context, opts ...RequestOption) (res *ContestDescription, err error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%d", s.contest),
@@ -31,7 +29,7 @@ func (s *GetContestItemService) Do(ctx context.Context, opts ...RequestOption) (
 	if err != nil {
 		return nil, err
 	}
-	res = new(models.ContestDescription)
+	res = new(ContestDescription)
 
 	err = json.Unmarshal(data, res)
 	if err != nil {

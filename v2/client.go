@@ -136,3 +136,13 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 func (c *Client) NewGetContestItemService() *GetContestItemService {
 	return &GetContestItemService{c: c}
 }
+
+// NewsGetParticipantListOfCompetition Init Participant List of Competition service
+func (c *Client) NewsGetParticipantListOfCompetition() *GetParticipantListOfCompetition {
+	return &GetParticipantListOfCompetition{c: c}
+}
+
+// NewGetParticipantListOfContest Init Participant List of contest service
+func (c *Client) NewGetParticipantListOfContest() *GetParticipantListOfContest {
+	return &GetParticipantListOfContest{c: c}
+}
