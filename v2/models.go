@@ -9,7 +9,7 @@ import (
 
 type AccessLevel struct {
 	ID                                 *int64  `json:"id"`
-	CheckerSettingsModificationAllowed *bool   `json:"checkerSettingsModificationAllowed"`
+	CheckerSetingsModificationAllowed  *bool   `json:"checkerSettingsModificationAllowed"`
 	ContestLimit                       int32   `json:"contestLimit,omitempty"`
 	FileSizeUploadLimit                int64   `json:"fileSizeUploadLimit,omitempty"`
 	IsGroupCreationAllowed             *bool   `json:"isGroupCreationAllowed"`

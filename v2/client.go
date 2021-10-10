@@ -146,3 +146,12 @@ func (c *Client) NewsGetParticipantListOfCompetition() *GetParticipantListOfComp
 func (c *Client) NewGetParticipantListOfContest() *GetParticipantListOfContest {
 	return &GetParticipantListOfContest{c: c}
 }
+
+// NewUserGeneratePasswordService Init Generate user password service
+func (c *Client) NewUserGeneratePasswordService() *UserGeneratePasswordService {
+	return &UserGeneratePasswordService{c: c}
+}
+
+func (c *Client) NewSubmissionRejudgeService() *SubmissionRejudgeService {
+	return &SubmissionRejudgeService{c: c}
+}

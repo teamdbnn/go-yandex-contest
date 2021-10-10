@@ -38,6 +38,7 @@ func (s *GetParticipantListOfCompetition) Do(ctx context.Context, opts ...Reques
 	return res, nil
 }
 
+// GetParticipantListOfContest struct
 type GetParticipantListOfContest struct {
 	c           *Client
 	contest     int64
@@ -45,21 +46,25 @@ type GetParticipantListOfContest struct {
 	login       string
 }
 
+// Contest Set contest
 func (s *GetParticipantListOfContest) Contest(contest int64) *GetParticipantListOfContest {
 	s.contest = contest
 	return s
 }
 
+// DisplayName Set display name
 func (s *GetParticipantListOfContest) DisplayName(displayName string) *GetParticipantListOfContest {
 	s.displayName = displayName
 	return s
 }
 
+// Login Set login
 func (s *GetParticipantListOfContest) Login(login string) *GetParticipantListOfContest {
 	s.login = login
 	return s
 }
 
+// Do send req
 func (s *GetParticipantListOfContest) Do(ctx context.Context, opts ...RequestOption) (res []*Participant, err error) {
 	r := &request{
 		method:   http.MethodGet,
