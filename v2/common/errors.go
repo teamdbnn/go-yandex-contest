@@ -1,11 +1,21 @@
 package common
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/pkg/errors"
+)
+
+const RequiredMessage string = "%[1]s is required. Call %[1]s() method."
 
 // APIError Define API error when response status is 4xx or 5xx
 type APIError struct {
 	Code    int64  `json:"code"`
 	Message string `json:"msg"`
+}
+
+func ValidationRequiredError(fieldName string) error {
+	return errors.Errorf(RequiredMessage, fieldName)
 }
 
 // Error Return error code and message

@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/teamdbnn/go-yandex-contest/v2/common"
 )
 
 type SubmissionRejudgeService struct {
@@ -17,6 +19,9 @@ func (s *SubmissionRejudgeService) Submission(submission int64) *SubmissionRejud
 }
 
 func (s *SubmissionRejudgeService) Do(ctx context.Context, opts ...RequestOption) (*Empty, error) {
+	if s.submission == 0 {
+		return nil, common.ValidationRequiredError("Sumbission")
+	}
 	r := &request{
 		method:   http.MethodPost,
 		endpoint: fmt.Sprintf("/submissions/%v/rejudge", s.submission),
@@ -25,10 +30,5 @@ func (s *SubmissionRejudgeService) Do(ctx context.Context, opts ...RequestOption
 	if err != nil {
 		return nil, err
 	}
-	res := new(Empty)
-	if err != nil {
-		return nil, err
-
-	}
-	return res, nil
+	return new(Empty), nil
 }

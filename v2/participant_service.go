@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/teamdbnn/go-yandex-contest/v2/common"
 )
 
 // GetParticipantListOfCompetition Get Participant list of competition
@@ -21,6 +23,9 @@ func (s *GetParticipantListOfCompetition) Competition(competition int64) *GetPar
 
 // Do Send GET request
 func (s *GetParticipantListOfCompetition) Do(ctx context.Context, opts ...RequestOption) (res *GrantResponse, err error) {
+	if s.competition == 0 {
+		return nil, common.ValidationRequiredError("Competition")
+	}
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/competitions/%v/participants", s.competition),
@@ -66,6 +71,10 @@ func (s *GetParticipantListOfContest) Login(login string) *GetParticipantListOfC
 
 // Do send req
 func (s *GetParticipantListOfContest) Do(ctx context.Context, opts ...RequestOption) (res []*Participant, err error) {
+	if s.contest == 0 {
+		return nil, common.ValidationRequiredError("Contest")
+	}
+
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/participants", s.contest),

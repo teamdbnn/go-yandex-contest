@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/pkg/errors"
+	"github.com/teamdbnn/go-yandex-contest/v2/common"
 )
 
 type UserGeneratePasswordService struct {
@@ -22,7 +22,7 @@ func (s *UserGeneratePasswordService) User(user int64) *UserGeneratePasswordServ
 // Do Send request
 func (s *UserGeneratePasswordService) Do(ctx context.Context, opts ...RequestOption) (res *ContestDescription, err error) {
 	if s.user == 0 {
-		return nil, errors.New("Set user(%d)")
+		return nil, common.ValidationRequiredError("User")
 	}
 	r := &request{
 		method:   http.MethodPost,
