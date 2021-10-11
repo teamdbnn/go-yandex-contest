@@ -154,3 +154,7 @@ func (c *Client) NewUserGeneratePasswordService() *UserGeneratePasswordService {
 func (c *Client) NewSubmissionRejudgeService() *SubmissionRejudgeService {
 	return &SubmissionRejudgeService{c: c}
 }
+
+func (c *Client) NewRegisterParticipantIntoCompetitionService() *RegisterParticipantIntoCompetitionService {
+	return &RegisterParticipantIntoCompetitionService{c: c}
+}
