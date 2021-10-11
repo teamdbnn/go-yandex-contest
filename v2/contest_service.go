@@ -7,19 +7,19 @@ import (
 	"net/http"
 )
 
-// GetContestItemService Get Contest item info
-type GetContestItemService struct {
+// GetContestService Get Contest item info
+type GetContestService struct {
 	c       *Client
 	contest int64
 }
 
 // Contest Set contest id
-func (s *GetContestItemService) Contest(contest int64) *GetContestItemService {
+func (s *GetContestService) Contest(contest int64) *GetContestService {
 	s.contest = contest
 	return s
 }
 
-func (s *GetContestItemService) validate() error {
+func (s *GetContestService) validate() error {
 	if s.contest == 0 {
 		return requiredError("contest")
 	}
@@ -27,7 +27,7 @@ func (s *GetContestItemService) validate() error {
 }
 
 // Do Send request
-func (s *GetContestItemService) Do(ctx context.Context, opts ...RequestOption) (res *ContestDescription, err error) {
+func (s *GetContestService) Do(ctx context.Context, opts ...RequestOption) (*ContestDescription, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -39,7 +39,50 @@ func (s *GetContestItemService) Do(ctx context.Context, opts ...RequestOption) (
 	if err != nil {
 		return nil, err
 	}
-	res = new(ContestDescription)
+	res := new(ContestDescription)
+
+	err = json.Unmarshal(data, &res)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+type GetClarificationsInContestService struct {
+	c       *Client
+	contest int64
+	locale  string
+}
+
+func (s *GetClarificationsInContestService) Contest(contest int64) *GetClarificationsInContestService {
+	s.contest = contest
+	return s
+}
+
+func (s *GetClarificationsInContestService) Locale(locale string) *GetClarificationsInContestService {
+	s.locale = locale
+	return s
+}
+
+func (s *GetClarificationsInContestService) validate() error {
+	if s.contest == 0 {
+		return requiredError("contest")
+	}
+	return nil
+}
+func (s *GetClarificationsInContestService) Do(ctx context.Context, opts ...RequestOption) (*Clarifications, error) {
+	if err := s.validate(); err != nil {
+		return nil, err
+	}
+	r := &request{
+		method:   http.MethodGet,
+		endpoint: fmt.Sprintf("/contests/%d/clarifications", s.contest),
+	}
+	data, err := s.c.callAPI(ctx, r, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res := new(Clarifications)
 
 	err = json.Unmarshal(data, &res)
 	if err != nil {

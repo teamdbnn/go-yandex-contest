@@ -7,8 +7,8 @@ import (
 	"net/http"
 )
 
-// GetParticipantsOfContest struct
-type GetParticipantsOfContest struct {
+// GetParticipantsOfContestService struct
+type GetParticipantsOfContestService struct {
 	c           *Client
 	contest     int64
 	displayName string
@@ -16,24 +16,24 @@ type GetParticipantsOfContest struct {
 }
 
 // Contest Set contest
-func (s *GetParticipantsOfContest) Contest(contest int64) *GetParticipantsOfContest {
+func (s *GetParticipantsOfContestService) Contest(contest int64) *GetParticipantsOfContestService {
 	s.contest = contest
 	return s
 }
 
 // DisplayName Set display name
-func (s *GetParticipantsOfContest) DisplayName(displayName string) *GetParticipantsOfContest {
+func (s *GetParticipantsOfContestService) DisplayName(displayName string) *GetParticipantsOfContestService {
 	s.displayName = displayName
 	return s
 }
 
 // Login Set login
-func (s *GetParticipantsOfContest) Login(login string) *GetParticipantsOfContest {
+func (s *GetParticipantsOfContestService) Login(login string) *GetParticipantsOfContestService {
 	s.login = login
 	return s
 }
 
-func (s *GetParticipantsOfContest) validate() error {
+func (s *GetParticipantsOfContestService) validate() error {
 	if s.contest == 0 {
 		return requiredError("contest")
 	}
@@ -41,7 +41,7 @@ func (s *GetParticipantsOfContest) validate() error {
 }
 
 // Do send req
-func (s *GetParticipantsOfContest) Do(ctx context.Context, opts ...RequestOption) (res []*Participant, err error) {
+func (s *GetParticipantsOfContestService) Do(ctx context.Context, opts ...RequestOption) ([]*Participant, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (s *GetParticipantsOfContest) Do(ctx context.Context, opts ...RequestOption
 		return nil, err
 	}
 
-	res = make([]*Participant, 0)
+	res := make([]*Participant, 0)
 
 	err = json.Unmarshal(data, &res)
 	if err != nil {

@@ -131,9 +131,9 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 	return data, nil
 }
 
-// NewGetContestItemService Init contest item Service
-func (c *Client) NewGetContestItemService() *GetContestItemService {
-	return &GetContestItemService{c: c}
+// NewGetContestService Init contest item Service
+func (c *Client) NewGetContestService() *GetContestService {
+	return &GetContestService{c: c}
 }
 
 // NewsGetParticipantListOfCompetition Init Participant List of Competition service
@@ -142,8 +142,8 @@ func (c *Client) NewGetParticipantsOfCompetitionService() *GetParticipantsOfComp
 }
 
 // NewGetParticipantListOfContest Init Participant List of contest service
-func (c *Client) NewGetParticipantsOfContest() *GetParticipantsOfContest {
-	return &GetParticipantsOfContest{c: c}
+func (c *Client) NewGetParticipantsOfContestService() *GetParticipantsOfContestService {
+	return &GetParticipantsOfContestService{c: c}
 }
 
 // NewUserGeneratePasswordService Init Generate user password service
@@ -157,4 +157,8 @@ func (c *Client) NewSubmissionRejudgeService() *SubmissionRejudgeService {
 
 func (c *Client) NewRegisterParticipantIntoCompetitionService() *RegisterParticipantIntoCompetitionService {
 	return &RegisterParticipantIntoCompetitionService{c: c}
+}
+
+func (c *Client) NewGetClarificationsInContestService() *GetClarificationsInContestService {
+	return &GetClarificationsInContestService{c: c}
 }

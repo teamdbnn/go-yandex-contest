@@ -27,7 +27,7 @@ func (s *GetParticipantsOfCompetitionService) Competition(competition int64) *Ge
 }
 
 // Do Send GET request
-func (s *GetParticipantsOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) (res *GrantResponse, err error) {
+func (s *GetParticipantsOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) (*GrantResponse, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (s *GetParticipantsOfCompetitionService) Do(ctx context.Context, opts ...Re
 	if err != nil {
 		return nil, err
 	}
-	res = new(GrantResponse)
+	res := new(GrantResponse)
 
 	err = json.Unmarshal(data, &res)
 	if err != nil {
@@ -77,7 +77,7 @@ func (s *RegisterParticipantIntoCompetitionService) validate() error {
 }
 
 // Do Send GET request
-func (s *RegisterParticipantIntoCompetitionService) Do(ctx context.Context, opts ...RequestOption) (res *GrantResponse, err error) {
+func (s *RegisterParticipantIntoCompetitionService) Do(ctx context.Context, opts ...RequestOption) (*GrantResponse, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -91,7 +91,7 @@ func (s *RegisterParticipantIntoCompetitionService) Do(ctx context.Context, opts
 	if err != nil {
 		return nil, err
 	}
-	res = new(GrantResponse)
+	res := new(GrantResponse)
 
 	err = json.Unmarshal(data, &res)
 	if err != nil {
