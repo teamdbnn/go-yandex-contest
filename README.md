@@ -40,6 +40,6 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | &#9744; | GET | `/contests/neurips/{contestId}/submissions/all` | Get all contest submissions report |
 | &#9744; | GET | `/contests/neurips/{contestId}/submissions/my` | Get your submissions to contest by contest id |
 | &#9744; | GET | `/participants/{participantId}/stats` | Get participant stats |
-| &#9744; | GET | `/service/capacity Get contest submissions` | queue capacity |
+| &#9744; | GET | `/service/capacity` | Get contest submissions queue capacity |
 | :white_check_mark: | POST | `/submissions/{submissionId}/rejudge` | Rejudge submission |
 | :white_check_mark: | POST | `/user/{userId}/generate-password` | Generate new password for internal user |
