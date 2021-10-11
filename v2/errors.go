@@ -11,23 +11,25 @@ type APIError struct {
 }
 
 type ValidateError struct {
-	FieldName string
-	Message   string
+	Message string
 }
 
 func newError() *ValidateError {
 	return &ValidateError{}
 }
 
-func (e ValidateError) Required(fieldName string) error {
+func (e ValidateError) Errorf(message string, args ...interface{}) error {
 	return &ValidateError{
-		FieldName: fieldName,
-		Message:   "%s can not be empty",
+		Message: fmt.Sprintf(message, args...),
 	}
 }
 
+func (e ValidateError) Required(fieldName string) error {
+	return e.Errorf("%s can not be empty", fieldName)
+}
+
 func (e ValidateError) Error() string {
-	return fmt.Sprintf("<ValidateError> msg="+e.Message, e.FieldName)
+	return fmt.Sprintf("<ValidateError> msg=%s", e.Message)
 }
 
 // Error Return error code and message
