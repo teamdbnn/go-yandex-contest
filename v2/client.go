@@ -137,13 +137,13 @@ func (c *Client) NewGetContestItemService() *GetContestItemService {
 }
 
 // NewsGetParticipantListOfCompetition Init Participant List of Competition service
-func (c *Client) NewsGetParticipantListOfCompetition() *GetParticipantListOfCompetitionService {
-	return &GetParticipantListOfCompetitionService{c: c}
+func (c *Client) NewGetParticipantsOfCompetitionService() *GetParticipantsOfCompetitionService {
+	return &GetParticipantsOfCompetitionService{c: c}
 }
 
 // NewGetParticipantListOfContest Init Participant List of contest service
-func (c *Client) NewGetParticipantListOfContest() *GetParticipantListOfContest {
-	return &GetParticipantListOfContest{c: c}
+func (c *Client) NewGetParticipantsOfContest() *GetParticipantsOfContest {
+	return &GetParticipantsOfContest{c: c}
 }
 
 // NewUserGeneratePasswordService Init Generate user password service

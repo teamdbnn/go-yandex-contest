@@ -18,7 +18,7 @@ func (s *SubmissionRejudgeService) Submission(submission int64) *SubmissionRejud
 
 func (s *SubmissionRejudgeService) validate() error {
 	if s.submission == 0 {
-		return newError().Required("submission")
+		return requiredError("submission")
 	}
 	return nil
 }

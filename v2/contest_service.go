@@ -21,7 +21,7 @@ func (s *GetContestItemService) Contest(contest int64) *GetContestItemService {
 
 func (s *GetContestItemService) validate() error {
 	if s.contest == 0 {
-		return newError().Required("contest")
+		return requiredError("contest")
 	}
 	return nil
 }
@@ -41,7 +41,7 @@ func (s *GetContestItemService) Do(ctx context.Context, opts ...RequestOption) (
 	}
 	res = new(ContestDescription)
 
-	err = json.Unmarshal(data, res)
+	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}

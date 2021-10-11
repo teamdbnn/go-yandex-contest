@@ -19,7 +19,7 @@ func (s *UserGeneratePasswordService) User(user int64) *UserGeneratePasswordServ
 
 func (s *UserGeneratePasswordService) validate() error {
 	if s.user == 0 {
-		return newError().Required("user")
+		return requiredError("user")
 	}
 	return nil
 }
@@ -40,7 +40,7 @@ func (s *UserGeneratePasswordService) Do(ctx context.Context, opts ...RequestOpt
 	}
 	res = new(ContestDescription)
 
-	err = json.Unmarshal(data, res)
+	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
