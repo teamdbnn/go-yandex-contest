@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 // GetParticipantsOfContestService struct
@@ -68,4 +69,59 @@ func (s *GetParticipantsOfContestService) Do(ctx context.Context, opts ...Reques
 		return nil, err
 	}
 	return res, nil
+}
+
+type RegisterParticipantForContestService struct {
+	c       *Client
+	contest int64
+	login   string
+	uid     int64
+}
+
+func (s *RegisterParticipantForContestService) Contest(contest int64) *RegisterParticipantForContestService {
+	s.contest = contest
+	return s
+}
+
+func (s *RegisterParticipantForContestService) Login(login string) *RegisterParticipantForContestService {
+	s.login = login
+	return s
+}
+
+func (s *RegisterParticipantForContestService) UID(uid int64) *RegisterParticipantForContestService {
+	s.uid = uid
+	return s
+}
+
+func (s *RegisterParticipantForContestService) validate() error {
+	if s.contest == 0 {
+		return requiredError("contest")
+	}
+	return nil
+}
+
+func (s *RegisterParticipantForContestService) Do(ctx context.Context, opts ...RequestOption) (*int64, error) {
+	if err := s.validate(); err != nil {
+		return nil, err
+	}
+	r := &request{
+		method:   http.MethodPost,
+		endpoint: fmt.Sprintf("/contests/%v/participants", s.contest),
+	}
+	if s.login != "" {
+		r.setFormParam("display_name", s.login)
+	}
+
+	data, err := s.c.callAPI(ctx, r, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	res := string(data)
+	i, err := strconv.ParseInt(res, 64, 10)
+	if err != nil {
+		return nil, err
+	}
+
+	return &i, nil
 }

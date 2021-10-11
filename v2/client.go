@@ -121,7 +121,7 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 	c.debug("response status code: %#v", res.StatusCode)
 
 	if res.StatusCode >= http.StatusBadRequest {
-		apiErr := APIError{
+		apiErr := &APIError{
 			Code:    int64(res.StatusCode),
 			Message: string(data),
 		}
@@ -165,4 +165,8 @@ func (c *Client) NewGetClarificationsInContestService() *GetClarificationsInCont
 
 func (c *Client) NewGetContestMessagesServie() *GetContestMessagesServie {
 	return &GetContestMessagesServie{c: c}
+}
+
+func (c *Client) NewRegisterParticipantForContestService() *RegisterParticipantForContestService {
+	return &RegisterParticipantForContestService{c: c}
 }
