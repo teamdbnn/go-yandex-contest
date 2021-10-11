@@ -1,12 +1,8 @@
-package common
+package yacontest
 
 import (
 	"fmt"
-
-	"github.com/pkg/errors"
 )
-
-const RequiredMessage string = "%[1]s is required. Call %[1]s() method."
 
 // APIError Define API error when response status is 4xx or 5xx
 type APIError struct {
@@ -14,8 +10,24 @@ type APIError struct {
 	Message string `json:"msg"`
 }
 
-func ValidationRequiredError(fieldName string) error {
-	return errors.Errorf(RequiredMessage, fieldName)
+type ValidateError struct {
+	FieldName string
+	Message   string
+}
+
+func newError() *ValidateError {
+	return &ValidateError{}
+}
+
+func (e ValidateError) Required(fieldName string) error {
+	return &ValidateError{
+		FieldName: fieldName,
+		Message:   "%s can not be empty",
+	}
+}
+
+func (e ValidateError) Error() string {
+	return fmt.Sprintf("<ValidateError> msg="+e.Message, e.FieldName)
 }
 
 // Error Return error code and message

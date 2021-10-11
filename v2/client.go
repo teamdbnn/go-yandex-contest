@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/teamdbnn/go-yandex-contest/v2/common"
 )
 
 // Client Define API client
@@ -123,9 +121,10 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 	c.debug("response status code: %#v", res.StatusCode)
 
 	if res.StatusCode >= http.StatusBadRequest {
-		apiErr := new(common.APIError)
-		apiErr.Code = int64(res.StatusCode)
-		apiErr.Message = string(data)
+		apiErr := APIError{
+			Code:    int64(res.StatusCode),
+			Message: string(data),
+		}
 		return nil, apiErr
 	}
 
@@ -138,8 +137,8 @@ func (c *Client) NewGetContestItemService() *GetContestItemService {
 }
 
 // NewsGetParticipantListOfCompetition Init Participant List of Competition service
-func (c *Client) NewsGetParticipantListOfCompetition() *GetParticipantListOfCompetition {
-	return &GetParticipantListOfCompetition{c: c}
+func (c *Client) NewsGetParticipantListOfCompetition() *GetParticipantListOfCompetitionService {
+	return &GetParticipantListOfCompetitionService{c: c}
 }
 
 // NewGetParticipantListOfContest Init Participant List of contest service

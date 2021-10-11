@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/teamdbnn/go-yandex-contest/v2/common"
 )
 
 type UserGeneratePasswordService struct {
@@ -19,11 +17,19 @@ func (s *UserGeneratePasswordService) User(user int64) *UserGeneratePasswordServ
 	return s
 }
 
+func (s *UserGeneratePasswordService) validate() error {
+	if s.user == 0 {
+		return newError().Required("user")
+	}
+	return nil
+}
+
 // Do Send request
 func (s *UserGeneratePasswordService) Do(ctx context.Context, opts ...RequestOption) (res *ContestDescription, err error) {
-	if s.user == 0 {
-		return nil, common.ValidationRequiredError("User")
+	if err := s.validate(); err != nil {
+		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodPost,
 		endpoint: fmt.Sprintf("/user/%d/generate-password", s.user),

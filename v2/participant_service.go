@@ -5,27 +5,33 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/teamdbnn/go-yandex-contest/v2/common"
 )
 
-// GetParticipantListOfCompetition Get Participant list of competition
-type GetParticipantListOfCompetition struct {
+// GetParticipantListOfCompetitionService Get Participant list of competition
+type GetParticipantListOfCompetitionService struct {
 	c           *Client
 	competition int64
 }
 
+func (s *GetParticipantListOfCompetitionService) validate() error {
+	if s.competition == 0 {
+		return newError().Required("competition")
+	}
+	return nil
+}
+
 // Competition Set competition
-func (s *GetParticipantListOfCompetition) Competition(competition int64) *GetParticipantListOfCompetition {
+func (s *GetParticipantListOfCompetitionService) Competition(competition int64) *GetParticipantListOfCompetitionService {
 	s.competition = competition
 	return s
 }
 
 // Do Send GET request
-func (s *GetParticipantListOfCompetition) Do(ctx context.Context, opts ...RequestOption) (res *GrantResponse, err error) {
-	if s.competition == 0 {
-		return nil, common.ValidationRequiredError("Competition")
+func (s *GetParticipantListOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) (res *GrantResponse, err error) {
+	if err := s.validate(); err != nil {
+		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/competitions/%v/participants", s.competition),
@@ -69,12 +75,18 @@ func (s *GetParticipantListOfContest) Login(login string) *GetParticipantListOfC
 	return s
 }
 
+func (s *GetParticipantListOfContest) validate() error {
+	if s.contest == 0 {
+		return newError().Required("contest")
+	}
+	return nil
+}
+
 // Do send req
 func (s *GetParticipantListOfContest) Do(ctx context.Context, opts ...RequestOption) (res []*Participant, err error) {
-	if s.contest == 0 {
-		return nil, common.ValidationRequiredError("Contest")
+	if err := s.validate(); err != nil {
+		return nil, err
 	}
-
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/participants", s.contest),
