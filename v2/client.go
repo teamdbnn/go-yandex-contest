@@ -162,3 +162,7 @@ func (c *Client) NewRegisterParticipantIntoCompetitionService() *RegisterPartici
 func (c *Client) NewGetClarificationsInContestService() *GetClarificationsInContestService {
 	return &GetClarificationsInContestService{c: c}
 }
+
+func (c *Client) NewGetContestMessagesServie() *GetContestMessagesServie {
+	return &GetContestMessagesServie{c: c}
+}

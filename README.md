@@ -8,7 +8,7 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 - [x] POST /competitions/{competitionId}/participants Register participants into competition
 - [x] GET /contests/{contestId} Get information about contest by id
 - [x] GET /contests/{contestId}/clarifications Get clarifications in contest by contest id
-- [ ] GET /contests/{contestId}/messages Get messages in contest by contest id
+- [x] GET /contests/{contestId}/messages Get messages in contest by contest id
 - [ ] POST /contests/{contestId}/messages Post new question to contest
 - [x] GET /contests/{contestId}/participants Get contest participants
 - [ ] POST /contests/{contestId}/participants Register for contest

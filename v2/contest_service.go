@@ -70,6 +70,7 @@ func (s *GetClarificationsInContestService) validate() error {
 	}
 	return nil
 }
+
 func (s *GetClarificationsInContestService) Do(ctx context.Context, opts ...RequestOption) (*Clarifications, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -83,6 +84,44 @@ func (s *GetClarificationsInContestService) Do(ctx context.Context, opts ...Requ
 		return nil, err
 	}
 	res := new(Clarifications)
+
+	err = json.Unmarshal(data, &res)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+type GetContestMessagesServie struct {
+	c       *Client
+	contest int64
+}
+
+func (s *GetContestMessagesServie) Contest(contest int64) *GetContestMessagesServie {
+	s.contest = contest
+	return s
+}
+
+func (s *GetContestMessagesServie) validate() error {
+	if s.contest == 0 {
+		return requiredError("contest")
+	}
+	return nil
+}
+
+func (s *GetContestMessagesServie) Do(ctx context.Context, opts ...RequestOption) (*Messages, error) {
+	if err := s.validate(); err != nil {
+		return nil, err
+	}
+	r := &request{
+		method:   http.MethodGet,
+		endpoint: fmt.Sprintf("/contests/%d/messages", s.contest),
+	}
+	data, err := s.c.callAPI(ctx, r, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res := new(Messages)
 
 	err = json.Unmarshal(data, &res)
 	if err != nil {
