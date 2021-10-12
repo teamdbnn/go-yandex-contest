@@ -6,7 +6,6 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 ## Methods
 | &#9744; | Method | Path  | Description |
 |-----|--------|-------|-------------|
-| :white_check_mark: | GET    | `/competitions/{competitionId}/participants` | Get registered participants of competition  |
 | :white_check_mark: | GET | `/competitions/{competitionId}/participants` | Get registered participants of competition |
 | :white_check_mark: | POST | `/competitions/{competitionId}/participants` | Register participants into competition |
 | :white_check_mark: | GET | `/contests/{contestId}` | Get information about contest by id |
