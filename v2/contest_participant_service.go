@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-// GetParticipantsOfContestService struct
+// GetParticipantsOfContestService Get contest participants
 type GetParticipantsOfContestService struct {
 	c           *Client
 	contest     int64
@@ -71,6 +71,7 @@ func (s *GetParticipantsOfContestService) Do(ctx context.Context, opts ...Reques
 	return res, nil
 }
 
+// RegisterParticipantForContestService Register for contest
 type RegisterParticipantForContestService struct {
 	c       *Client
 	contest int64
@@ -97,6 +98,9 @@ func (s *RegisterParticipantForContestService) validate() error {
 	if s.contest == 0 {
 		return requiredError("contest")
 	}
+	if s.login == "" {
+		return requiredError("login")
+	}
 	return nil
 }
 
@@ -109,7 +113,11 @@ func (s *RegisterParticipantForContestService) Do(ctx context.Context, opts ...R
 		endpoint: fmt.Sprintf("/contests/%v/participants", s.contest),
 	}
 	if s.login != "" {
-		r.setFormParam("display_name", s.login)
+		r.setParam("login", s.login)
+	}
+
+	if s.uid != 0 {
+		r.setParam("uid", s.uid) // todo: Check usage
 	}
 
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -118,7 +126,7 @@ func (s *RegisterParticipantForContestService) Do(ctx context.Context, opts ...R
 	}
 
 	res := string(data)
-	i, err := strconv.ParseInt(res, 64, 10)
+	i, err := strconv.ParseInt(res, 10, 64)
 	if err != nil {
 		return nil, err
 	}

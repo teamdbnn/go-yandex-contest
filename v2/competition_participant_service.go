@@ -13,17 +13,17 @@ type GetParticipantsOfCompetitionService struct {
 	competition int64
 }
 
+// Competition Set competition
+func (s *GetParticipantsOfCompetitionService) Competition(competition int64) *GetParticipantsOfCompetitionService {
+	s.competition = competition
+	return s
+}
+
 func (s *GetParticipantsOfCompetitionService) validate() error {
 	if s.competition == 0 {
 		return requiredError("competition")
 	}
 	return nil
-}
-
-// Competition Set competition
-func (s *GetParticipantsOfCompetitionService) Competition(competition int64) *GetParticipantsOfCompetitionService {
-	s.competition = competition
-	return s
 }
 
 // Do Send GET request

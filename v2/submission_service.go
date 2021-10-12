@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// SubmissionRejudgeService Rejudge submission
 type SubmissionRejudgeService struct {
 	c          *Client
 	submission int64

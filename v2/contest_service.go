@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// GetContestService Get Contest item info
+// GetContestService Get information about contest by id
 type GetContestService struct {
 	c       *Client
 	contest int64
@@ -26,7 +26,7 @@ func (s *GetContestService) validate() error {
 	return nil
 }
 
-// Do Send request
+// Do Send request to GetContestService
 func (s *GetContestService) Do(ctx context.Context, opts ...RequestOption) (*ContestDescription, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -40,7 +40,6 @@ func (s *GetContestService) Do(ctx context.Context, opts ...RequestOption) (*Con
 		return nil, err
 	}
 	res := new(ContestDescription)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
@@ -48,6 +47,7 @@ func (s *GetContestService) Do(ctx context.Context, opts ...RequestOption) (*Con
 	return res, nil
 }
 
+// GetClarificationsInContestService Get clarifications in contest by contest id
 type GetClarificationsInContestService struct {
 	c       *Client
 	contest int64
@@ -79,6 +79,9 @@ func (s *GetClarificationsInContestService) Do(ctx context.Context, opts ...Requ
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%d/clarifications", s.contest),
 	}
+	if s.locale != "" {
+		r.setParam("locale", s.locale)
+	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
@@ -92,6 +95,7 @@ func (s *GetClarificationsInContestService) Do(ctx context.Context, opts ...Requ
 	return res, nil
 }
 
+// GetContestMessagesServie Get messages in contest by contest id
 type GetContestMessagesServie struct {
 	c       *Client
 	contest int64

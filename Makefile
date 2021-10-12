@@ -1,6 +1,3 @@
-
-SWAGGER_URL = "https://api.contest.yandex.net/api/public/v2/api-docs?group=v2"
-
 # Colors
 GREEN_COLOR   = "\033[0;32m"
 PURPLE_COLOR  = "\033[0;35m"
@@ -19,6 +16,4 @@ deps: ## Download reqired dependencies and remove unused.
 
 update: ## Update dependencies.
 	@echo -e $(GREEN_COLOR)[UPDATE DEPENDENCIES]$(DEFAULT_COLOR)
-	go get -u
-
-upgrade: ## Upgrade swagger from external
+	go get -u ./v2
