@@ -78,7 +78,6 @@ func (r *request) validate() (err error) {
 	if r.form == nil {
 		r.form = url.Values{}
 	}
-
 	return nil
 }
 
