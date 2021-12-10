@@ -3,6 +3,7 @@ package yacontest
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -72,6 +73,10 @@ func (c *Client) parseRequest(r *request, opts ...RequestOption) (err error) {
 	if bodyString != "" {
 		header.Set("Content-Type", "application/x-www-form-urlencoded")
 		body = bytes.NewBufferString(bodyString)
+	} else if r.json != nil {
+		header.Set("Content-Type", "application/json")
+		jsonString, _ := json.Marshal(r.json)
+		body = bytes.NewBuffer(jsonString)
 	}
 
 	header.Set("Authorization", fmt.Sprintf("%s %s", "OAuth", c.OAuthToken))
@@ -169,4 +174,8 @@ func (c *Client) NewGetContestMessagesServie() *GetContestMessagesServie {
 
 func (c *Client) NewRegisterParticipantForContestService() *RegisterParticipantForContestService {
 	return &RegisterParticipantForContestService{c: c}
+}
+
+func (c *Client) NewUpdateParticipantForContestService() *UpdateParticipantForContestService {
+	return &UpdateParticipantForContestService{c: c}
 }

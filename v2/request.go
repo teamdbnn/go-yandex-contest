@@ -15,6 +15,7 @@ type request struct {
 	endpoint string
 	query    url.Values
 	form     url.Values
+	json     interface{}
 	header   http.Header
 	body     io.Reader
 	fullURL  string
@@ -56,11 +57,17 @@ func (r *request) setFormParam(key string, value interface{}) *request {
 	return r
 }
 
-// setFomParams set params with key/values to request form body
-func (r *request) setFomParams(m params) *request {
+// setFormParams set params with key/values to request form body
+func (r *request) setFormParams(m params) *request {
 	for k, v := range m {
 		r.setFormParam(k, v)
 	}
+	return r
+}
+
+// setJSONBody set body to request json
+func (r *request) setJSONBody(body interface{}) *request {
+	r.json = body
 	return r
 }
 

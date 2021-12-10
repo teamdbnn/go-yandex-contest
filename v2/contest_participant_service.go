@@ -133,3 +133,65 @@ func (s *RegisterParticipantForContestService) Do(ctx context.Context, opts ...R
 
 	return &i, nil
 }
+
+type UpdateParticipantForContestService struct {
+	c       *Client
+	contest int64
+	body    struct {
+		displayedName string
+	}
+	participant int64
+}
+
+func (s *UpdateParticipantForContestService) Contest(contest int64) *UpdateParticipantForContestService {
+	s.contest = contest
+	return s
+}
+
+func (s *UpdateParticipantForContestService) Participant(participant int64) *UpdateParticipantForContestService {
+	s.participant = participant
+	return s
+}
+
+func (s *UpdateParticipantForContestService) DisplayedName(name string) *UpdateParticipantForContestService {
+	s.body.displayedName = name
+	return s
+}
+
+func (s *UpdateParticipantForContestService) validate() error {
+	if s.contest == 0 {
+		return requiredError("contest")
+	}
+	if s.participant == 0 {
+		return requiredError("participant")
+	}
+	if s.body.displayedName == "" {
+		return requiredError("displayedName")
+	}
+	return nil
+}
+
+func (s *UpdateParticipantForContestService) Do(ctx context.Context, opts ...RequestOption) (*int64, error) {
+	if err := s.validate(); err != nil {
+		return nil, err
+	}
+	r := &request{
+		method:   http.MethodPatch,
+		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contest, s.participant),
+	}
+
+	r.setJSONBody(s.body)
+
+	data, err := s.c.callAPI(ctx, r, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	res := string(data)
+	i, err := strconv.ParseInt(res, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	return &i, nil
+}
