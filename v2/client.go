@@ -141,12 +141,12 @@ func (c *Client) NewGetContestService() *GetContestService {
 	return &GetContestService{c: c}
 }
 
-// NewsGetParticipantListOfCompetition Init Participant List of Competition service
+// NewGetParticipantsOfCompetitionService Init Participant List of Competition service
 func (c *Client) NewGetParticipantsOfCompetitionService() *GetParticipantsOfCompetitionService {
 	return &GetParticipantsOfCompetitionService{c: c}
 }
 
-// NewGetParticipantListOfContest Init Participant List of contest service
+// NewGetParticipantsOfContestService Init Participant List of contest service
 func (c *Client) NewGetParticipantsOfContestService() *GetParticipantsOfContestService {
 	return &GetParticipantsOfContestService{c: c}
 }
