@@ -95,25 +95,25 @@ func (s *GetClarificationsInContestService) Do(ctx context.Context, opts ...Requ
 	return res, nil
 }
 
-// GetContestMessagesServie Get messages in contest by contest id
-type GetContestMessagesServie struct {
+// GetContestMessagesService Get messages in contest by contest id
+type GetContestMessagesService struct {
 	c       *Client
 	contest int64
 }
 
-func (s *GetContestMessagesServie) Contest(contest int64) *GetContestMessagesServie {
+func (s *GetContestMessagesService) Contest(contest int64) *GetContestMessagesService {
 	s.contest = contest
 	return s
 }
 
-func (s *GetContestMessagesServie) validate() error {
+func (s *GetContestMessagesService) validate() error {
 	if s.contest == 0 {
 		return requiredError("contest")
 	}
 	return nil
 }
 
-func (s *GetContestMessagesServie) Do(ctx context.Context, opts ...RequestOption) (*Messages, error) {
+func (s *GetContestMessagesService) Do(ctx context.Context, opts ...RequestOption) (*Messages, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}

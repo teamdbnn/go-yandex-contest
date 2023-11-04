@@ -168,8 +168,8 @@ func (c *Client) NewGetClarificationsInContestService() *GetClarificationsInCont
 	return &GetClarificationsInContestService{c: c}
 }
 
-func (c *Client) NewGetContestMessagesServie() *GetContestMessagesServie {
-	return &GetContestMessagesServie{c: c}
+func (c *Client) NewGetContestMessagesService() *GetContestMessagesService {
+	return &GetContestMessagesService{c: c}
 }
 
 func (c *Client) NewRegisterParticipantForContestService() *RegisterParticipantForContestService {
@@ -178,4 +178,8 @@ func (c *Client) NewRegisterParticipantForContestService() *RegisterParticipantF
 
 func (c *Client) NewUpdateParticipantForContestService() *UpdateParticipantForContestService {
 	return &UpdateParticipantForContestService{c: c}
+}
+
+func (c *Client) NewGetSubmissionsOfContestService() *GetSubmissionsOfContestService {
+	return &GetSubmissionsOfContestService{c: c}
 }
