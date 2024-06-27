@@ -6,11 +6,11 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 ## Methods
 | &#9744; | Method | Path  | Description |
 |-----|--------|-------|-------------|
-| :white_check_mark: | GET | `/competitions/{competitionId}/participants` | Get registered participants of competition |
-| :white_check_mark: | POST | `/competitions/{competitionId}/participants` | Register participants into competition |
+| &#9744; | GET | `/competitions/{competitionId}/participants` | Get registered participants of competition |
+| &#9744; | POST | `/competitions/{competitionId}/participants` | Register participants into competition |
 | :white_check_mark: | GET | `/contests/{contestId}` | Get information about contest by id |
-| :white_check_mark: | GET | `/contests/{contestId}/clarifications` | Get clarifications in contest by contest id |
-| :white_check_mark: | GET | `/contests/{contestId}/messages` | Get messages in contest by contest id |
+| &#9744; | GET | `/contests/{contestId}/clarifications` | Get clarifications in contest by contest id |
+| &#9744; | GET | `/contests/{contestId}/messages` | Get messages in contest by contest id |
 | &#9744; | POST | `/contests/{contestId}/messages` | Post new question to contest |
 | :white_check_mark: | GET | `/contests/{contestId}/participants` | Get contest participants |
 | :white_check_mark: | POST | `/contests/{contestId}/participants` | Register for contest |
@@ -40,5 +40,5 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | &#9744; | GET | `/contests/neurips/{contestId}/submissions/my` | Get your submissions to contest by contest id |
 | &#9744; | GET | `/participants/{participantId}/stats` | Get participant stats |
 | &#9744; | GET | `/service/capacity` | Get contest submissions queue capacity |
-| :white_check_mark: | POST | `/submissions/{submissionId}/rejudge` | Rejudge submission |
-| :white_check_mark: | POST | `/user/{userId}/generate-password` | Generate new password for internal user |
+| ? | POST | `/submissions/{submissionId}/rejudge` | Rejudge submission | 
+| ? | POST | `/user/{userId}/generate-password` | Generate new password for internal user | 
