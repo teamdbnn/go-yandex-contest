@@ -50,6 +50,17 @@ type CompetitionParticipantsRegisterResponse struct {
 	MissedUids []string `json:"missedUids"`
 }
 
+type Compiler struct {
+	ID         string `json:"id,omitempty"`
+	Name       string `json:"name,omitempty"`
+	Deprecated bool   `json:"deprecated"`
+	Style      string `json:"style,omitempty"`
+}
+
+type Compilers struct {
+	Compilers []*Compiler `json:"compilers"`
+}
+
 type CompilerLimit struct {
 	CompilerName  string `json:"compilerName,omitempty"`
 	IdlenessLimit int64  `json:"idlenessLimit,omitempty"`
@@ -93,12 +104,14 @@ type ContestLog struct {
 }
 
 type ContestProblem struct {
-	ID         *string          `json:"id"`
-	Name       *string          `json:"name"`
-	Alias      *string          `json:"alias"`
-	Compilers  []string         `json:"compilers"`
-	Statements []*Statement     `json:"statements"`
-	Limits     []*CompilerLimit `json:"limits"`
+	Compilers   []string         `json:"compilers"`
+	Alias       *string          `json:"alias"`
+	ID          *string          `json:"id"`
+	Name        *string          `json:"name"`
+	ProblemType *string          `json:"problemType"`
+	Statements  []*Statement     `json:"statements"`
+	Limits      []*CompilerLimit `json:"limits"`
+	TestCount   int64            `json:"testCount"`
 }
 
 type ContestProblems struct {
@@ -705,6 +718,11 @@ type RunReport struct {
 	RunID int64 `json:"runId,omitempty"`
 }
 
+type Service struct {
+	Active bool   `json:"active,omitempty"`
+	Scope  string `json:"scope"`
+}
+
 type ServiceCapacity struct {
 	SubmissionsCount *int64 `json:"submissionsCount"`
 }
@@ -738,8 +756,9 @@ type State struct {
 }
 
 type Statement struct {
-	Path string `json:"path,omitempty"`
-	Type string `json:"type,omitempty"`
+	Locale string `json:"locale,omitempty"`
+	Path   string `json:"path,omitempty"`
+	Type   string `json:"type,omitempty"`
 }
 
 type Submission struct {
@@ -817,4 +836,10 @@ type UserWithPasswordResponse struct {
 	Login    *string `json:"login"`
 	Password *string `json:"password"`
 	UserID   *int64  `json:"userId"`
+}
+
+type Group struct {
+	ID          *int64 `json:"id,omitempty"`
+	MemberCount int64  `json:"memberCount,omitempty"`
+	Name        string `json:"name,omitempty"`
 }

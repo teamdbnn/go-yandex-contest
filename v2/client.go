@@ -115,6 +115,7 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 	if err != nil {
 		return []byte{}, err
 	}
+
 	defer func() {
 		cerr := res.Body.Close()
 		if err == nil && cerr != nil {
@@ -160,6 +161,7 @@ func (c *Client) NewSubmissionRejudgeService() *SubmissionRejudgeService {
 	return &SubmissionRejudgeService{c: c}
 }
 
+// NewRegisterParticipantIntoCompetitionService Register participant into competition
 func (c *Client) NewRegisterParticipantIntoCompetitionService() *RegisterParticipantIntoCompetitionService {
 	return &RegisterParticipantIntoCompetitionService{c: c}
 }
@@ -172,14 +174,48 @@ func (c *Client) NewGetContestMessagesService() *GetContestMessagesService {
 	return &GetContestMessagesService{c: c}
 }
 
+// NewRegisterParticipantForContestService Register participant for contest
 func (c *Client) NewRegisterParticipantForContestService() *RegisterParticipantForContestService {
 	return &RegisterParticipantForContestService{c: c}
 }
 
+// NewUnregisterParticipantForContestService Unregister participant for contest
+func (c *Client) NewUnregisterParticipantForContestService() *UnregisterParticipantForContestService {
+	return &UnregisterParticipantForContestService{c: c}
+}
+
+// NewUpdateParticipantForContestService Update participant for contest
 func (c *Client) NewUpdateParticipantForContestService() *UpdateParticipantForContestService {
 	return &UpdateParticipantForContestService{c: c}
 }
 
 func (c *Client) NewGetSubmissionsOfContestService() *GetSubmissionsOfContestService {
 	return &GetSubmissionsOfContestService{c: c}
+}
+
+// NewGetGroupInfoOfCompetitionService Get group info of competition
+func (c *Client) NewGetGroupInfoOfCompetitionService() *GetGroupInfoOfCompetitionService {
+	return &GetGroupInfoOfCompetitionService{c: c}
+}
+
+// NewCreateGroupForCompetitionService Create group for competition
+func (c *Client) NewCreateGroupForCompetitionService() *CreateGroupForCompetitionService {
+	return &CreateGroupForCompetitionService{c: c}
+}
+
+// NewGetListOfGroupsForContestService Get group for competition
+func (c *Client) NewGetListOfGroupsForContestService() *GetListOfGroupsForContestService {
+	return &GetListOfGroupsForContestService{c: c}
+}
+
+func (c *Client) NewGetCompilersList() *GetCompilersList {
+	return &GetCompilersList{c: c}
+}
+
+func (c *Client) NewGetAvailableScopes() *GetAvailableScopes {
+	return &GetAvailableScopes{c: c}
+}
+
+func (c *Client) NewGetContestProblems() *GetContestProblems {
+	return &GetContestProblems{c: c}
 }

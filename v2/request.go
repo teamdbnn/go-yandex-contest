@@ -81,7 +81,7 @@ func (r *request) validate() (err error) {
 	return nil
 }
 
-// RequestOption define optuin type for request
+// RequestOption define option type for request
 type RequestOption func(*request)
 
 // WithHeader set or add a header value to the request

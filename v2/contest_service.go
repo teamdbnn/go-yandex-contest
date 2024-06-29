@@ -13,7 +13,7 @@ type GetContestService struct {
 	contest int64
 }
 
-// Contest Set contest id
+// Contest Set contest
 func (s *GetContestService) Contest(contest int64) *GetContestService {
 	s.contest = contest
 	return s
