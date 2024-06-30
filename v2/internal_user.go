@@ -25,7 +25,7 @@ func (s *UserGeneratePasswordService) validate() error {
 }
 
 // Do Send request
-func (s *UserGeneratePasswordService) Do(ctx context.Context, opts ...RequestOption) (*ContestDescription, error) {
+func (s *UserGeneratePasswordService) Do(ctx context.Context, opts ...RequestOption) (*UserWithPasswordResponse, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func (s *UserGeneratePasswordService) Do(ctx context.Context, opts ...RequestOpt
 	if err != nil {
 		return nil, err
 	}
-	res := new(ContestDescription)
+	res := new(UserWithPasswordResponse)
 
 	err = json.Unmarshal(data, &res)
 	if err != nil {

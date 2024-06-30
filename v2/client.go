@@ -137,85 +137,237 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 	return data, nil
 }
 
-// NewGetContestService Init contest item Service
-func (c *Client) NewGetContestService() *GetContestService {
-	return &GetContestService{c: c}
-}
-
-// NewGetParticipantsOfCompetitionService Init Participant List of Competition service
+// NewGetParticipantsOfCompetitionService Get participants of competition service
 func (c *Client) NewGetParticipantsOfCompetitionService() *GetParticipantsOfCompetitionService {
 	return &GetParticipantsOfCompetitionService{c: c}
 }
 
-// NewGetParticipantsOfContestService Init Participant List of contest service
-func (c *Client) NewGetParticipantsOfContestService() *GetParticipantsOfContestService {
-	return &GetParticipantsOfContestService{c: c}
-}
-
-// NewUserGeneratePasswordService Init Generate user password service
-func (c *Client) NewUserGeneratePasswordService() *UserGeneratePasswordService {
-	return &UserGeneratePasswordService{c: c}
-}
-
-func (c *Client) NewSubmissionRejudgeService() *SubmissionRejudgeService {
-	return &SubmissionRejudgeService{c: c}
-}
-
-// NewRegisterParticipantIntoCompetitionService Register participant into competition
+// NewRegisterParticipantIntoCompetitionService Register participant into competition service
 func (c *Client) NewRegisterParticipantIntoCompetitionService() *RegisterParticipantIntoCompetitionService {
 	return &RegisterParticipantIntoCompetitionService{c: c}
 }
 
-func (c *Client) NewGetClarificationsInContestService() *GetClarificationsInContestService {
-	return &GetClarificationsInContestService{c: c}
-}
-
-func (c *Client) NewGetContestMessagesService() *GetContestMessagesService {
-	return &GetContestMessagesService{c: c}
-}
-
-// NewRegisterParticipantForContestService Register participant for contest
-func (c *Client) NewRegisterParticipantForContestService() *RegisterParticipantForContestService {
-	return &RegisterParticipantForContestService{c: c}
-}
-
-// NewUnregisterParticipantForContestService Unregister participant for contest
-func (c *Client) NewUnregisterParticipantForContestService() *UnregisterParticipantForContestService {
-	return &UnregisterParticipantForContestService{c: c}
-}
-
-// NewUpdateParticipantForContestService Update participant for contest
-func (c *Client) NewUpdateParticipantForContestService() *UpdateParticipantForContestService {
-	return &UpdateParticipantForContestService{c: c}
-}
-
-func (c *Client) NewGetSubmissionsOfContestService() *GetSubmissionsOfContestService {
-	return &GetSubmissionsOfContestService{c: c}
-}
-
-// NewGetGroupInfoOfCompetitionService Get group info of competition
-func (c *Client) NewGetGroupInfoOfCompetitionService() *GetGroupInfoOfCompetitionService {
-	return &GetGroupInfoOfCompetitionService{c: c}
-}
-
-// NewCreateGroupForCompetitionService Create group for competition
-func (c *Client) NewCreateGroupForCompetitionService() *CreateGroupForCompetitionService {
-	return &CreateGroupForCompetitionService{c: c}
-}
-
-// NewGetListOfGroupsForContestService Get group for competition
-func (c *Client) NewGetListOfGroupsForContestService() *GetListOfGroupsForContestService {
-	return &GetListOfGroupsForContestService{c: c}
-}
-
+// NewGetCompilersList Get compilers list
 func (c *Client) NewGetCompilersList() *GetCompilersList {
 	return &GetCompilersList{c: c}
 }
 
+// NewGetContestInfo Get contest info
+func (c *Client) NewGetContestInfo() *GetContestInfo {
+	return &GetContestInfo{c: c}
+}
+
+// NewCreateGroupForCompetitionService Create group for competition service
+func (c *Client) NewCreateGroupForCompetitionService() *CreateGroupForCompetitionService {
+	return &CreateGroupForCompetitionService{c: c}
+}
+
+// NewGetGroupInfoOfCompetitionService Get group info of competition service
+func (c *Client) NewGetGroupInfoOfCompetitionService() *GetGroupInfoOfCompetitionService {
+	return &GetGroupInfoOfCompetitionService{c: c}
+}
+
+// NewAddGroupMemberForCompetitionService Add group member for competition service
+func (c *Client) NewAddGroupMemberForCompetitionService() *AddGroupMemberForCompetitionService {
+	return &AddGroupMemberForCompetitionService{c: c}
+}
+
+// NewRemoveGroupOfCompetitionService Remove group of competition service
+func (c *Client) NewRemoveGroupOfCompetitionService() *RemoveGroupOfCompetitionService {
+	return &RemoveGroupOfCompetitionService{c: c}
+}
+
+// NewUserGeneratePasswordService Generate user password service
+func (c *Client) NewUserGeneratePasswordService() *UserGeneratePasswordService {
+	return &UserGeneratePasswordService{c: c}
+}
+
+// NewGetJuryClarifications Get jury clarifications
+func (c *Client) NewGetJuryClarifications() *GetJuryClarifications {
+	return &GetJuryClarifications{c: c}
+}
+
+// NewGetContestMessagesService Get contest messages service
+func (c *Client) NewGetContestMessagesService() *GetContestMessagesService {
+	return &GetContestMessagesService{c: c}
+}
+
+// NewSendQuestionToJury Send question to jury
+func (c *Client) NewSendQuestionToJury() *SendQuestionToJury {
+	return &SendQuestionToJury{c: c}
+}
+
+// NewGetAllSubmissionsForContest Get all submissions for contest
+func (c *Client) NewGetAllSubmissionsForContest() *GetAllSubmissionsForContest {
+	return &GetAllSubmissionsForContest{c: c}
+}
+
+// NewGetYourSubmissionsForContest Get your submissions for contest
+func (c *Client) NewGetYourSubmissionsForContest() *GetYourSubmissionsForContest {
+	return &GetYourSubmissionsForContest{c: c}
+}
+
+// NewGetListOfGroupsForContestService Get groups list for contest service
+func (c *Client) NewGetListOfGroupsForContestService() *GetListOfGroupsForContestService {
+	return &GetListOfGroupsForContestService{c: c}
+}
+
+// NewRegisterGroupForContestService Register group for contest service
+func (c *Client) NewRegisterGroupForContestService() *RegisterGroupForContestService {
+	return &RegisterGroupForContestService{c: c}
+}
+
+// NewDeleteGroupFromContestService Delete group from contest service
+func (c *Client) NewDeleteGroupFromContestService() *DeleteGroupFromContestService {
+	return &DeleteGroupFromContestService{c: c}
+}
+
+// NewUpdateGroupForContestService Update group for contest service
+func (c *Client) NewUpdateGroupForContestService() *UpdateGroupForContestService {
+	return &UpdateGroupForContestService{c: c}
+}
+
+// NewGetParticipantsOfContestService Get participants of contest service
+func (c *Client) NewGetParticipantsOfContestService() *GetParticipantsOfContestService {
+	return &GetParticipantsOfContestService{c: c}
+}
+
+// NewRegisterParticipantForContestService Register participant for contest service
+func (c *Client) NewRegisterParticipantForContestService() *RegisterParticipantForContestService {
+	return &RegisterParticipantForContestService{c: c}
+}
+
+// NewGetInfoOfParticipant Get info of participant
+func (c *Client) NewGetInfoOfParticipant() *GetInfoOfParticipant {
+	return &GetInfoOfParticipant{c: c}
+}
+
+// NewStartContestForParticipant Start contest for participant
+func (c *Client) NewStartContestForParticipant() *StartContestForParticipant {
+	return &StartContestForParticipant{c: c}
+}
+
+// NewUnregisterParticipantFromContestService Unregister participant from contest service
+func (c *Client) NewUnregisterParticipantFromContestService() *UnregisterParticipantFromContestService {
+	return &UnregisterParticipantFromContestService{c: c}
+}
+
+// NewUpdateParticipantForContestService Update participant for contest service
+func (c *Client) NewUpdateParticipantForContestService() *UpdateParticipantForContestService {
+	return &UpdateParticipantForContestService{c: c}
+}
+
+// NewGetInfoOfYourParticipation Get info of your participation
+func (c *Client) NewGetInfoOfYourParticipation() *GetInfoOfYourParticipation {
+	return &GetInfoOfYourParticipation{c: c}
+}
+
+// NewStartContest Start contest
+func (c *Client) NewStartContest() *StartContest {
+	return &StartContest{c: c}
+}
+
+// NewUnregisterYourselfFromContest Unregister yourself from contest
+func (c *Client) NewUnregisterYourselfFromContest() *UnregisterYourselfFromContest {
+	return &UnregisterYourselfFromContest{c: c}
+}
+
+// NewGetContestProblems Get contest problems
+func (c *Client) NewGetContestProblems() *GetContestProblems {
+	return &GetContestProblems{c: c}
+}
+
+// NewGetStatementProblem Get statement problem
+func (c *Client) NewGetStatementProblem() *GetStatementProblem {
+	return &GetStatementProblem{c: c}
+}
+
+// NewGetProblemFile Get problem file
+func (c *Client) NewGetProblemFile() *GetProblemFile {
+	return &GetProblemFile{c: c}
+}
+
+// NewGetSubmissionsQueueCapacity Get submissions queue capacity
+func (c *Client) NewGetSubmissionsQueueCapacity() *GetSubmissionsQueueCapacity {
+	return &GetSubmissionsQueueCapacity{c: c}
+}
+
+// NewGetAvailableScopes Get available scopes
 func (c *Client) NewGetAvailableScopes() *GetAvailableScopes {
 	return &GetAvailableScopes{c: c}
 }
 
-func (c *Client) NewGetContestProblems() *GetContestProblems {
-	return &GetContestProblems{c: c}
+// NewGetContestStandings Get contest standings
+func (c *Client) NewGetContestStandings() *GetContestStandings {
+	return &GetContestStandings{c: c}
+}
+
+// NewGetContestStandingsExtended Get extended contest standings
+func (c *Client) NewGetContestStandingsExtended() *GetContestStandingsExtended {
+	return &GetContestStandingsExtended{c: c}
+}
+
+// NewGetYourPositionInContestStandings Get your position in contest standings
+func (c *Client) NewGetYourPositionInContestStandings() *GetYourPositionInContestStandings {
+	return &GetYourPositionInContestStandings{c: c}
+}
+
+// NewGetSubmissionsOfContestService Get submissions of contest service
+func (c *Client) NewGetSubmissionsOfContestService() *GetSubmissionsOfContestService {
+	return &GetSubmissionsOfContestService{c: c}
+}
+
+// NewSendSubmissionFromURL Send submissions from URL
+func (c *Client) NewSendSubmissionFromURL() *SendSubmissionFromURL {
+	return &SendSubmissionFromURL{c: c}
+}
+
+// NewGetReportForMultipleSubmissions Get report for multiple submissions
+func (c *Client) NewGetReportForMultipleSubmissions() *GetReportForMultipleSubmissions {
+	return &GetReportForMultipleSubmissions{c: c}
+}
+
+// NewGetBriefReportForSubmission Get brief report for submission
+func (c *Client) NewGetBriefReportForSubmission() *GetBriefReportForSubmission {
+	return &GetBriefReportForSubmission{c: c}
+}
+
+// NewGetFullReportForSubmission Get full report for submission
+func (c *Client) NewGetFullReportForSubmission() *GetFullReportForSubmission {
+	return &GetFullReportForSubmission{c: c}
+}
+
+// NewGetSubmissionSourceCode Get submission source code
+func (c *Client) NewGetSubmissionSourceCode() *GetSubmissionSourceCode {
+	return &GetSubmissionSourceCode{c: c}
+}
+
+// NewGetMetadataOfSubmissionSourceCode Get metadata of submission source code
+func (c *Client) NewGetMetadataOfSubmissionSourceCode() *GetMetadataOfSubmissionSourceCode {
+	return &GetMetadataOfSubmissionSourceCode{c: c}
+}
+
+// NewGetFullAnswerFileForTest Get full answer file for test
+func (c *Client) NewGetFullAnswerFileForTest() *GetFullAnswerFileForTest {
+	return &GetFullAnswerFileForTest{c: c}
+}
+
+// NewGetFullInputFileForTest Get full input file for test
+func (c *Client) NewGetFullInputFileForTest() *GetFullInputFileForTest {
+	return &GetFullInputFileForTest{c: c}
+}
+
+// NewGetParticipantOutputForTest Get participant output for test
+func (c *Client) NewGetParticipantOutputForTest() *GetParticipantOutputForTest {
+	return &GetParticipantOutputForTest{c: c}
+}
+
+// NewSubmissionRejudgeService Submission rejudge service
+func (c *Client) NewSubmissionRejudgeService() *SubmissionRejudgeService {
+	return &SubmissionRejudgeService{c: c}
+}
+
+// NewGetUserTeams Get user teams
+func (c *Client) NewGetUserTeams() *GetUserTeams {
+	return &GetUserTeams{c: c}
 }

@@ -7,23 +7,23 @@ import (
 	"net/http"
 )
 
-// GetCompilersList Get Compilers list
-type GetCompilersList struct {
+// GetUserTeams Get User teams
+type GetUserTeams struct {
 	c *Client
 }
 
 // Do send req
-func (s *GetCompilersList) Do(ctx context.Context, opts ...RequestOption) (*CompilerListResponse, error) {
+func (s *GetUserTeams) Do(ctx context.Context, opts ...RequestOption) ([]*TeamView, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/compilers"),
+		endpoint: fmt.Sprintf("/teams"),
 	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
-	res := new(CompilerListResponse)
-	err = json.Unmarshal(data, res)
+	res := make([]*TeamView, 0)
+	err = json.Unmarshal(data, &res)
 
 	if err != nil {
 		return nil, err
