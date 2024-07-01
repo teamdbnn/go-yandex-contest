@@ -28,7 +28,7 @@ func (s *GetContestProblems) Locale(locale string) *GetContestProblems {
 
 func (s *GetContestProblems) validate() error {
 	if s.contestId == 0 {
-		return requiredError("contest")
+		return requiredError("contestId")
 	}
 	return nil
 }

@@ -57,8 +57,8 @@ type GetGroupInfoOfCompetitionService struct {
 	groupId int64
 }
 
-// GroupId Set groupId
-func (s *GetGroupInfoOfCompetitionService) GroupId(groupId int64) *GetGroupInfoOfCompetitionService {
+// GroupID Set group id
+func (s *GetGroupInfoOfCompetitionService) GroupID(groupId int64) *GetGroupInfoOfCompetitionService {
 	s.groupId = groupId
 	return s
 }
@@ -103,8 +103,8 @@ type AddGroupMemberForCompetitionService struct {
 	}
 }
 
-// GroupId Set groupId
-func (s *AddGroupMemberForCompetitionService) GroupId(groupId int64) *AddGroupMemberForCompetitionService {
+// GroupID Set group id
+func (s *AddGroupMemberForCompetitionService) GroupID(groupId int64) *AddGroupMemberForCompetitionService {
 	s.groupId = groupId
 	return s
 }
@@ -165,8 +165,8 @@ type RemoveGroupOfCompetitionService struct {
 	}
 }
 
-// GroupId Set groupId
-func (s *RemoveGroupOfCompetitionService) GroupId(groupId int64) *RemoveGroupOfCompetitionService {
+// GroupID Set group id
+func (s *RemoveGroupOfCompetitionService) GroupID(groupId int64) *RemoveGroupOfCompetitionService {
 	s.groupId = groupId
 	return s
 }

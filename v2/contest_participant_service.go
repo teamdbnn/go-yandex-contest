@@ -120,8 +120,8 @@ func (s *DeleteGroupFromContestService) ContestID(contestId int64) *DeleteGroupF
 	return s
 }
 
-// GroupId Set group id
-func (s *DeleteGroupFromContestService) GroupId(groupId int64) *DeleteGroupFromContestService {
+// GroupID Set group id
+func (s *DeleteGroupFromContestService) GroupID(groupId int64) *DeleteGroupFromContestService {
 	s.groupId = groupId
 	return s
 }
