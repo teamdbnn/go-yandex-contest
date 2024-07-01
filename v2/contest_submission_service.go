@@ -10,7 +10,7 @@ import (
 // GetSubmissionsOfContestService Get contest participants
 type GetSubmissionsOfContestService struct {
 	c                *Client
-	contestId        int64
+	contestID        int64
 	page             int32
 	pageFuncCall     bool
 	pageSize         int32
@@ -18,8 +18,8 @@ type GetSubmissionsOfContestService struct {
 }
 
 // ContestID Set contest id
-func (s *GetSubmissionsOfContestService) ContestID(contestId int64) *GetSubmissionsOfContestService {
-	s.contestId = contestId
+func (s *GetSubmissionsOfContestService) ContestID(contestID int64) *GetSubmissionsOfContestService {
+	s.contestID = contestID
 	return s
 }
 
@@ -38,8 +38,8 @@ func (s *GetSubmissionsOfContestService) PageSize(pageSize int32) *GetSubmission
 }
 
 func (s *GetSubmissionsOfContestService) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -49,9 +49,10 @@ func (s *GetSubmissionsOfContestService) Do(ctx context.Context, opts ...Request
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/submissions", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/submissions", s.contestID),
 	}
 	if s.page == 0 && !s.pageFuncCall {
 		r.setParam("page", 1)
@@ -82,19 +83,19 @@ func (s *GetSubmissionsOfContestService) Do(ctx context.Context, opts ...Request
 // SendSubmissionFromURL Send submission from URL
 type SendSubmissionFromURL struct {
 	c         *Client
-	contestId int64
+	contestID int64
 	body      struct {
 		fileUrl      string
 		fileName     string
 		problemAlias string
-		compilerId   string
+		compilerID   string
 		meta         string
 	}
 }
 
 // ContestID Set contest id
-func (s *SendSubmissionFromURL) ContestID(contestId int64) *SendSubmissionFromURL {
-	s.contestId = contestId
+func (s *SendSubmissionFromURL) ContestID(contestID int64) *SendSubmissionFromURL {
+	s.contestID = contestID
 	return s
 }
 
@@ -117,8 +118,8 @@ func (s *SendSubmissionFromURL) ProblemAlias(problemAlias string) *SendSubmissio
 }
 
 // CompilerID Set compiler id
-func (s *SendSubmissionFromURL) CompilerID(compilerId string) *SendSubmissionFromURL {
-	s.body.compilerId = compilerId
+func (s *SendSubmissionFromURL) CompilerID(compilerID string) *SendSubmissionFromURL {
+	s.body.compilerID = compilerID
 	return s
 }
 
@@ -129,8 +130,8 @@ func (s *SendSubmissionFromURL) Meta(meta string) *SendSubmissionFromURL {
 }
 
 func (s *SendSubmissionFromURL) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	if s.body.fileUrl == "" {
 		return requiredError("fileUrl")
@@ -141,8 +142,8 @@ func (s *SendSubmissionFromURL) validate() error {
 	if s.body.problemAlias == "" {
 		return requiredError("problemAlias")
 	}
-	if s.body.compilerId == "" {
-		return requiredError("compilerId")
+	if s.body.compilerID == "" {
+		return requiredError("compilerID")
 	}
 	if s.body.meta == "" {
 		return requiredError("meta")
@@ -151,14 +152,14 @@ func (s *SendSubmissionFromURL) validate() error {
 }
 
 // Do send req
-func (s *SendSubmissionFromURL) Do(ctx context.Context, opts ...RequestOption) (*RunId, error) {
+func (s *SendSubmissionFromURL) Do(ctx context.Context, opts ...RequestOption) (*RunID, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
 
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("/contests/%v/submissions/lazy", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/submissions/lazy", s.contestID),
 	}
 	r.setJSONBody(s.body)
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -166,7 +167,7 @@ func (s *SendSubmissionFromURL) Do(ctx context.Context, opts ...RequestOption) (
 	if err != nil {
 		return nil, err
 	}
-	res := new(RunId)
+	res := new(RunID)
 
 	err = json.Unmarshal(data, &res)
 	if err != nil {
@@ -178,14 +179,14 @@ func (s *SendSubmissionFromURL) Do(ctx context.Context, opts ...RequestOption) (
 // GetReportForMultipleSubmissions Get report for multiple submissions
 type GetReportForMultipleSubmissions struct {
 	c         *Client
-	contestId int64
+	contestID int64
 	locale    string
-	runIds    []int
+	runIDs    []int
 }
 
 // ContestID Set contest id
-func (s *GetReportForMultipleSubmissions) ContestID(contestId int64) *GetReportForMultipleSubmissions {
-	s.contestId = contestId
+func (s *GetReportForMultipleSubmissions) ContestID(contestID int64) *GetReportForMultipleSubmissions {
+	s.contestID = contestID
 	return s
 }
 
@@ -196,14 +197,14 @@ func (s *GetReportForMultipleSubmissions) Locale(locale string) *GetReportForMul
 }
 
 // RunIds Set run ids
-func (s *GetReportForMultipleSubmissions) RunIds(runIds []int) *GetReportForMultipleSubmissions {
-	s.runIds = runIds
+func (s *GetReportForMultipleSubmissions) RunIds(runIDs []int) *GetReportForMultipleSubmissions {
+	s.runIDs = runIDs
 	return s
 }
 
 func (s *GetReportForMultipleSubmissions) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -213,9 +214,10 @@ func (s *GetReportForMultipleSubmissions) Do(ctx context.Context, opts ...Reques
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/submissions/multiple", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/submissions/multiple", s.contestID),
 	}
 	if s.locale == "" {
 		r.setParam("locale", "ru")
@@ -223,7 +225,7 @@ func (s *GetReportForMultipleSubmissions) Do(ctx context.Context, opts ...Reques
 		r.setParam("locale", s.locale)
 	}
 
-	r.setParam("runIds", s.runIds)
+	r.setParam("runIDs", s.runIDs)
 
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
@@ -242,28 +244,28 @@ func (s *GetReportForMultipleSubmissions) Do(ctx context.Context, opts ...Reques
 // GetBriefReportForSubmission Get brief report for submission
 type GetBriefReportForSubmission struct {
 	c            *Client
-	contestId    int64
-	submissionId int64
+	contestID    int64
+	submissionID int64
 }
 
 // ContestID Set contest id
-func (s *GetBriefReportForSubmission) ContestID(contestId int64) *GetBriefReportForSubmission {
-	s.contestId = contestId
+func (s *GetBriefReportForSubmission) ContestID(contestID int64) *GetBriefReportForSubmission {
+	s.contestID = contestID
 	return s
 }
 
 // SubmissionID Set submission id
-func (s *GetBriefReportForSubmission) SubmissionID(submissionId int64) *GetBriefReportForSubmission {
-	s.submissionId = submissionId
+func (s *GetBriefReportForSubmission) SubmissionID(submissionID int64) *GetBriefReportForSubmission {
+	s.submissionID = submissionID
 	return s
 }
 
 func (s *GetBriefReportForSubmission) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.submissionId == 0 {
-		return requiredError("submissionId")
+	if s.submissionID == 0 {
+		return requiredError("submissionID")
 	}
 	return nil
 }
@@ -273,9 +275,10 @@ func (s *GetBriefReportForSubmission) Do(ctx context.Context, opts ...RequestOpt
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/submissions/%v", s.contestId, s.submissionId),
+		endpoint: fmt.Sprintf("/contests/%v/submissions/%v", s.contestID, s.submissionID),
 	}
 
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -295,20 +298,20 @@ func (s *GetBriefReportForSubmission) Do(ctx context.Context, opts ...RequestOpt
 // GetFullReportForSubmission Get full report for submission
 type GetFullReportForSubmission struct {
 	c            *Client
-	contestId    int64
-	submissionId int64
+	contestID    int64
+	submissionID int64
 	locale       string
 }
 
 // ContestID Set contest id
-func (s *GetFullReportForSubmission) ContestID(contestId int64) *GetFullReportForSubmission {
-	s.contestId = contestId
+func (s *GetFullReportForSubmission) ContestID(contestID int64) *GetFullReportForSubmission {
+	s.contestID = contestID
 	return s
 }
 
 // SubmissionID Set submission id
-func (s *GetFullReportForSubmission) SubmissionID(submissionId int64) *GetFullReportForSubmission {
-	s.submissionId = submissionId
+func (s *GetFullReportForSubmission) SubmissionID(submissionID int64) *GetFullReportForSubmission {
+	s.submissionID = submissionID
 	return s
 }
 func (s *GetFullReportForSubmission) Locale(locale string) *GetFullReportForSubmission {
@@ -317,11 +320,11 @@ func (s *GetFullReportForSubmission) Locale(locale string) *GetFullReportForSubm
 }
 
 func (s *GetFullReportForSubmission) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.submissionId == 0 {
-		return requiredError("submissionId")
+	if s.submissionID == 0 {
+		return requiredError("submissionID")
 	}
 	return nil
 }
@@ -331,9 +334,10 @@ func (s *GetFullReportForSubmission) Do(ctx context.Context, opts ...RequestOpti
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/full", s.contestId, s.submissionId),
+		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/full", s.contestID, s.submissionID),
 	}
 	if s.locale == "" {
 		r.setParam("locale", "ru")
@@ -357,28 +361,28 @@ func (s *GetFullReportForSubmission) Do(ctx context.Context, opts ...RequestOpti
 // GetSubmissionSourceCode Get submission source code
 type GetSubmissionSourceCode struct {
 	c            *Client
-	contestId    int64
-	submissionId int64
+	contestID    int64
+	submissionID int64
 }
 
 // ContestID Set contest id
-func (s *GetSubmissionSourceCode) ContestID(contestId int64) *GetSubmissionSourceCode {
-	s.contestId = contestId
+func (s *GetSubmissionSourceCode) ContestID(contestID int64) *GetSubmissionSourceCode {
+	s.contestID = contestID
 	return s
 }
 
 // SubmissionID Set submission id
-func (s *GetSubmissionSourceCode) SubmissionID(submissionId int64) *GetSubmissionSourceCode {
-	s.submissionId = submissionId
+func (s *GetSubmissionSourceCode) SubmissionID(submissionID int64) *GetSubmissionSourceCode {
+	s.submissionID = submissionID
 	return s
 }
 
 func (s *GetSubmissionSourceCode) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.submissionId == 0 {
-		return requiredError("submissionId")
+	if s.submissionID == 0 {
+		return requiredError("submissionID")
 	}
 	return nil
 }
@@ -388,9 +392,10 @@ func (s *GetSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption)
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/source", s.contestId, s.submissionId),
+		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/source", s.contestID, s.submissionID),
 	}
 
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -410,28 +415,28 @@ func (s *GetSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption)
 // GetMetadataOfSubmissionSourceCode Get metadata of submission source code
 type GetMetadataOfSubmissionSourceCode struct {
 	c            *Client
-	contestId    int64
-	submissionId int64
+	contestID    int64
+	submissionID int64
 }
 
 // ContestID Set contest id
-func (s *GetMetadataOfSubmissionSourceCode) ContestID(contestId int64) *GetMetadataOfSubmissionSourceCode {
-	s.contestId = contestId
+func (s *GetMetadataOfSubmissionSourceCode) ContestID(contestID int64) *GetMetadataOfSubmissionSourceCode {
+	s.contestID = contestID
 	return s
 }
 
 // SubmissionID Set submission id
-func (s *GetMetadataOfSubmissionSourceCode) SubmissionID(submissionId int64) *GetMetadataOfSubmissionSourceCode {
-	s.submissionId = submissionId
+func (s *GetMetadataOfSubmissionSourceCode) SubmissionID(submissionID int64) *GetMetadataOfSubmissionSourceCode {
+	s.submissionID = submissionID
 	return s
 }
 
 func (s *GetMetadataOfSubmissionSourceCode) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.submissionId == 0 {
-		return requiredError("submissionId")
+	if s.submissionID == 0 {
+		return requiredError("submissionID")
 	}
 	return nil
 }
@@ -441,9 +446,10 @@ func (s *GetMetadataOfSubmissionSourceCode) Do(ctx context.Context, opts ...Requ
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodHead,
-		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/source", s.contestId, s.submissionId),
+		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/source", s.contestID, s.submissionID),
 	}
 
 	_, err := s.c.callAPI(ctx, r, opts...)
@@ -457,21 +463,21 @@ func (s *GetMetadataOfSubmissionSourceCode) Do(ctx context.Context, opts ...Requ
 // GetFullAnswerFileForTest Get full answer file for test
 type GetFullAnswerFileForTest struct {
 	c                 *Client
-	contestId         int64
-	submissionId      int64
+	contestID         int64
+	submissionID      int64
 	testName          string
 	useReportSettings bool
 }
 
 // ContestID Set contest id
-func (s *GetFullAnswerFileForTest) ContestID(contestId int64) *GetFullAnswerFileForTest {
-	s.contestId = contestId
+func (s *GetFullAnswerFileForTest) ContestID(contestID int64) *GetFullAnswerFileForTest {
+	s.contestID = contestID
 	return s
 }
 
 // SubmissionID Set submission id
-func (s *GetFullAnswerFileForTest) SubmissionID(submissionId int64) *GetFullAnswerFileForTest {
-	s.submissionId = submissionId
+func (s *GetFullAnswerFileForTest) SubmissionID(submissionID int64) *GetFullAnswerFileForTest {
+	s.submissionID = submissionID
 	return s
 }
 
@@ -488,11 +494,11 @@ func (s *GetFullAnswerFileForTest) UseReportSettings(useReportSettings bool) *Ge
 }
 
 func (s *GetFullAnswerFileForTest) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.submissionId == 0 {
-		return requiredError("submissionId")
+	if s.submissionID == 0 {
+		return requiredError("submissionID")
 	}
 	if s.testName == "" {
 		return requiredError("testName")
@@ -505,9 +511,10 @@ func (s *GetFullAnswerFileForTest) Do(ctx context.Context, opts ...RequestOption
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/%v/answer", s.contestId, s.submissionId, s.testName),
+		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/%v/answer", s.contestID, s.submissionID, s.testName),
 	}
 	r.setParam("useReportSettings", s.useReportSettings)
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -525,21 +532,21 @@ func (s *GetFullAnswerFileForTest) Do(ctx context.Context, opts ...RequestOption
 // GetFullInputFileForTest Get full input file for test
 type GetFullInputFileForTest struct {
 	c                 *Client
-	contestId         int64
-	submissionId      int64
+	contestID         int64
+	submissionID      int64
 	testName          string
 	useReportSettings bool
 }
 
 // ContestID Set contest id
-func (s *GetFullInputFileForTest) ContestID(contestId int64) *GetFullInputFileForTest {
-	s.contestId = contestId
+func (s *GetFullInputFileForTest) ContestID(contestID int64) *GetFullInputFileForTest {
+	s.contestID = contestID
 	return s
 }
 
 // SubmissionID Set submission id
-func (s *GetFullInputFileForTest) SubmissionID(submissionId int64) *GetFullInputFileForTest {
-	s.submissionId = submissionId
+func (s *GetFullInputFileForTest) SubmissionID(submissionID int64) *GetFullInputFileForTest {
+	s.submissionID = submissionID
 	return s
 }
 
@@ -556,11 +563,11 @@ func (s *GetFullInputFileForTest) UseReportSettings(useReportSettings bool) *Get
 }
 
 func (s *GetFullInputFileForTest) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.submissionId == 0 {
-		return requiredError("submissionId")
+	if s.submissionID == 0 {
+		return requiredError("submissionID")
 	}
 	if s.testName == "" {
 		return requiredError("testName")
@@ -573,9 +580,10 @@ func (s *GetFullInputFileForTest) Do(ctx context.Context, opts ...RequestOption)
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/%v/input", s.contestId, s.submissionId, s.testName),
+		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/%v/input", s.contestID, s.submissionID, s.testName),
 	}
 	r.setParam("useReportSettings", s.useReportSettings)
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -595,21 +603,21 @@ func (s *GetFullInputFileForTest) Do(ctx context.Context, opts ...RequestOption)
 // GetParticipantOutputForTest Get participant output for test
 type GetParticipantOutputForTest struct {
 	c                 *Client
-	contestId         int64
-	submissionId      int64
+	contestID         int64
+	submissionID      int64
 	testName          string
 	useReportSettings bool
 }
 
 // ContestID Set contest id
-func (s *GetParticipantOutputForTest) ContestID(contestId int64) *GetParticipantOutputForTest {
-	s.contestId = contestId
+func (s *GetParticipantOutputForTest) ContestID(contestID int64) *GetParticipantOutputForTest {
+	s.contestID = contestID
 	return s
 }
 
 // SubmissionId Set submission id
-func (s *GetParticipantOutputForTest) SubmissionId(submissionId int64) *GetParticipantOutputForTest {
-	s.submissionId = submissionId
+func (s *GetParticipantOutputForTest) SubmissionId(submissionID int64) *GetParticipantOutputForTest {
+	s.submissionID = submissionID
 	return s
 }
 
@@ -626,11 +634,11 @@ func (s *GetParticipantOutputForTest) UseReportSettings(useReportSettings bool) 
 }
 
 func (s *GetParticipantOutputForTest) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.submissionId == 0 {
-		return requiredError("submissionId")
+	if s.submissionID == 0 {
+		return requiredError("submissionID")
 	}
 	if s.testName == "" {
 		return requiredError("testName")
@@ -643,9 +651,10 @@ func (s *GetParticipantOutputForTest) Do(ctx context.Context, opts ...RequestOpt
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/%v/output", s.contestId, s.submissionId, s.testName),
+		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/%v/output", s.contestID, s.submissionID, s.testName),
 	}
 	r.setParam("useReportSettings", s.useReportSettings)
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -663,18 +672,18 @@ func (s *GetParticipantOutputForTest) Do(ctx context.Context, opts ...RequestOpt
 // SubmissionRejudgeService Rejudge submission
 type SubmissionRejudgeService struct {
 	c            *Client
-	submissionId int64
+	submissionID int64
 }
 
 // SubmissionID Set submission id
-func (s *SubmissionRejudgeService) SubmissionID(submissionId int64) *SubmissionRejudgeService {
-	s.submissionId = submissionId
+func (s *SubmissionRejudgeService) SubmissionID(submissionID int64) *SubmissionRejudgeService {
+	s.submissionID = submissionID
 	return s
 }
 
 func (s *SubmissionRejudgeService) validate() error {
-	if s.submissionId == 0 {
-		return requiredError("submissionId")
+	if s.submissionID == 0 {
+		return requiredError("submissionID")
 	}
 	return nil
 }
@@ -684,9 +693,10 @@ func (s *SubmissionRejudgeService) Do(ctx context.Context, opts ...RequestOption
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("/submissions/%v/rejudge", s.submissionId),
+		endpoint: fmt.Sprintf("/submissions/%v/rejudge", s.submissionID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
 

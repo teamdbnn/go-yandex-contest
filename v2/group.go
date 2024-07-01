@@ -29,10 +29,11 @@ func (s *CreateGroupForCompetitionService) validate() error {
 }
 
 // Do send req
-func (s *CreateGroupForCompetitionService) Do(ctx context.Context, opts ...RequestOption) (*GroupId, error) {
+func (s *CreateGroupForCompetitionService) Do(ctx context.Context, opts ...RequestOption) (*GroupID, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodPost,
 		endpoint: fmt.Sprintf("/groups/"),
@@ -41,8 +42,7 @@ func (s *CreateGroupForCompetitionService) Do(ctx context.Context, opts ...Reque
 	r.setJSONBody(s.body)
 	data, err := s.c.callAPI(ctx, r, opts...)
 
-	res := new(GroupId)
-	fmt.Println(data)
+	res := new(GroupID)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
@@ -54,18 +54,18 @@ func (s *CreateGroupForCompetitionService) Do(ctx context.Context, opts ...Reque
 // GetGroupInfoOfCompetitionService Get group info of competition
 type GetGroupInfoOfCompetitionService struct {
 	c       *Client
-	groupId int64
+	groupID int64
 }
 
 // GroupID Set group id
-func (s *GetGroupInfoOfCompetitionService) GroupID(groupId int64) *GetGroupInfoOfCompetitionService {
-	s.groupId = groupId
+func (s *GetGroupInfoOfCompetitionService) GroupID(groupID int64) *GetGroupInfoOfCompetitionService {
+	s.groupID = groupID
 	return s
 }
 
 func (s *GetGroupInfoOfCompetitionService) validate() error {
-	if s.groupId == 0 {
-		return requiredError("groupId")
+	if s.groupID == 0 {
+		return requiredError("groupID")
 	}
 	return nil
 }
@@ -75,9 +75,10 @@ func (s *GetGroupInfoOfCompetitionService) Do(ctx context.Context, opts ...Reque
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/groups/%v", s.groupId),
+		endpoint: fmt.Sprintf("/groups/%v", s.groupID),
 	}
 
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -96,7 +97,7 @@ func (s *GetGroupInfoOfCompetitionService) Do(ctx context.Context, opts ...Reque
 // AddGroupMemberForCompetitionService Add group member for competition
 type AddGroupMemberForCompetitionService struct {
 	c       *Client
-	groupId int64
+	groupID int64
 	body    struct {
 		login string
 		uid   int64
@@ -104,8 +105,8 @@ type AddGroupMemberForCompetitionService struct {
 }
 
 // GroupID Set group id
-func (s *AddGroupMemberForCompetitionService) GroupID(groupId int64) *AddGroupMemberForCompetitionService {
-	s.groupId = groupId
+func (s *AddGroupMemberForCompetitionService) GroupID(groupID int64) *AddGroupMemberForCompetitionService {
+	s.groupID = groupID
 	return s
 }
 
@@ -122,8 +123,8 @@ func (s *AddGroupMemberForCompetitionService) UID(uid int64) *AddGroupMemberForC
 }
 
 func (s *AddGroupMemberForCompetitionService) validate() error {
-	if s.groupId == 0 {
-		return requiredError("groupId")
+	if s.groupID == 0 {
+		return requiredError("groupID")
 	}
 	if s.body.login == "" {
 		return requiredError("login")
@@ -139,9 +140,10 @@ func (s *AddGroupMemberForCompetitionService) Do(ctx context.Context, opts ...Re
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("/groups/%v/members", s.groupId),
+		endpoint: fmt.Sprintf("/groups/%v/members", s.groupID),
 	}
 
 	r.setJSONBody(s.body)
@@ -158,7 +160,7 @@ func (s *AddGroupMemberForCompetitionService) Do(ctx context.Context, opts ...Re
 // RemoveGroupOfCompetitionService Remove group of competition
 type RemoveGroupOfCompetitionService struct {
 	c       *Client
-	groupId int64
+	groupID int64
 	body    struct {
 		login string
 		uid   int64
@@ -166,8 +168,8 @@ type RemoveGroupOfCompetitionService struct {
 }
 
 // GroupID Set group id
-func (s *RemoveGroupOfCompetitionService) GroupID(groupId int64) *RemoveGroupOfCompetitionService {
-	s.groupId = groupId
+func (s *RemoveGroupOfCompetitionService) GroupID(groupID int64) *RemoveGroupOfCompetitionService {
+	s.groupID = groupID
 	return s
 }
 
@@ -184,8 +186,8 @@ func (s *RemoveGroupOfCompetitionService) UID(uid int64) *RemoveGroupOfCompetiti
 }
 
 func (s *RemoveGroupOfCompetitionService) validate() error {
-	if s.groupId == 0 {
-		return requiredError("groupId")
+	if s.groupID == 0 {
+		return requiredError("groupID")
 	}
 	if s.body.login == "" {
 		return requiredError("login")
@@ -200,13 +202,13 @@ func (s *RemoveGroupOfCompetitionService) Do(ctx context.Context, opts ...Reques
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodDelete,
-		endpoint: fmt.Sprintf("/groups/%v/members", s.groupId),
+		endpoint: fmt.Sprintf("/groups/%v/members", s.groupID),
 	}
 	r.setJSONBody(s.body)
-	data, err := s.c.callAPI(ctx, r, opts...)
-	fmt.Println(data)
+	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}

@@ -11,18 +11,18 @@ import (
 // GetListOfGroupsForContestService Get list of groups for contest
 type GetListOfGroupsForContestService struct {
 	c         *Client
-	contestId int64
+	contestID int64
 }
 
 // ContestID Set contest id
-func (s *GetListOfGroupsForContestService) ContestID(contestId int64) *GetListOfGroupsForContestService {
-	s.contestId = contestId
+func (s *GetListOfGroupsForContestService) ContestID(contestID int64) *GetListOfGroupsForContestService {
+	s.contestID = contestID
 	return s
 }
 
 func (s *GetListOfGroupsForContestService) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -32,9 +32,10 @@ func (s *GetListOfGroupsForContestService) Do(ctx context.Context, opts ...Reque
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/groups", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/groups", s.contestID),
 	}
 
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -53,22 +54,22 @@ func (s *GetListOfGroupsForContestService) Do(ctx context.Context, opts ...Reque
 
 type RegisterGroupForContestService struct {
 	c         *Client
-	contestId int64
-	groupId   int64
+	contestID int64
+	groupID   int64
 	body      struct {
 		roles []string
 	}
 }
 
 // ContestID Set contest id
-func (s *RegisterGroupForContestService) ContestID(contestId int64) *RegisterGroupForContestService {
-	s.contestId = contestId
+func (s *RegisterGroupForContestService) ContestID(contestID int64) *RegisterGroupForContestService {
+	s.contestID = contestID
 	return s
 }
 
 // GroupID Set group Id
-func (s *RegisterGroupForContestService) GroupID(groupId int64) *RegisterGroupForContestService {
-	s.groupId = groupId
+func (s *RegisterGroupForContestService) GroupID(groupID int64) *RegisterGroupForContestService {
+	s.groupID = groupID
 	return s
 }
 
@@ -79,23 +80,24 @@ func (s *RegisterGroupForContestService) Roles(roles []string) *RegisterGroupFor
 }
 
 func (s *RegisterGroupForContestService) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.groupId == 0 {
-		return requiredError("groupId")
+	if s.groupID == 0 {
+		return requiredError("groupID")
 	}
 	return nil
 }
 
 // Do send req
-func (s *RegisterGroupForContestService) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *RegisterGroupForContestService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("/contests/%v/groups/%v", s.contestId, s.groupId),
+		endpoint: fmt.Sprintf("/contests/%v/groups/%v", s.contestID, s.groupID),
 	}
 
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -110,40 +112,41 @@ func (s *RegisterGroupForContestService) Do(ctx context.Context, opts ...Request
 // DeleteGroupFromContestService Delete group from contest
 type DeleteGroupFromContestService struct {
 	c         *Client
-	contestId int64
-	groupId   int64
+	contestID int64
+	groupID   int64
 }
 
 // ContestID Set contest id
-func (s *DeleteGroupFromContestService) ContestID(contestId int64) *DeleteGroupFromContestService {
-	s.contestId = contestId
+func (s *DeleteGroupFromContestService) ContestID(contestID int64) *DeleteGroupFromContestService {
+	s.contestID = contestID
 	return s
 }
 
 // GroupID Set group id
-func (s *DeleteGroupFromContestService) GroupID(groupId int64) *DeleteGroupFromContestService {
-	s.groupId = groupId
+func (s *DeleteGroupFromContestService) GroupID(groupID int64) *DeleteGroupFromContestService {
+	s.groupID = groupID
 	return s
 }
 
 func (s *DeleteGroupFromContestService) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.groupId == 0 {
-		return requiredError("groupId")
+	if s.groupID == 0 {
+		return requiredError("groupID")
 	}
 	return nil
 }
 
 // Do send req
-func (s *DeleteGroupFromContestService) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *DeleteGroupFromContestService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodDelete,
-		endpoint: fmt.Sprintf("/contests/%v/groups/%v", s.contestId, s.groupId),
+		endpoint: fmt.Sprintf("/contests/%v/groups/%v", s.contestID, s.groupID),
 	}
 
 	_, err := s.c.callAPI(ctx, r, opts...)
@@ -156,22 +159,22 @@ func (s *DeleteGroupFromContestService) Do(ctx context.Context, opts ...RequestO
 
 type UpdateGroupForContestService struct {
 	c         *Client
-	contestId int64
-	groupId   int64
+	contestID int64
+	groupID   int64
 	body      struct {
 		roles []string
 	}
 }
 
 // ContestID Set contest id
-func (s *UpdateGroupForContestService) ContestID(contestId int64) *UpdateGroupForContestService {
-	s.contestId = contestId
+func (s *UpdateGroupForContestService) ContestID(contestID int64) *UpdateGroupForContestService {
+	s.contestID = contestID
 	return s
 }
 
 // GroupID Set group Id
-func (s *UpdateGroupForContestService) GroupID(groupId int64) *UpdateGroupForContestService {
-	s.groupId = groupId
+func (s *UpdateGroupForContestService) GroupID(groupID int64) *UpdateGroupForContestService {
+	s.groupID = groupID
 	return s
 }
 
@@ -182,11 +185,11 @@ func (s *UpdateGroupForContestService) Roles(roles []string) *UpdateGroupForCont
 }
 
 func (s *UpdateGroupForContestService) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.groupId == 0 {
-		return requiredError("groupId")
+	if s.groupID == 0 {
+		return requiredError("groupID")
 	}
 	return nil
 }
@@ -196,9 +199,10 @@ func (s *UpdateGroupForContestService) Do(ctx context.Context, opts ...RequestOp
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodPatch,
-		endpoint: fmt.Sprintf("/contests/%v/groups/%v", s.contestId, s.groupId),
+		endpoint: fmt.Sprintf("/contests/%v/groups/%v", s.contestID, s.groupID),
 	}
 
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -213,14 +217,14 @@ func (s *UpdateGroupForContestService) Do(ctx context.Context, opts ...RequestOp
 // GetParticipantsOfContestService Get contest participants
 type GetParticipantsOfContestService struct {
 	c           *Client
-	contestId   int64
+	contestID   int64
 	displayName string
 	login       string
 }
 
 // ContestID Set contest id
-func (s *GetParticipantsOfContestService) ContestID(contestId int64) *GetParticipantsOfContestService {
-	s.contestId = contestId
+func (s *GetParticipantsOfContestService) ContestID(contestID int64) *GetParticipantsOfContestService {
+	s.contestID = contestID
 	return s
 }
 
@@ -237,7 +241,7 @@ func (s *GetParticipantsOfContestService) Login(login string) *GetParticipantsOf
 }
 
 func (s *GetParticipantsOfContestService) validate() error {
-	if s.contestId == 0 {
+	if s.contestID == 0 {
 		return requiredError("contestId")
 	}
 	return nil
@@ -248,9 +252,10 @@ func (s *GetParticipantsOfContestService) Do(ctx context.Context, opts ...Reques
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/participants", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/participants", s.contestID),
 	}
 	if s.displayName != "" {
 		r.setParam("display_name", s.displayName)
@@ -276,14 +281,14 @@ func (s *GetParticipantsOfContestService) Do(ctx context.Context, opts ...Reques
 // RegisterParticipantForContestService Register participant for contest
 type RegisterParticipantForContestService struct {
 	c         *Client
-	contestId int64
+	contestID int64
 	login     string
 	uid       int64
 }
 
 // ContestID Set contest id
-func (s *RegisterParticipantForContestService) ContestID(contestId int64) *RegisterParticipantForContestService {
-	s.contestId = contestId
+func (s *RegisterParticipantForContestService) ContestID(contestID int64) *RegisterParticipantForContestService {
+	s.contestID = contestID
 	return s
 }
 
@@ -300,8 +305,8 @@ func (s *RegisterParticipantForContestService) UID(uid int64) *RegisterParticipa
 }
 
 func (s *RegisterParticipantForContestService) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	if s.login == "" {
 		return requiredError("login")
@@ -314,9 +319,10 @@ func (s *RegisterParticipantForContestService) Do(ctx context.Context, opts ...R
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("/contests/%v/participants", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/participants", s.contestID),
 	}
 	if s.login != "" {
 		r.setParam("login", s.login)
@@ -343,28 +349,28 @@ func (s *RegisterParticipantForContestService) Do(ctx context.Context, opts ...R
 // GetInfoOfParticipant Get info about participant
 type GetInfoOfParticipant struct {
 	c             *Client
-	contestId     int64
-	participantId int64
+	contestID     int64
+	participantID int64
 }
 
 // ContestID Set contest id
-func (s *GetInfoOfParticipant) ContestID(contestId int64) *GetInfoOfParticipant {
-	s.contestId = contestId
+func (s *GetInfoOfParticipant) ContestID(contestID int64) *GetInfoOfParticipant {
+	s.contestID = contestID
 	return s
 }
 
 // ParticipantID Set participant id
-func (s *GetInfoOfParticipant) ParticipantID(participantId int64) *GetInfoOfParticipant {
-	s.participantId = participantId
+func (s *GetInfoOfParticipant) ParticipantID(participantID int64) *GetInfoOfParticipant {
+	s.participantID = participantID
 	return s
 }
 
 func (s *GetInfoOfParticipant) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.participantId == 0 {
-		return requiredError("participantId")
+	if s.participantID == 0 {
+		return requiredError("participantID")
 	}
 	return nil
 }
@@ -374,9 +380,10 @@ func (s *GetInfoOfParticipant) Do(ctx context.Context, opts ...RequestOption) (*
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestId, s.participantId),
+		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestID, s.participantID),
 	}
 
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -396,28 +403,28 @@ func (s *GetInfoOfParticipant) Do(ctx context.Context, opts ...RequestOption) (*
 // StartContestForParticipant Start contest for participant
 type StartContestForParticipant struct {
 	c             *Client
-	contestId     int64
-	participantId int64
+	contestID     int64
+	participantID int64
 }
 
 // ContestID Set contest id
-func (s *StartContestForParticipant) ContestID(contestId int64) *StartContestForParticipant {
-	s.contestId = contestId
+func (s *StartContestForParticipant) ContestID(contestID int64) *StartContestForParticipant {
+	s.contestID = contestID
 	return s
 }
 
 // ParticipantID Set participant id
-func (s *StartContestForParticipant) ParticipantID(participantId int64) *StartContestForParticipant {
-	s.participantId = participantId
+func (s *StartContestForParticipant) ParticipantID(participantID int64) *StartContestForParticipant {
+	s.participantID = participantID
 	return s
 }
 
 func (s *StartContestForParticipant) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contest")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.participantId == 0 {
-		return requiredError("participant")
+	if s.participantID == 0 {
+		return requiredError("participantID")
 	}
 	return nil
 }
@@ -427,9 +434,10 @@ func (s *StartContestForParticipant) Do(ctx context.Context, opts ...RequestOpti
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestId, s.participantId),
+		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestID, s.participantID),
 	}
 
 	_, err := s.c.callAPI(ctx, r, opts...)
@@ -442,28 +450,28 @@ func (s *StartContestForParticipant) Do(ctx context.Context, opts ...RequestOpti
 // UnregisterParticipantFromContestService Unregister participant from contest
 type UnregisterParticipantFromContestService struct {
 	c             *Client
-	contestId     int64
-	participantId int64
+	contestID     int64
+	participantID int64
 }
 
 // ContestID Set contest id
-func (s *UnregisterParticipantFromContestService) ContestID(contestId int64) *UnregisterParticipantFromContestService {
-	s.contestId = contestId
+func (s *UnregisterParticipantFromContestService) ContestID(contestID int64) *UnregisterParticipantFromContestService {
+	s.contestID = contestID
 	return s
 }
 
 // ParticipantID Set participant id
-func (s *UnregisterParticipantFromContestService) ParticipantID(participantId int64) *UnregisterParticipantFromContestService {
-	s.participantId = participantId
+func (s *UnregisterParticipantFromContestService) ParticipantID(participantID int64) *UnregisterParticipantFromContestService {
+	s.participantID = participantID
 	return s
 }
 
 func (s *UnregisterParticipantFromContestService) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.participantId == 0 {
-		return requiredError("participantId")
+	if s.participantID == 0 {
+		return requiredError("participantID")
 	}
 	return nil
 }
@@ -473,9 +481,10 @@ func (s *UnregisterParticipantFromContestService) Do(ctx context.Context, opts .
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodDelete,
-		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestId, s.participantId),
+		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestID, s.participantID),
 	}
 
 	_, err := s.c.callAPI(ctx, r, opts...)
@@ -489,22 +498,22 @@ func (s *UnregisterParticipantFromContestService) Do(ctx context.Context, opts .
 // UpdateParticipantForContestService Update participant for contest
 type UpdateParticipantForContestService struct {
 	c         *Client
-	contestId int64
+	contestID int64
 	body      struct {
 		displayedName string
 	}
-	participantId int64
+	participantID int64
 }
 
 // ContestID Set contest id
-func (s *UpdateParticipantForContestService) ContestID(contestId int64) *UpdateParticipantForContestService {
-	s.contestId = contestId
+func (s *UpdateParticipantForContestService) ContestID(contestID int64) *UpdateParticipantForContestService {
+	s.contestID = contestID
 	return s
 }
 
 // ParticipantID Set participant id
-func (s *UpdateParticipantForContestService) ParticipantID(participantId int64) *UpdateParticipantForContestService {
-	s.participantId = participantId
+func (s *UpdateParticipantForContestService) ParticipantID(participantID int64) *UpdateParticipantForContestService {
+	s.participantID = participantID
 	return s
 }
 
@@ -515,11 +524,11 @@ func (s *UpdateParticipantForContestService) DisplayedName(name string) *UpdateP
 }
 
 func (s *UpdateParticipantForContestService) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
-	if s.participantId == 0 {
-		return requiredError("participantId")
+	if s.participantID == 0 {
+		return requiredError("participantID")
 	}
 	if s.body.displayedName == "" {
 		return requiredError("displayedName")
@@ -532,9 +541,10 @@ func (s *UpdateParticipantForContestService) Do(ctx context.Context, opts ...Req
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodPatch,
-		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestId, s.participantId),
+		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestID, s.participantID),
 	}
 
 	r.setJSONBody(s.body)
@@ -550,18 +560,18 @@ func (s *UpdateParticipantForContestService) Do(ctx context.Context, opts ...Req
 // GetInfoOfYourParticipation Get info of your participation
 type GetInfoOfYourParticipation struct {
 	c         *Client
-	contestId int64
+	contestID int64
 }
 
 // ContestID Set contest id
-func (s *GetInfoOfYourParticipation) ContestID(contestId int64) *GetInfoOfYourParticipation {
-	s.contestId = contestId
+func (s *GetInfoOfYourParticipation) ContestID(contestID int64) *GetInfoOfYourParticipation {
+	s.contestID = contestID
 	return s
 }
 
 func (s *GetInfoOfYourParticipation) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -571,9 +581,10 @@ func (s *GetInfoOfYourParticipation) Do(ctx context.Context, opts ...RequestOpti
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestID),
 	}
 
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -593,18 +604,18 @@ func (s *GetInfoOfYourParticipation) Do(ctx context.Context, opts ...RequestOpti
 // StartContest Start contest
 type StartContest struct {
 	c         *Client
-	contestId int64
+	contestID int64
 }
 
 // ContestID Set contest id
-func (s *StartContest) ContestID(contestId int64) *StartContest {
-	s.contestId = contestId
+func (s *StartContest) ContestID(contestID int64) *StartContest {
+	s.contestID = contestID
 	return s
 }
 
 func (s *StartContest) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -614,9 +625,10 @@ func (s *StartContest) Do(ctx context.Context, opts ...RequestOption) (interface
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
@@ -628,18 +640,18 @@ func (s *StartContest) Do(ctx context.Context, opts ...RequestOption) (interface
 // UnregisterYourselfFromContest Unregister yourself from contest
 type UnregisterYourselfFromContest struct {
 	c         *Client
-	contestId int64
+	contestID int64
 }
 
 // ContestID Set contest id
-func (s *UnregisterYourselfFromContest) ContestID(contestId int64) *UnregisterYourselfFromContest {
-	s.contestId = contestId
+func (s *UnregisterYourselfFromContest) ContestID(contestID int64) *UnregisterYourselfFromContest {
+	s.contestID = contestID
 	return s
 }
 
 func (s *UnregisterYourselfFromContest) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contest")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -649,9 +661,10 @@ func (s *UnregisterYourselfFromContest) Do(ctx context.Context, opts ...RequestO
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodDelete,
-		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {

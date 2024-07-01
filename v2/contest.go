@@ -10,18 +10,18 @@ import (
 // GetContestInfo Get information about contest by id
 type GetContestInfo struct {
 	c         *Client
-	contestId int64
+	contestID int64
 }
 
 // ContestID Set contest id
-func (s *GetContestInfo) ContestID(contestId int64) *GetContestInfo {
-	s.contestId = contestId
+func (s *GetContestInfo) ContestID(contestID int64) *GetContestInfo {
+	s.contestID = contestID
 	return s
 }
 
 func (s *GetContestInfo) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -31,9 +31,10 @@ func (s *GetContestInfo) Do(ctx context.Context, opts ...RequestOption) (*Contes
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%d", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%d", s.contestID),
 	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {

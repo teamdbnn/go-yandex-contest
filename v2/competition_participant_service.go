@@ -10,18 +10,18 @@ import (
 // GetParticipantsOfCompetitionService Get Participant list of competition
 type GetParticipantsOfCompetitionService struct {
 	c             *Client
-	competitionId int64
+	competitionID int64
 }
 
 // CompetitionID Set competition id
-func (s *GetParticipantsOfCompetitionService) CompetitionID(competitionId int64) *GetParticipantsOfCompetitionService {
-	s.competitionId = competitionId
+func (s *GetParticipantsOfCompetitionService) CompetitionID(competitionID int64) *GetParticipantsOfCompetitionService {
+	s.competitionID = competitionID
 	return s
 }
 
 func (s *GetParticipantsOfCompetitionService) validate() error {
-	if s.competitionId == 0 {
-		return requiredError("competitionId")
+	if s.competitionID == 0 {
+		return requiredError("competitionID")
 	}
 	return nil
 }
@@ -34,7 +34,7 @@ func (s *GetParticipantsOfCompetitionService) Do(ctx context.Context, opts ...Re
 
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/competitions/%v/participants", s.competitionId),
+		endpoint: fmt.Sprintf("/competitions/%v/participants", s.competitionID),
 	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
@@ -47,15 +47,15 @@ func (s *GetParticipantsOfCompetitionService) Do(ctx context.Context, opts ...Re
 // RegisterParticipantIntoCompetitionService Register Participant into competition
 type RegisterParticipantIntoCompetitionService struct {
 	c             *Client
-	competitionId int64
+	competitionID int64
 	body          struct {
 		users []string
 	}
 }
 
 // CompetitionID Set competition id
-func (s *RegisterParticipantIntoCompetitionService) CompetitionID(competitionId int64) *RegisterParticipantIntoCompetitionService {
-	s.competitionId = competitionId
+func (s *RegisterParticipantIntoCompetitionService) CompetitionID(competitionID int64) *RegisterParticipantIntoCompetitionService {
+	s.competitionID = competitionID
 	return s
 }
 
@@ -66,8 +66,8 @@ func (s *RegisterParticipantIntoCompetitionService) Users(users []string) *Regis
 }
 
 func (s *RegisterParticipantIntoCompetitionService) validate() error {
-	if s.competitionId == 0 {
-		return requiredError("competitionId")
+	if s.competitionID == 0 {
+		return requiredError("competitionID")
 	}
 	if s.body.users == nil {
 		return requiredError("users")
@@ -84,11 +84,10 @@ func (s *RegisterParticipantIntoCompetitionService) Do(ctx context.Context, opts
 
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("/competitions/%v/participants", s.competitionId),
+		endpoint: fmt.Sprintf("/competitions/%v/participants", s.competitionID),
 	}
 	r.setJSONBody(s.body)
 	data, err := s.c.callAPI(ctx, r, opts...)
-	fmt.Println(data)
 	if err != nil {
 		return nil, err
 	}

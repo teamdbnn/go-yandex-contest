@@ -191,7 +191,7 @@ type CreateGroupRequest struct {
 	Name *string `json:"name"`
 }
 
-type GroupId struct {
+type GroupID struct {
 	ID *int64 `json:"id"`
 }
 
@@ -311,7 +311,7 @@ type RegisterGroupRequest struct {
 	Roles *[]string `json:"roles"`
 }
 
-type RunId struct {
+type RunID struct {
 	RunID *int64 `json:"runId"`
 }
 

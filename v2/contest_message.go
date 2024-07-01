@@ -10,13 +10,13 @@ import (
 // GetJuryClarifications Get jury clarifications
 type GetJuryClarifications struct {
 	c         *Client
-	contestId int64
+	contestID int64
 	locale    string
 }
 
 // ContestID Set contest id
-func (s *GetJuryClarifications) ContestID(contestId int64) *GetJuryClarifications {
-	s.contestId = contestId
+func (s *GetJuryClarifications) ContestID(contestID int64) *GetJuryClarifications {
+	s.contestID = contestID
 	return s
 }
 
@@ -27,8 +27,8 @@ func (s *GetJuryClarifications) Locale(locale string) *GetJuryClarifications {
 }
 
 func (s *GetJuryClarifications) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -38,9 +38,10 @@ func (s *GetJuryClarifications) Do(ctx context.Context, opts ...RequestOption) (
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%d/clarifications", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%d/clarifications", s.contestID),
 	}
 	if s.locale == "" {
 		r.setParam("locale", "ru")
@@ -63,18 +64,18 @@ func (s *GetJuryClarifications) Do(ctx context.Context, opts ...RequestOption) (
 // GetContestMessagesService Get messages in contest by contest id
 type GetContestMessagesService struct {
 	c         *Client
-	contestId int64
+	contestID int64
 }
 
 // ContestID Set contest id
-func (s *GetContestMessagesService) ContestID(contestId int64) *GetContestMessagesService {
-	s.contestId = contestId
+func (s *GetContestMessagesService) ContestID(contestID int64) *GetContestMessagesService {
+	s.contestID = contestID
 	return s
 }
 
 func (s *GetContestMessagesService) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -84,9 +85,10 @@ func (s *GetContestMessagesService) Do(ctx context.Context, opts ...RequestOptio
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%d/messages", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%d/messages", s.contestID),
 	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
@@ -104,15 +106,15 @@ func (s *GetContestMessagesService) Do(ctx context.Context, opts ...RequestOptio
 // SendQuestionToJury Get jury clarifications in contest by contest id
 type SendQuestionToJury struct {
 	c         *Client
-	contestId int64
+	contestID int64
 	problem   string
 	subject   string
 	text      string
 }
 
 // ContestID Set contest id
-func (s *SendQuestionToJury) ContestID(contestId int64) *SendQuestionToJury {
-	s.contestId = contestId
+func (s *SendQuestionToJury) ContestID(contestID int64) *SendQuestionToJury {
+	s.contestID = contestID
 	return s
 }
 
@@ -135,8 +137,8 @@ func (s *SendQuestionToJury) Text(text string) *SendQuestionToJury {
 }
 
 func (s *SendQuestionToJury) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	if s.subject == "" {
 		return requiredError("subject")
@@ -154,7 +156,7 @@ func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) (int
 	}
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("/contests/%v/messages", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/messages", s.contestID),
 	}
 	if s.problem != "" {
 		r.setFormParam("problem", s.problem)
@@ -166,8 +168,7 @@ func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) (int
 		r.setFormParam("text", s.text)
 	}
 
-	data, err := s.c.callAPI(ctx, r, opts...)
-	fmt.Println(data)
+	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}

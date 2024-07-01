@@ -10,7 +10,7 @@ import (
 // GetContestStandings Get contest standings
 type GetContestStandings struct {
 	c                 *Client
-	contestId         int64
+	contestID         int64
 	forJudge          bool
 	locale            string
 	page              int32
@@ -20,12 +20,12 @@ type GetContestStandings struct {
 	participantSearch string
 	showExternal      bool
 	showVirtual       bool
-	userGroupId       int64
+	userGroupID       int64
 }
 
 // ContestID Set contest id
-func (s *GetContestStandings) ContestID(contestId int64) *GetContestStandings {
-	s.contestId = contestId
+func (s *GetContestStandings) ContestID(contestID int64) *GetContestStandings {
+	s.contestID = contestID
 	return s
 }
 
@@ -73,15 +73,15 @@ func (s *GetContestStandings) ShowVirtual(showVirtual bool) *GetContestStandings
 	return s
 }
 
-// UserGroupId User group id
-func (s *GetContestStandings) UserGroupId(userGroupId int64) *GetContestStandings {
-	s.userGroupId = userGroupId
+// UserGroupID User group id
+func (s *GetContestStandings) UserGroupID(userGroupID int64) *GetContestStandings {
+	s.userGroupID = userGroupID
 	return s
 }
 
 func (s *GetContestStandings) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -91,9 +91,10 @@ func (s *GetContestStandings) Do(ctx context.Context, opts ...RequestOption) (*C
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/standings", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/standings", s.contestID),
 	}
 	r.setParam("forJudge", s.forJudge)
 
@@ -119,6 +120,7 @@ func (s *GetContestStandings) Do(ctx context.Context, opts ...RequestOption) (*C
 
 	r.setParam("showVirtual", s.showVirtual)
 
+	r.setParam("userGroupID", s.userGroupID)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
@@ -136,7 +138,7 @@ func (s *GetContestStandings) Do(ctx context.Context, opts ...RequestOption) (*C
 // GetContestStandingsExtended Get extended contest standings
 type GetContestStandingsExtended struct {
 	c                 *Client
-	contestId         int64
+	contestID         int64
 	forJudge          bool
 	locale            string
 	page              int32
@@ -146,12 +148,12 @@ type GetContestStandingsExtended struct {
 	participantSearch string
 	showExternal      bool
 	showVirtual       bool
-	userGroupId       int64
+	userGroupID       int64
 }
 
 // ContestID Set contest id
-func (s *GetContestStandingsExtended) ContestID(contestId int64) *GetContestStandingsExtended {
-	s.contestId = contestId
+func (s *GetContestStandingsExtended) ContestID(contestID int64) *GetContestStandingsExtended {
+	s.contestID = contestID
 	return s
 }
 
@@ -200,14 +202,14 @@ func (s *GetContestStandingsExtended) ShowVirtual(showVirtual bool) *GetContestS
 }
 
 // UserGroupId User group id
-func (s *GetContestStandingsExtended) UserGroupId(userGroupId int64) *GetContestStandingsExtended {
-	s.userGroupId = userGroupId
+func (s *GetContestStandingsExtended) UserGroupId(userGroupID int64) *GetContestStandingsExtended {
+	s.userGroupID = userGroupID
 	return s
 }
 
 func (s *GetContestStandingsExtended) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -217,9 +219,10 @@ func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOpt
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/standings-extended", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/standings-extended", s.contestID),
 	}
 	r.setParam("forJudge", s.forJudge)
 
@@ -245,6 +248,7 @@ func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOpt
 
 	r.setParam("showVirtual", s.showVirtual)
 
+	r.setParam("userGroupID", s.userGroupID)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
@@ -261,7 +265,7 @@ func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOpt
 
 type GetYourPositionInContestStandings struct {
 	c            *Client
-	contestId    int64
+	contestID    int64
 	forJudge     bool
 	locale       string
 	showExternal bool
@@ -269,8 +273,8 @@ type GetYourPositionInContestStandings struct {
 }
 
 // ContestID Set contest id
-func (s *GetYourPositionInContestStandings) ContestID(contestId int64) *GetYourPositionInContestStandings {
-	s.contestId = contestId
+func (s *GetYourPositionInContestStandings) ContestID(contestID int64) *GetYourPositionInContestStandings {
+	s.contestID = contestID
 	return s
 }
 
@@ -299,8 +303,8 @@ func (s *GetYourPositionInContestStandings) ShowVirtual(showVirtual bool) *GetYo
 }
 
 func (s *GetYourPositionInContestStandings) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contest")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -310,19 +314,22 @@ func (s *GetYourPositionInContestStandings) Do(ctx context.Context, opts ...Requ
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/%v/standings/my", s.contestId),
+		endpoint: fmt.Sprintf("/contests/%v/standings/my", s.contestID),
 	}
 	r.setParam("forJudge", s.forJudge)
-	r.setParam("showExternal", s.showExternal)
-	r.setParam("showVirtual", s.showVirtual)
+
 	if s.locale != "" {
 		r.setParam("locale", s.locale)
 	} else {
 		r.setParam("locale", "ru")
 	}
 
+	r.setParam("showExternal", s.showExternal)
+
+	r.setParam("showVirtual", s.showVirtual)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err

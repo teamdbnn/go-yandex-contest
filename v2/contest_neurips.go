@@ -10,7 +10,7 @@ import (
 // GetAllSubmissionsForContest Get all contest submissions
 type GetAllSubmissionsForContest struct {
 	c                *Client
-	contestId        int64
+	contestID        int64
 	onlyFinished     bool
 	pageNumber       int32
 	pageSize         int32
@@ -20,8 +20,8 @@ type GetAllSubmissionsForContest struct {
 }
 
 // ContestID Set contest id
-func (s *GetAllSubmissionsForContest) ContestID(contestId int64) *GetAllSubmissionsForContest {
-	s.contestId = contestId
+func (s *GetAllSubmissionsForContest) ContestID(contestID int64) *GetAllSubmissionsForContest {
+	s.contestID = contestID
 	return s
 }
 
@@ -44,21 +44,16 @@ func (s *GetAllSubmissionsForContest) PageSize(pageSize int32) *GetAllSubmission
 	return s
 }
 
-// SortBy Sort by, default "ID"
-func (s *GetAllSubmissionsForContest) SortBy(sortBy string) *GetAllSubmissionsForContest {
-	s.sortBy = sortBy
-	return s
-}
-
-// SortDesc Sort desc, default "ASC"
-func (s *GetAllSubmissionsForContest) SortDesc(sortDesc string) *GetAllSubmissionsForContest {
-	s.sortDesc = sortDesc
+// Sort by field and direction, default "ID" and "ASC"
+func (s *GetAllSubmissionsForContest) Sort(field, direction string) *GetAllSubmissionsForContest {
+	s.sortBy = field
+	s.sortDesc = direction
 	return s
 }
 
 func (s *GetAllSubmissionsForContest) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -68,15 +63,17 @@ func (s *GetAllSubmissionsForContest) Do(ctx context.Context, opts ...RequestOpt
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/neurips/%v/submissions/all", s.contestId),
+		endpoint: fmt.Sprintf("/contests/neurips/%v/submissions/all", s.contestID),
 	}
+	const pageSizeDefault = 30
 	r.setParam("onlyFinished", s.onlyFinished)
 	r.setParam("pageNumber", s.pageNumber)
 
 	if s.pageSize == 0 && !s.pageSizeFuncCall {
-		r.setParam("pageSize", 30)
+		r.setParam("pageSize", pageSizeDefault)
 	} else {
 		r.setParam("pageSize", s.pageSize)
 	}
@@ -109,7 +106,7 @@ func (s *GetAllSubmissionsForContest) Do(ctx context.Context, opts ...RequestOpt
 
 type GetYourSubmissionsForContest struct {
 	c                *Client
-	contestId        int64
+	contestID        int64
 	onlyFinished     bool
 	pageNumber       int32
 	pageSize         int32
@@ -119,8 +116,8 @@ type GetYourSubmissionsForContest struct {
 }
 
 // ContestID Set contest id
-func (s *GetYourSubmissionsForContest) ContestID(contestId int64) *GetYourSubmissionsForContest {
-	s.contestId = contestId
+func (s *GetYourSubmissionsForContest) ContestID(contestID int64) *GetYourSubmissionsForContest {
+	s.contestID = contestID
 	return s
 }
 
@@ -156,8 +153,8 @@ func (s *GetYourSubmissionsForContest) SortDesc(sortDesc string) *GetYourSubmiss
 }
 
 func (s *GetYourSubmissionsForContest) validate() error {
-	if s.contestId == 0 {
-		return requiredError("contestId")
+	if s.contestID == 0 {
+		return requiredError("contestID")
 	}
 	return nil
 }
@@ -167,15 +164,17 @@ func (s *GetYourSubmissionsForContest) Do(ctx context.Context, opts ...RequestOp
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
+
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("/contests/neurips/%v/submissions/my", s.contestId),
+		endpoint: fmt.Sprintf("/contests/neurips/%v/submissions/my", s.contestID),
 	}
+	const pageSizeDefault = 30
 	r.setParam("onlyFinished", s.onlyFinished)
 	r.setParam("pageNumber", s.pageNumber)
 
 	if s.pageSize == 0 && !s.pageSizeFuncCall {
-		r.setParam("pageSize", 30)
+		r.setParam("pageSize", pageSizeDefault)
 	} else {
 		r.setParam("pageSize", s.pageSize)
 	}
