@@ -41,7 +41,7 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | &#9744; | GET | `/contests/{contestId}/standings` | Get contest standings |
 | &#9744; | GET | `/contests/{contestId}/standings-extended` | Get contest standings |
 | &#9744; | GET | `/contests/{contestId}/standings/my` | Get your position in contest standings |
-| &#9744; | GET | `/contests/{contestId}/submissions` | Get submissions for contest |
+| :white_check_mark:  | GET | `/contests/{contestId}/submissions` | Get submissions for contest |
 | &#9744; | POST | `/contests/{contestId}/submissions` | Send submission |
 | &#9744; | POST | `/contests/{contestId}/submissions/lazy` | Send submission from URL |
 | &#9744; | GET | `/contests/{contestId}/submissions/multiple` | Get report for multiple submissions |
