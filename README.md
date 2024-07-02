@@ -21,7 +21,7 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | &#9744; | GET | `/contests/neurips/{contestId}/submissions/all` | Get all submissions for contest |
 | &#9744; | GET | `/contests/neurips/{contestId}/submissions/my` | Get your submissions for contest |
 | :white_check_mark: | GET | `/contests/{contestId}/groups` | List groups registered for contest |
-| &#9744; | POST | `/contests/{contestId}/groups/{groupId}` | Register group for contest |
+| :white_check_mark: | POST | `/contests/{contestId}/groups/{groupId}` | Register group for contest |
 | :white_check_mark: | DELETE | `/contests/{contestId}/groups/{groupId}` | Delete group for contest |
 | &#9744; | PATCH | `/contests/{contestId}/groups/{groupId}` | Change group registration info |
 | :white_check_mark: | GET | `/contests/{contestId}/participants` | Get contest participants |
