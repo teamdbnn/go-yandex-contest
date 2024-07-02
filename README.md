@@ -10,7 +10,7 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | &#9744; | POST | `/competitions/{competitionId}/participants` | Register participants into competition |
 | :white_check_mark: | GET | `/compilers` | Get compilers list |
 | :white_check_mark: | GET | `/contests/{contestId}` | Get information about contest |
-| &#9744; | POST | `/groups/` | Create a new group |
+| :white_check_mark: | POST | `/groups/` | Create a new group |
 | :white_check_mark: | GET | `/groups/{groupId}` | View group |
 | &#9744; | POST | `/groups/{groupId}/members` | Add group member |
 | &#9744; | DELETE | `/groups/{groupId}/members` | Remove group member |
