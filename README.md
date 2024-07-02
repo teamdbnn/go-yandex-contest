@@ -14,7 +14,7 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | :white_check_mark: | GET | `/groups/{groupId}` | View group |
 | &#9744; | POST | `/groups/{groupId}/members` | Add group member |
 | &#9744; | DELETE | `/groups/{groupId}/members` | Remove group member |
-| &#9744; | POST | `/user/{userId}/generate-password` | Generate new password for internal user |
+| :white_check_mark: | POST | `/user/{userId}/generate-password` | Generate new password for internal user |
 | &#9744; | GET | `/contests/{contestId}/clarifications` | Get jury clarifications |
 | &#9744; | GET | `/contests/{contestId}/messages` | Get your questions and jury answers |
 | &#9744; | POST | `/contests/{contestId}/messages` | Send question to jury |
