@@ -23,7 +23,7 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | :white_check_mark: | GET | `/contests/{contestId}/groups` | List groups registered for contest |
 | :white_check_mark: | POST | `/contests/{contestId}/groups/{groupId}` | Register group for contest |
 | :white_check_mark: | DELETE | `/contests/{contestId}/groups/{groupId}` | Delete group for contest |
-| &#9744; | PATCH | `/contests/{contestId}/groups/{groupId}` | Change group registration info |
+| :white_check_mark: | PATCH | `/contests/{contestId}/groups/{groupId}` | Change group registration info |
 | :white_check_mark: | GET | `/contests/{contestId}/participants` | Get contest participants |
 | :white_check_mark: | POST | `/contests/{contestId}/participants` | Register for contest |
 | :white_check_mark: | GET | `/contests/{contestId}/participants/{participantId}` | Get information about participant |
