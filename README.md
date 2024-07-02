@@ -29,7 +29,7 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | :white_check_mark: | GET | `/contests/{contestId}/participants/{participantId}` | Get information about participant |
 | :white_check_mark: | PUT | `/contests/{contestId}/participants/{participantId}` | Start the contest for participant |
 | &#9744; | DELETE | `/contests/{contestId}/participants/{participantId}` | Unregister participant from contest |
-| &#9744; | PATCH | `/contests/{contestId}/participants/{participantId}` | Update participant in contest |
+| :white_check_mark: | PATCH | `/contests/{contestId}/participants/{participantId}` | Update participant in contest |
 | :white_check_mark: | GET | `/contests/{contestId}/participation` | Get informantion about your participation |
 | :white_check_mark: | PUT | `/contests/{contestId}/participation` | Start the contest |
 | &#9744; | DELETE | `/contests/{contestId}/participation` | Unregister yourself from contest |
