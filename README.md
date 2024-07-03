@@ -38,9 +38,9 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | &#9744; | GET | `/problems` | Get problem file |
 | &#9744; | GET | `/service/capacity` | Get submissoins queue capacity |
 | :white_check_mark: | GET | `/service/introspect` | Get avaible scopes |
-| &#9744; | GET | `/contests/{contestId}/standings` | Get contest standings |
+| :white_check_mark: | GET | `/contests/{contestId}/standings` | Get contest standings |
 | &#9744; | GET | `/contests/{contestId}/standings-extended` | Get contest standings |
-| &#9744; | GET | `/contests/{contestId}/standings/my` | Get your position in contest standings |
+| :white_check_mark: | GET | `/contests/{contestId}/standings/my` | Get your position in contest standings |
 | :white_check_mark:  | GET | `/contests/{contestId}/submissions` | Get submissions for contest |
 | &#9744; | POST | `/contests/{contestId}/submissions` | Send submission |
 | &#9744; | POST | `/contests/{contestId}/submissions/lazy` | Send submission from URL |
