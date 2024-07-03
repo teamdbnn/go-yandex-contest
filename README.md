@@ -51,7 +51,7 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | &#9744; | HEAD | `/contests/{contestId}/submissions/{submissionId}/source` | Get metadata of submission source code|
 | &#9744; | GET | `/contests/{contestId}/submissions/{submissionId}/{testName}/answer` | Get full answer file for test |
 | &#9744; | GET | `/contests/{contestId}/submissions/{submissionId}/{testName}/input` | Get full input file for test |
-| &#9744; | GET | `/contests/{contestId}/submissions/{submissionId}/{testName}/output` | Get participant output for test |
+| :white_check_mark: | GET | `/contests/{contestId}/submissions/{submissionId}/{testName}/output` | Get participant output for test |
 | :white_check_mark: | POST | `/submissions/{submissionId}/rejudge` | Rejudge submission | 
 | :white_check_mark: | GET | `/teams` | Get user teams |
 
