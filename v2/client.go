@@ -277,9 +277,9 @@ func (c *Client) NewGetContestProblems() *GetContestProblems {
 	return &GetContestProblems{c: c}
 }
 
-// NewGetStatementProblem Get statement problem
-func (c *Client) NewGetStatementProblem() *GetStatementProblem {
-	return &GetStatementProblem{c: c}
+// NewGetProblemStatement Get problem statement
+func (c *Client) NewGetProblemStatement() *GetProblemStatement {
+	return &GetProblemStatement{c: c}
 }
 
 // NewGetProblemFile Get problem file

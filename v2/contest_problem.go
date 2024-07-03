@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 // GetContestProblems Get contest problems
@@ -62,8 +63,8 @@ func (s *GetContestProblems) Do(ctx context.Context, opts ...RequestOption) (*Co
 	return res, nil
 }
 
-// GetStatementProblem Get statement problem
-type GetStatementProblem struct {
+// GetProblemStatement Get problem statement
+type GetProblemStatement struct {
 	c         *Client
 	contestID int64
 	alias     string
@@ -72,30 +73,30 @@ type GetStatementProblem struct {
 }
 
 // ContestID Set contest id
-func (s *GetStatementProblem) ContestID(contestID int64) *GetStatementProblem {
+func (s *GetProblemStatement) ContestID(contestID int64) *GetProblemStatement {
 	s.contestID = contestID
 	return s
 }
 
 // Alias Set alias
-func (s *GetStatementProblem) Alias(alias string) *GetStatementProblem {
+func (s *GetProblemStatement) Alias(alias string) *GetProblemStatement {
 	s.alias = alias
 	return s
 }
 
 // Locale Set locale
-func (s *GetStatementProblem) Locale(locale string) *GetStatementProblem {
+func (s *GetProblemStatement) Locale(locale string) *GetProblemStatement {
 	s.locale = locale
 	return s
 }
 
 // Type Set type
-func (s *GetStatementProblem) Type(types string) *GetStatementProblem {
+func (s *GetProblemStatement) Type(types string) *GetProblemStatement {
 	s.types = types
 	return s
 }
 
-func (s *GetStatementProblem) validate() error {
+func (s *GetProblemStatement) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
@@ -106,7 +107,7 @@ func (s *GetStatementProblem) validate() error {
 }
 
 // Do Send GET request
-func (s *GetStatementProblem) Do(ctx context.Context, opts ...RequestOption) (*ContestProblems, error) {
+func (s *GetProblemStatement) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -121,17 +122,23 @@ func (s *GetStatementProblem) Do(ctx context.Context, opts ...RequestOption) (*C
 		r.setParam("locale", s.locale)
 	}
 	r.setParam("type", s.types)
+
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
-	res := new(ContestProblems)
-	err = json.Unmarshal(data, res)
-	fmt.Println(res)
+
+	f, err := os.Create("problemStatement")
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+
+	_, err = f.Write(data)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
 }
 
 // GetProblemFile Get Problem file

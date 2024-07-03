@@ -57,7 +57,7 @@ type RegisterGroupForContestService struct {
 	contestID int64
 	groupID   int64
 	body      struct {
-		roles []string
+		Roles []string `json:"roles"`
 	}
 }
 
@@ -74,8 +74,8 @@ func (s *RegisterGroupForContestService) GroupID(groupID int64) *RegisterGroupFo
 }
 
 // Roles Set roles
-func (s *RegisterGroupForContestService) Roles(roles []string) *RegisterGroupForContestService {
-	s.body.roles = roles
+func (s *RegisterGroupForContestService) Roles(Roles []string) *RegisterGroupForContestService {
+	s.body.Roles = Roles
 	return s
 }
 
@@ -85,6 +85,9 @@ func (s *RegisterGroupForContestService) validate() error {
 	}
 	if s.groupID == 0 {
 		return requiredError("groupID")
+	}
+	if s.body.Roles == nil {
+		return requiredError("Roles")
 	}
 	return nil
 }
@@ -99,9 +102,8 @@ func (s *RegisterGroupForContestService) Do(ctx context.Context, opts ...Request
 		method:   http.MethodPost,
 		endpoint: fmt.Sprintf("/contests/%v/groups/%v", s.contestID, s.groupID),
 	}
-
-	data, err := s.c.callAPI(ctx, r, opts...)
-	fmt.Println(data)
+	r.setJSONBody(s.body)
+	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -162,7 +164,7 @@ type UpdateGroupForContestService struct {
 	contestID int64
 	groupID   int64
 	body      struct {
-		roles []string
+		Roles []string `json:"roles"`
 	}
 }
 
@@ -179,8 +181,8 @@ func (s *UpdateGroupForContestService) GroupID(groupID int64) *UpdateGroupForCon
 }
 
 // Roles Set roles
-func (s *UpdateGroupForContestService) Roles(roles []string) *UpdateGroupForContestService {
-	s.body.roles = roles
+func (s *UpdateGroupForContestService) Roles(Roles []string) *UpdateGroupForContestService {
+	s.body.Roles = Roles
 	return s
 }
 
@@ -191,11 +193,14 @@ func (s *UpdateGroupForContestService) validate() error {
 	if s.groupID == 0 {
 		return requiredError("groupID")
 	}
+	if s.body.Roles == nil {
+		return requiredError("Roles")
+	}
 	return nil
 }
 
 // Do send req
-func (s *UpdateGroupForContestService) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *UpdateGroupForContestService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -204,9 +209,8 @@ func (s *UpdateGroupForContestService) Do(ctx context.Context, opts ...RequestOp
 		method:   http.MethodPatch,
 		endpoint: fmt.Sprintf("/contests/%v/groups/%v", s.contestID, s.groupID),
 	}
-
-	data, err := s.c.callAPI(ctx, r, opts...)
-	fmt.Println(data)
+	r.setJSONBody(s.body)
+	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -477,7 +481,7 @@ func (s *UnregisterParticipantFromContestService) validate() error {
 }
 
 // Do send req
-func (s *UnregisterParticipantFromContestService) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *UnregisterParticipantFromContestService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -500,7 +504,7 @@ type UpdateParticipantForContestService struct {
 	c         *Client
 	contestID int64
 	body      struct {
-		displayedName string
+		DisplayedName string `json:"displayedName"`
 	}
 	participantID int64
 }
@@ -518,8 +522,8 @@ func (s *UpdateParticipantForContestService) ParticipantID(participantID int64) 
 }
 
 // DisplayedName Set displayedName
-func (s *UpdateParticipantForContestService) DisplayedName(name string) *UpdateParticipantForContestService {
-	s.body.displayedName = name
+func (s *UpdateParticipantForContestService) DisplayedName(DisplayedName string) *UpdateParticipantForContestService {
+	s.body.DisplayedName = DisplayedName
 	return s
 }
 
@@ -530,8 +534,8 @@ func (s *UpdateParticipantForContestService) validate() error {
 	if s.participantID == 0 {
 		return requiredError("participantID")
 	}
-	if s.body.displayedName == "" {
-		return requiredError("displayedName")
+	if s.body.DisplayedName == "" {
+		return requiredError("DisplayedName")
 	}
 	return nil
 }
@@ -657,7 +661,7 @@ func (s *UnregisterYourselfFromContest) validate() error {
 }
 
 // Do send req
-func (s *UnregisterYourselfFromContest) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *UnregisterYourselfFromContest) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}

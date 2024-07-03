@@ -11,19 +11,19 @@ import (
 type CreateGroupForCompetitionService struct {
 	c    *Client
 	body struct {
-		name string
+		Name string `json:"name"`
 	}
 }
 
 // Name Set name
-func (s *CreateGroupForCompetitionService) Name(name string) *CreateGroupForCompetitionService {
-	s.body.name = name
+func (s *CreateGroupForCompetitionService) Name(Name string) *CreateGroupForCompetitionService {
+	s.body.Name = Name
 	return s
 }
 
 func (s *CreateGroupForCompetitionService) validate() error {
-	if s.body.name == "" {
-		return requiredError("name")
+	if s.body.Name == "" {
+		return requiredError("Name")
 	}
 	return nil
 }
@@ -99,8 +99,8 @@ type AddGroupMemberForCompetitionService struct {
 	c       *Client
 	groupID int64
 	body    struct {
-		login string
-		uid   int64
+		Login string `json:"login"`
+		Uid   int64  `json:"uid"`
 	}
 }
 
@@ -111,14 +111,14 @@ func (s *AddGroupMemberForCompetitionService) GroupID(groupID int64) *AddGroupMe
 }
 
 // Login Set login
-func (s *AddGroupMemberForCompetitionService) Login(login string) *AddGroupMemberForCompetitionService {
-	s.body.login = login
+func (s *AddGroupMemberForCompetitionService) Login(Login string) *AddGroupMemberForCompetitionService {
+	s.body.Login = Login
 	return s
 }
 
 // UID Set uid
-func (s *AddGroupMemberForCompetitionService) UID(uid int64) *AddGroupMemberForCompetitionService {
-	s.body.uid = uid
+func (s *AddGroupMemberForCompetitionService) UID(Uid int64) *AddGroupMemberForCompetitionService {
+	s.body.Uid = Uid
 	return s
 }
 
@@ -126,17 +126,17 @@ func (s *AddGroupMemberForCompetitionService) validate() error {
 	if s.groupID == 0 {
 		return requiredError("groupID")
 	}
-	if s.body.login == "" {
-		return requiredError("login")
+	if s.body.Login == "" {
+		return requiredError("Login")
 	}
-	if s.body.uid == 0 {
-		return requiredError("uid")
+	if s.body.Uid == 0 {
+		return requiredError("Uid")
 	}
 	return nil
 }
 
 // Do send req
-func (s *AddGroupMemberForCompetitionService) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *AddGroupMemberForCompetitionService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -147,9 +147,8 @@ func (s *AddGroupMemberForCompetitionService) Do(ctx context.Context, opts ...Re
 	}
 
 	r.setJSONBody(s.body)
-	data, err := s.c.callAPI(ctx, r, opts...)
+	_, err := s.c.callAPI(ctx, r, opts...)
 
-	fmt.Println(data)
 	if err != nil {
 		return nil, err
 	}
@@ -162,8 +161,8 @@ type RemoveGroupOfCompetitionService struct {
 	c       *Client
 	groupID int64
 	body    struct {
-		login string
-		uid   int64
+		Login string `json:"login"`
+		Uid   int64  `json:"uid"`
 	}
 }
 
@@ -174,14 +173,14 @@ func (s *RemoveGroupOfCompetitionService) GroupID(groupID int64) *RemoveGroupOfC
 }
 
 // Login Set login
-func (s *RemoveGroupOfCompetitionService) Login(login string) *RemoveGroupOfCompetitionService {
-	s.body.login = login
+func (s *RemoveGroupOfCompetitionService) Login(Login string) *RemoveGroupOfCompetitionService {
+	s.body.Login = Login
 	return s
 }
 
 // UID Set uid
-func (s *RemoveGroupOfCompetitionService) UID(uid int64) *RemoveGroupOfCompetitionService {
-	s.body.uid = uid
+func (s *RemoveGroupOfCompetitionService) UID(Uid int64) *RemoveGroupOfCompetitionService {
+	s.body.Uid = Uid
 	return s
 }
 
@@ -189,16 +188,16 @@ func (s *RemoveGroupOfCompetitionService) validate() error {
 	if s.groupID == 0 {
 		return requiredError("groupID")
 	}
-	if s.body.login == "" {
-		return requiredError("login")
+	if s.body.Login == "" {
+		return requiredError("Login")
 	}
-	if s.body.uid == 0 {
-		return requiredError("uid")
+	if s.body.Uid == 0 {
+		return requiredError("Uid")
 	}
 	return nil
 }
 
-func (s *RemoveGroupOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *RemoveGroupOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}

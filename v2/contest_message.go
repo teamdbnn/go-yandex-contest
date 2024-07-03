@@ -150,7 +150,7 @@ func (s *SendQuestionToJury) validate() error {
 }
 
 // Do send req
-func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}

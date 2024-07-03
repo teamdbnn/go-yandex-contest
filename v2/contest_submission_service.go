@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 // GetSubmissionsOfContestService Get contest participants
@@ -45,7 +46,7 @@ func (s *GetSubmissionsOfContestService) validate() error {
 }
 
 // Do send req
-func (s *GetSubmissionsOfContestService) Do(ctx context.Context, opts ...RequestOption) ([]*Submission, error) {
+func (s *GetSubmissionsOfContestService) Do(ctx context.Context, opts ...RequestOption) (*Submissions, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -71,7 +72,7 @@ func (s *GetSubmissionsOfContestService) Do(ctx context.Context, opts ...Request
 		return nil, err
 	}
 
-	res := make([]*Submission, 0)
+	res := new(Submissions)
 
 	err = json.Unmarshal(data, &res)
 	if err != nil {
@@ -85,11 +86,11 @@ type SendSubmissionFromURL struct {
 	c         *Client
 	contestID int64
 	body      struct {
-		fileUrl      string
-		fileName     string
-		problemAlias string
-		compilerID   string
-		meta         string
+		FileUrl      string `json:"fileUrl"`
+		FileName     string `json:"fileName"`
+		ProblemAlias string `json:"problemAlias"`
+		CompilerID   string `json:"compilerID"`
+		Meta         string `json:"meta"`
 	}
 }
 
@@ -100,32 +101,32 @@ func (s *SendSubmissionFromURL) ContestID(contestID int64) *SendSubmissionFromUR
 }
 
 // FileUrl Set file URL
-func (s *SendSubmissionFromURL) FileUrl(fileUrl string) *SendSubmissionFromURL {
-	s.body.fileUrl = fileUrl
+func (s *SendSubmissionFromURL) FileUrl(FileUrl string) *SendSubmissionFromURL {
+	s.body.FileUrl = FileUrl
 	return s
 }
 
 // FileName Set file name
-func (s *SendSubmissionFromURL) FileName(fileName string) *SendSubmissionFromURL {
-	s.body.fileName = fileName
+func (s *SendSubmissionFromURL) FileName(FileName string) *SendSubmissionFromURL {
+	s.body.FileName = FileName
 	return s
 }
 
 // ProblemAlias Set problem alias
-func (s *SendSubmissionFromURL) ProblemAlias(problemAlias string) *SendSubmissionFromURL {
-	s.body.problemAlias = problemAlias
+func (s *SendSubmissionFromURL) ProblemAlias(ProblemAlias string) *SendSubmissionFromURL {
+	s.body.ProblemAlias = ProblemAlias
 	return s
 }
 
 // CompilerID Set compiler id
-func (s *SendSubmissionFromURL) CompilerID(compilerID string) *SendSubmissionFromURL {
-	s.body.compilerID = compilerID
+func (s *SendSubmissionFromURL) CompilerID(CompilerID string) *SendSubmissionFromURL {
+	s.body.CompilerID = CompilerID
 	return s
 }
 
 // Meta Set meta
-func (s *SendSubmissionFromURL) Meta(meta string) *SendSubmissionFromURL {
-	s.body.meta = meta
+func (s *SendSubmissionFromURL) Meta(Meta string) *SendSubmissionFromURL {
+	s.body.Meta = Meta
 	return s
 }
 
@@ -133,20 +134,20 @@ func (s *SendSubmissionFromURL) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
-	if s.body.fileUrl == "" {
-		return requiredError("fileUrl")
+	if s.body.FileUrl == "" {
+		return requiredError("FileUrl")
 	}
-	if s.body.fileName == "" {
-		return requiredError("fileName")
+	if s.body.FileName == "" {
+		return requiredError("FileName")
 	}
-	if s.body.problemAlias == "" {
-		return requiredError("problemAlias")
+	if s.body.ProblemAlias == "" {
+		return requiredError("ProblemAlias")
 	}
-	if s.body.compilerID == "" {
-		return requiredError("compilerID")
+	if s.body.CompilerID == "" {
+		return requiredError("CompilerID")
 	}
-	if s.body.meta == "" {
-		return requiredError("meta")
+	if s.body.Meta == "" {
+		return requiredError("Meta")
 	}
 	return nil
 }
@@ -206,6 +207,9 @@ func (s *GetReportForMultipleSubmissions) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
+	if s.runIDs == nil {
+		return requiredError("runIDs")
+	}
 	return nil
 }
 
@@ -225,7 +229,7 @@ func (s *GetReportForMultipleSubmissions) Do(ctx context.Context, opts ...Reques
 		r.setParam("locale", s.locale)
 	}
 
-	r.setParam("runIDs", s.runIDs)
+	r.setParam("runIds", s.runIDs)
 
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
@@ -388,7 +392,7 @@ func (s *GetSubmissionSourceCode) validate() error {
 }
 
 // Do send req
-func (s *GetSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *GetSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption) ([]byte, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -403,13 +407,7 @@ func (s *GetSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption)
 		return nil, err
 	}
 
-	res := new(interface{})
-
-	err = json.Unmarshal(data, &res)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+	return data, nil
 }
 
 // GetMetadataOfSubmissionSourceCode Get metadata of submission source code
@@ -442,7 +440,7 @@ func (s *GetMetadataOfSubmissionSourceCode) validate() error {
 }
 
 // Do send req
-func (s *GetMetadataOfSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *GetMetadataOfSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption) ([]byte, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -452,12 +450,12 @@ func (s *GetMetadataOfSubmissionSourceCode) Do(ctx context.Context, opts ...Requ
 		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/source", s.contestID, s.submissionID),
 	}
 
-	_, err := s.c.callAPI(ctx, r, opts...)
+	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	return data, nil
 }
 
 // GetFullAnswerFileForTest Get full answer file for test
@@ -507,11 +505,10 @@ func (s *GetFullAnswerFileForTest) validate() error {
 }
 
 // Do send req
-func (s *GetFullAnswerFileForTest) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *GetFullAnswerFileForTest) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
-
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/%v/answer", s.contestID, s.submissionID, s.testName),
@@ -521,12 +518,18 @@ func (s *GetFullAnswerFileForTest) Do(ctx context.Context, opts ...RequestOption
 	if err != nil {
 		return nil, err
 	}
-	res := new(interface{})
-	err = json.Unmarshal(data, &res)
+
+	f, err := os.Create("fullAnswerFileForTest")
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+
+	_, err = f.Write(data)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
 }
 
 // GetFullInputFileForTest Get full input file for test
@@ -576,7 +579,7 @@ func (s *GetFullInputFileForTest) validate() error {
 }
 
 // Do send req
-func (s *GetFullInputFileForTest) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *GetFullInputFileForTest) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -591,13 +594,17 @@ func (s *GetFullInputFileForTest) Do(ctx context.Context, opts ...RequestOption)
 		return nil, err
 	}
 
-	res := new(interface{})
-
-	err = json.Unmarshal(data, &res)
+	f, err := os.Create("fullInputFileForTest")
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+
+	_, err = f.Write(data)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
 }
 
 // GetParticipantOutputForTest Get participant output for test
@@ -615,8 +622,8 @@ func (s *GetParticipantOutputForTest) ContestID(contestID int64) *GetParticipant
 	return s
 }
 
-// SubmissionId Set submission id
-func (s *GetParticipantOutputForTest) SubmissionId(submissionID int64) *GetParticipantOutputForTest {
+// SubmissionID Set submission id
+func (s *GetParticipantOutputForTest) SubmissionID(submissionID int64) *GetParticipantOutputForTest {
 	s.submissionID = submissionID
 	return s
 }
@@ -647,7 +654,7 @@ func (s *GetParticipantOutputForTest) validate() error {
 }
 
 // Do send req
-func (s *GetParticipantOutputForTest) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *GetParticipantOutputForTest) Do(ctx context.Context, opts ...RequestOption) ([]byte, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -661,12 +668,8 @@ func (s *GetParticipantOutputForTest) Do(ctx context.Context, opts ...RequestOpt
 	if err != nil {
 		return nil, err
 	}
-	res := new(interface{})
-	err = json.Unmarshal(data, &res)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+
+	return data, nil
 }
 
 // SubmissionRejudgeService Rejudge submission
@@ -689,7 +692,7 @@ func (s *SubmissionRejudgeService) validate() error {
 }
 
 // Do send req
-func (s *SubmissionRejudgeService) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *SubmissionRejudgeService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}

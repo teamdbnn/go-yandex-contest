@@ -49,7 +49,7 @@ type RegisterParticipantIntoCompetitionService struct {
 	c             *Client
 	competitionID int64
 	body          struct {
-		users []string
+		Users []string `json:"users"`
 	}
 }
 
@@ -60,8 +60,8 @@ func (s *RegisterParticipantIntoCompetitionService) CompetitionID(competitionID 
 }
 
 // Users Set users
-func (s *RegisterParticipantIntoCompetitionService) Users(users []string) *RegisterParticipantIntoCompetitionService {
-	s.body.users = users
+func (s *RegisterParticipantIntoCompetitionService) Users(Users []string) *RegisterParticipantIntoCompetitionService {
+	s.body.Users = Users
 	return s
 }
 
@@ -69,8 +69,8 @@ func (s *RegisterParticipantIntoCompetitionService) validate() error {
 	if s.competitionID == 0 {
 		return requiredError("competitionID")
 	}
-	if s.body.users == nil {
-		return requiredError("users")
+	if s.body.Users == nil {
+		return requiredError("Users")
 	}
 
 	return nil

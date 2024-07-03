@@ -8,18 +8,18 @@ import (
 )
 
 type UserGeneratePasswordService struct {
-	c    *Client
-	user int64
+	c      *Client
+	userID int64
 }
 
-func (s *UserGeneratePasswordService) User(user int64) *UserGeneratePasswordService {
-	s.user = user
+func (s *UserGeneratePasswordService) UserID(userID int64) *UserGeneratePasswordService {
+	s.userID = userID
 	return s
 }
 
 func (s *UserGeneratePasswordService) validate() error {
-	if s.user == 0 {
-		return requiredError("user")
+	if s.userID == 0 {
+		return requiredError("userID")
 	}
 	return nil
 }
@@ -32,7 +32,7 @@ func (s *UserGeneratePasswordService) Do(ctx context.Context, opts ...RequestOpt
 
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("/user/%d/generate-password", s.user),
+		endpoint: fmt.Sprintf("/user/%d/generate-password", s.userID),
 	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {

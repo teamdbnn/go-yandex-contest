@@ -68,7 +68,7 @@ func (s *GetAllSubmissionsForContest) Do(ctx context.Context, opts ...RequestOpt
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/neurips/%v/submissions/all", s.contestID),
 	}
-	const pageSizeDefault = 30
+	const pageSizeDefault int32 = 30
 	r.setParam("onlyFinished", s.onlyFinished)
 	r.setParam("pageNumber", s.pageNumber)
 
@@ -169,7 +169,7 @@ func (s *GetYourSubmissionsForContest) Do(ctx context.Context, opts ...RequestOp
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/neurips/%v/submissions/my", s.contestID),
 	}
-	const pageSizeDefault = 30
+	const pageSizeDefault int32 = 30
 	r.setParam("onlyFinished", s.onlyFinished)
 	r.setParam("pageNumber", s.pageNumber)
 
