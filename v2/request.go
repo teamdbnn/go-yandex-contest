@@ -27,7 +27,7 @@ func (r *request) addParam(key string, value interface{}) *request {
 		r.query = url.Values{}
 	}
 
-	r.query.Set(key, fmt.Sprintf("%v", value))
+	r.query.Add(key, fmt.Sprintf("%v", value))
 	return r
 }
 

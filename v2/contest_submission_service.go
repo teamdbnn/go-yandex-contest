@@ -101,32 +101,32 @@ func (s *SendSubmissionFromURL) ContestID(contestID int64) *SendSubmissionFromUR
 }
 
 // FileUrl Set file URL
-func (s *SendSubmissionFromURL) FileUrl(FileUrl string) *SendSubmissionFromURL {
-	s.body.FileUrl = FileUrl
+func (s *SendSubmissionFromURL) FileUrl(fileUrl string) *SendSubmissionFromURL {
+	s.body.FileUrl = fileUrl
 	return s
 }
 
 // FileName Set file name
-func (s *SendSubmissionFromURL) FileName(FileName string) *SendSubmissionFromURL {
-	s.body.FileName = FileName
+func (s *SendSubmissionFromURL) FileName(fileName string) *SendSubmissionFromURL {
+	s.body.FileName = fileName
 	return s
 }
 
 // ProblemAlias Set problem alias
-func (s *SendSubmissionFromURL) ProblemAlias(ProblemAlias string) *SendSubmissionFromURL {
-	s.body.ProblemAlias = ProblemAlias
+func (s *SendSubmissionFromURL) ProblemAlias(problemAlias string) *SendSubmissionFromURL {
+	s.body.ProblemAlias = problemAlias
 	return s
 }
 
 // CompilerID Set compiler id
-func (s *SendSubmissionFromURL) CompilerID(CompilerID string) *SendSubmissionFromURL {
-	s.body.CompilerID = CompilerID
+func (s *SendSubmissionFromURL) CompilerID(compilerID string) *SendSubmissionFromURL {
+	s.body.CompilerID = compilerID
 	return s
 }
 
 // Meta Set meta
-func (s *SendSubmissionFromURL) Meta(Meta string) *SendSubmissionFromURL {
-	s.body.Meta = Meta
+func (s *SendSubmissionFromURL) Meta(meta string) *SendSubmissionFromURL {
+	s.body.Meta = meta
 	return s
 }
 
@@ -229,8 +229,9 @@ func (s *GetReportForMultipleSubmissions) Do(ctx context.Context, opts ...Reques
 		r.setParam("locale", s.locale)
 	}
 
-	r.setParam("runIds", s.runIDs)
-
+	for i := 0; i < len(s.runIDs); i++ {
+		r.addParam("runIds", s.runIDs[i])
+	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
@@ -392,9 +393,9 @@ func (s *GetSubmissionSourceCode) validate() error {
 }
 
 // Do send req
-func (s *GetSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption) ([]byte, error) {
+func (s *GetSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption) (string, error) {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return "", err
 	}
 
 	r := &request{
@@ -404,10 +405,10 @@ func (s *GetSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption)
 
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return data, nil
+	return string(data), nil
 }
 
 // GetMetadataOfSubmissionSourceCode Get metadata of submission source code
@@ -440,9 +441,9 @@ func (s *GetMetadataOfSubmissionSourceCode) validate() error {
 }
 
 // Do send req
-func (s *GetMetadataOfSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption) ([]byte, error) {
+func (s *GetMetadataOfSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption) (string, error) {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return "", err
 	}
 
 	r := &request{
@@ -452,10 +453,10 @@ func (s *GetMetadataOfSubmissionSourceCode) Do(ctx context.Context, opts ...Requ
 
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return data, nil
+	return string(data), nil
 }
 
 // GetFullAnswerFileForTest Get full answer file for test
@@ -505,9 +506,9 @@ func (s *GetFullAnswerFileForTest) validate() error {
 }
 
 // Do send req
-func (s *GetFullAnswerFileForTest) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *GetFullAnswerFileForTest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 	r := &request{
 		method:   http.MethodGet,
@@ -516,20 +517,20 @@ func (s *GetFullAnswerFileForTest) Do(ctx context.Context, opts ...RequestOption
 	r.setParam("useReportSettings", s.useReportSettings)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	f, err := os.Create("fullAnswerFileForTest")
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	_, err = f.Write(data)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 // GetFullInputFileForTest Get full input file for test
@@ -579,9 +580,9 @@ func (s *GetFullInputFileForTest) validate() error {
 }
 
 // Do send req
-func (s *GetFullInputFileForTest) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *GetFullInputFileForTest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -591,20 +592,20 @@ func (s *GetFullInputFileForTest) Do(ctx context.Context, opts ...RequestOption)
 	r.setParam("useReportSettings", s.useReportSettings)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	f, err := os.Create("fullInputFileForTest")
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	_, err = f.Write(data)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 // GetParticipantOutputForTest Get participant output for test
@@ -654,9 +655,9 @@ func (s *GetParticipantOutputForTest) validate() error {
 }
 
 // Do send req
-func (s *GetParticipantOutputForTest) Do(ctx context.Context, opts ...RequestOption) ([]byte, error) {
+func (s *GetParticipantOutputForTest) Do(ctx context.Context, opts ...RequestOption) (string, error) {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return "", err
 	}
 
 	r := &request{
@@ -666,10 +667,10 @@ func (s *GetParticipantOutputForTest) Do(ctx context.Context, opts ...RequestOpt
 	r.setParam("useReportSettings", s.useReportSettings)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return data, nil
+	return string(data), nil
 }
 
 // SubmissionRejudgeService Rejudge submission
@@ -692,9 +693,9 @@ func (s *SubmissionRejudgeService) validate() error {
 }
 
 // Do send req
-func (s *SubmissionRejudgeService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *SubmissionRejudgeService) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -704,8 +705,8 @@ func (s *SubmissionRejudgeService) Do(ctx context.Context, opts ...RequestOption
 	_, err := s.c.callAPI(ctx, r, opts...)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }

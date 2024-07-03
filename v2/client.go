@@ -28,9 +28,9 @@ const (
 )
 
 // NewClient Create new http client
-func NewClient(outhToken string) *Client {
+func NewClient(oauthToken string) *Client {
 	return &Client{
-		OAuthToken: outhToken,
+		OAuthToken: oauthToken,
 		BaseURL:    baseAPIMainURL,
 		UserAgent:  "Yandex-Contest/golang",
 		HTTPClient: http.DefaultClient,

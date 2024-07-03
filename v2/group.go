@@ -16,8 +16,8 @@ type CreateGroupForCompetitionService struct {
 }
 
 // Name Set name
-func (s *CreateGroupForCompetitionService) Name(Name string) *CreateGroupForCompetitionService {
-	s.body.Name = Name
+func (s *CreateGroupForCompetitionService) Name(name string) *CreateGroupForCompetitionService {
+	s.body.Name = name
 	return s
 }
 
@@ -136,9 +136,9 @@ func (s *AddGroupMemberForCompetitionService) validate() error {
 }
 
 // Do send req
-func (s *AddGroupMemberForCompetitionService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *AddGroupMemberForCompetitionService) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -150,10 +150,10 @@ func (s *AddGroupMemberForCompetitionService) Do(ctx context.Context, opts ...Re
 	_, err := s.c.callAPI(ctx, r, opts...)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 // RemoveGroupOfCompetitionService Remove group of competition
@@ -173,14 +173,14 @@ func (s *RemoveGroupOfCompetitionService) GroupID(groupID int64) *RemoveGroupOfC
 }
 
 // Login Set login
-func (s *RemoveGroupOfCompetitionService) Login(Login string) *RemoveGroupOfCompetitionService {
-	s.body.Login = Login
+func (s *RemoveGroupOfCompetitionService) Login(login string) *RemoveGroupOfCompetitionService {
+	s.body.Login = login
 	return s
 }
 
 // UID Set uid
-func (s *RemoveGroupOfCompetitionService) UID(Uid int64) *RemoveGroupOfCompetitionService {
-	s.body.Uid = Uid
+func (s *RemoveGroupOfCompetitionService) UID(uid int64) *RemoveGroupOfCompetitionService {
+	s.body.Uid = uid
 	return s
 }
 
@@ -197,9 +197,9 @@ func (s *RemoveGroupOfCompetitionService) validate() error {
 	return nil
 }
 
-func (s *RemoveGroupOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *RemoveGroupOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -209,7 +209,7 @@ func (s *RemoveGroupOfCompetitionService) Do(ctx context.Context, opts ...Reques
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return nil, nil
+	return nil
 }

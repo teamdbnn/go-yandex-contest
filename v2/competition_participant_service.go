@@ -27,9 +27,9 @@ func (s *GetParticipantsOfCompetitionService) validate() error {
 }
 
 // Do Send GET request
-func (s *GetParticipantsOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) ([]byte, error) {
+func (s *GetParticipantsOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) (string, error) {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return "", err
 	}
 
 	r := &request{
@@ -38,10 +38,10 @@ func (s *GetParticipantsOfCompetitionService) Do(ctx context.Context, opts ...Re
 	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return data, nil
+	return string(data), nil
 }
 
 // RegisterParticipantIntoCompetitionService Register Participant into competition
@@ -60,8 +60,8 @@ func (s *RegisterParticipantIntoCompetitionService) CompetitionID(competitionID 
 }
 
 // Users Set users
-func (s *RegisterParticipantIntoCompetitionService) Users(Users []string) *RegisterParticipantIntoCompetitionService {
-	s.body.Users = Users
+func (s *RegisterParticipantIntoCompetitionService) Users(users []string) *RegisterParticipantIntoCompetitionService {
+	s.body.Users = users
 	return s
 }
 

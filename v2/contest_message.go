@@ -150,9 +150,9 @@ func (s *SendQuestionToJury) validate() error {
 }
 
 // Do send req
-func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 	r := &request{
 		method:   http.MethodPost,
@@ -170,8 +170,8 @@ func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) (err
 
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }

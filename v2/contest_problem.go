@@ -107,9 +107,9 @@ func (s *GetProblemStatement) validate() error {
 }
 
 // Do Send GET request
-func (s *GetProblemStatement) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *GetProblemStatement) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -125,20 +125,20 @@ func (s *GetProblemStatement) Do(ctx context.Context, opts ...RequestOption) (er
 
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	f, err := os.Create("problemStatement")
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	_, err = f.Write(data)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 // GetProblemFile Get Problem file

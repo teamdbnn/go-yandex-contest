@@ -74,8 +74,8 @@ func (s *RegisterGroupForContestService) GroupID(groupID int64) *RegisterGroupFo
 }
 
 // Roles Set roles
-func (s *RegisterGroupForContestService) Roles(Roles []string) *RegisterGroupForContestService {
-	s.body.Roles = Roles
+func (s *RegisterGroupForContestService) Roles(roles []string) *RegisterGroupForContestService {
+	s.body.Roles = roles
 	return s
 }
 
@@ -93,9 +93,9 @@ func (s *RegisterGroupForContestService) validate() error {
 }
 
 // Do send req
-func (s *RegisterGroupForContestService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *RegisterGroupForContestService) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -105,10 +105,10 @@ func (s *RegisterGroupForContestService) Do(ctx context.Context, opts ...Request
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 // DeleteGroupFromContestService Delete group from contest
@@ -141,9 +141,9 @@ func (s *DeleteGroupFromContestService) validate() error {
 }
 
 // Do send req
-func (s *DeleteGroupFromContestService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *DeleteGroupFromContestService) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -153,10 +153,10 @@ func (s *DeleteGroupFromContestService) Do(ctx context.Context, opts ...RequestO
 
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 type UpdateGroupForContestService struct {
@@ -181,8 +181,8 @@ func (s *UpdateGroupForContestService) GroupID(groupID int64) *UpdateGroupForCon
 }
 
 // Roles Set roles
-func (s *UpdateGroupForContestService) Roles(Roles []string) *UpdateGroupForContestService {
-	s.body.Roles = Roles
+func (s *UpdateGroupForContestService) Roles(roles []string) *UpdateGroupForContestService {
+	s.body.Roles = roles
 	return s
 }
 
@@ -200,9 +200,9 @@ func (s *UpdateGroupForContestService) validate() error {
 }
 
 // Do send req
-func (s *UpdateGroupForContestService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *UpdateGroupForContestService) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -212,10 +212,10 @@ func (s *UpdateGroupForContestService) Do(ctx context.Context, opts ...RequestOp
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 // GetParticipantsOfContestService Get contest participants
@@ -434,9 +434,9 @@ func (s *StartContestForParticipant) validate() error {
 }
 
 // Do send req
-func (s *StartContestForParticipant) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *StartContestForParticipant) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -446,9 +446,10 @@ func (s *StartContestForParticipant) Do(ctx context.Context, opts ...RequestOpti
 
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return nil, nil
+
+	return nil
 }
 
 // UnregisterParticipantFromContestService Unregister participant from contest
@@ -481,9 +482,9 @@ func (s *UnregisterParticipantFromContestService) validate() error {
 }
 
 // Do send req
-func (s *UnregisterParticipantFromContestService) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *UnregisterParticipantFromContestService) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -493,10 +494,10 @@ func (s *UnregisterParticipantFromContestService) Do(ctx context.Context, opts .
 
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 // UpdateParticipantForContestService Update participant for contest
@@ -522,8 +523,8 @@ func (s *UpdateParticipantForContestService) ParticipantID(participantID int64) 
 }
 
 // DisplayedName Set displayedName
-func (s *UpdateParticipantForContestService) DisplayedName(DisplayedName string) *UpdateParticipantForContestService {
-	s.body.DisplayedName = DisplayedName
+func (s *UpdateParticipantForContestService) DisplayedName(displayedName string) *UpdateParticipantForContestService {
+	s.body.DisplayedName = displayedName
 	return s
 }
 
@@ -541,9 +542,9 @@ func (s *UpdateParticipantForContestService) validate() error {
 }
 
 // Do send req
-func (s *UpdateParticipantForContestService) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *UpdateParticipantForContestService) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -555,10 +556,10 @@ func (s *UpdateParticipantForContestService) Do(ctx context.Context, opts ...Req
 
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 // GetInfoOfYourParticipation Get info of your participation
@@ -625,9 +626,9 @@ func (s *StartContest) validate() error {
 }
 
 // Do send req
-func (s *StartContest) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
+func (s *StartContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -636,9 +637,9 @@ func (s *StartContest) Do(ctx context.Context, opts ...RequestOption) (interface
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return nil, nil
+	return nil
 }
 
 // UnregisterYourselfFromContest Unregister yourself from contest
@@ -661,9 +662,9 @@ func (s *UnregisterYourselfFromContest) validate() error {
 }
 
 // Do send req
-func (s *UnregisterYourselfFromContest) Do(ctx context.Context, opts ...RequestOption) (error, error) {
+func (s *UnregisterYourselfFromContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	r := &request{
@@ -672,7 +673,8 @@ func (s *UnregisterYourselfFromContest) Do(ctx context.Context, opts ...RequestO
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return nil, nil
+
+	return nil
 }
