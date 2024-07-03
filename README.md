@@ -34,7 +34,7 @@ yandex contest api client (built from swagger https://api.contest.yandex.net/api
 | :white_check_mark: | PUT | `/contests/{contestId}/participation` | Start the contest |
 | &#9744; | DELETE | `/contests/{contestId}/participation` | Unregister yourself from contest |
 | :white_check_mark: | GET | `/contests/{contestId}/problems` | Get contest problems |
-| &#9744; | GET | `/contests/{contestId}/problems/{alias}/statement` | Get problem statement |
+| :white_check_mark:  | GET | `/contests/{contestId}/problems/{alias}/statement` | Get problem statement |
 | &#9744; | GET | `/problems` | Get problem file |
 | &#9744; | GET | `/service/capacity` | Get submissoins queue capacity |
 | :white_check_mark: | GET | `/service/introspect` | Get avaible scopes |
