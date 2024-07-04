@@ -12,7 +12,7 @@ type GetSubmissionsQueueCapacity struct {
 	c *Client
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetSubmissionsQueueCapacity) Do(ctx context.Context, opts ...RequestOption) (*ServiceCapacity, error) {
 	r := &request{
 		method:   http.MethodGet,
@@ -37,7 +37,7 @@ type GetAvailableScopes struct {
 	c *Client
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetAvailableScopes) Do(ctx context.Context, opts ...RequestOption) (*Service, error) {
 	r := &request{
 		method:   http.MethodGet,

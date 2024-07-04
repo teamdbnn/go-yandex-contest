@@ -34,7 +34,7 @@ func (s *GetContestProblems) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetContestProblems) Do(ctx context.Context, opts ...RequestOption) (*ContestProblems, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -170,7 +170,7 @@ func (s *GetProblemFile) validate() error {
 	return nil
 }
 
-// Do send req          todo: File ouput?
+// Do Send GET request          todo: File ouput?
 func (s *GetProblemFile) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
 	if err := s.validate(); err != nil {
 		return nil, err

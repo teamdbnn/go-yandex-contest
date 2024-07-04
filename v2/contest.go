@@ -26,7 +26,7 @@ func (s *GetContestInfo) validate() error {
 	return nil
 }
 
-// Do Send request to GetContestService
+// Do Send GET request
 func (s *GetContestInfo) Do(ctx context.Context, opts ...RequestOption) (*ContestDescription, error) {
 	if err := s.validate(); err != nil {
 		return nil, err

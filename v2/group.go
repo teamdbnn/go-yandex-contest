@@ -7,8 +7,8 @@ import (
 	"net/http"
 )
 
-// CreateGroupForCompetitionService Create group for competition
-type CreateGroupForCompetitionService struct {
+// CreateGroupForCompetition Create group for competition
+type CreateGroupForCompetition struct {
 	c    *Client
 	body struct {
 		Name string `json:"name"`
@@ -16,20 +16,20 @@ type CreateGroupForCompetitionService struct {
 }
 
 // Name Set name
-func (s *CreateGroupForCompetitionService) Name(name string) *CreateGroupForCompetitionService {
+func (s *CreateGroupForCompetition) Name(name string) *CreateGroupForCompetition {
 	s.body.Name = name
 	return s
 }
 
-func (s *CreateGroupForCompetitionService) validate() error {
+func (s *CreateGroupForCompetition) validate() error {
 	if s.body.Name == "" {
 		return requiredError("Name")
 	}
 	return nil
 }
 
-// Do send req
-func (s *CreateGroupForCompetitionService) Do(ctx context.Context, opts ...RequestOption) (*GroupID, error) {
+// Do Send POST request
+func (s *CreateGroupForCompetition) Do(ctx context.Context, opts ...RequestOption) (*GroupID, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -51,27 +51,27 @@ func (s *CreateGroupForCompetitionService) Do(ctx context.Context, opts ...Reque
 	return res, nil
 }
 
-// GetGroupInfoOfCompetitionService Get group info of competition
-type GetGroupInfoOfCompetitionService struct {
+// GetGroupInfoOfCompetition Get group info of competition
+type GetGroupInfoOfCompetition struct {
 	c       *Client
 	groupID int64
 }
 
 // GroupID Set group id
-func (s *GetGroupInfoOfCompetitionService) GroupID(groupID int64) *GetGroupInfoOfCompetitionService {
+func (s *GetGroupInfoOfCompetition) GroupID(groupID int64) *GetGroupInfoOfCompetition {
 	s.groupID = groupID
 	return s
 }
 
-func (s *GetGroupInfoOfCompetitionService) validate() error {
+func (s *GetGroupInfoOfCompetition) validate() error {
 	if s.groupID == 0 {
 		return requiredError("groupID")
 	}
 	return nil
 }
 
-// Do send req
-func (s *GetGroupInfoOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) (*GroupInfo, error) {
+// Do Send GET request
+func (s *GetGroupInfoOfCompetition) Do(ctx context.Context, opts ...RequestOption) (*GroupInfo, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -94,8 +94,8 @@ func (s *GetGroupInfoOfCompetitionService) Do(ctx context.Context, opts ...Reque
 	return res, nil
 }
 
-// AddGroupMemberForCompetitionService Add group member for competition
-type AddGroupMemberForCompetitionService struct {
+// AddGroupMemberForCompetition Add group member for competition
+type AddGroupMemberForCompetition struct {
 	c       *Client
 	groupID int64
 	body    struct {
@@ -105,24 +105,24 @@ type AddGroupMemberForCompetitionService struct {
 }
 
 // GroupID Set group id
-func (s *AddGroupMemberForCompetitionService) GroupID(groupID int64) *AddGroupMemberForCompetitionService {
+func (s *AddGroupMemberForCompetition) GroupID(groupID int64) *AddGroupMemberForCompetition {
 	s.groupID = groupID
 	return s
 }
 
 // Login Set login
-func (s *AddGroupMemberForCompetitionService) Login(Login string) *AddGroupMemberForCompetitionService {
+func (s *AddGroupMemberForCompetition) Login(Login string) *AddGroupMemberForCompetition {
 	s.body.Login = Login
 	return s
 }
 
 // UID Set uid
-func (s *AddGroupMemberForCompetitionService) UID(Uid int64) *AddGroupMemberForCompetitionService {
+func (s *AddGroupMemberForCompetition) UID(Uid int64) *AddGroupMemberForCompetition {
 	s.body.Uid = Uid
 	return s
 }
 
-func (s *AddGroupMemberForCompetitionService) validate() error {
+func (s *AddGroupMemberForCompetition) validate() error {
 	if s.groupID == 0 {
 		return requiredError("groupID")
 	}
@@ -135,8 +135,8 @@ func (s *AddGroupMemberForCompetitionService) validate() error {
 	return nil
 }
 
-// Do send req
-func (s *AddGroupMemberForCompetitionService) Do(ctx context.Context, opts ...RequestOption) error {
+// Do Send POST request
+func (s *AddGroupMemberForCompetition) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
 	}
@@ -156,8 +156,8 @@ func (s *AddGroupMemberForCompetitionService) Do(ctx context.Context, opts ...Re
 	return nil
 }
 
-// RemoveGroupOfCompetitionService Remove group of competition
-type RemoveGroupOfCompetitionService struct {
+// RemoveGroupOfCompetition Remove group of competition
+type RemoveGroupOfCompetition struct {
 	c       *Client
 	groupID int64
 	body    struct {
@@ -167,24 +167,24 @@ type RemoveGroupOfCompetitionService struct {
 }
 
 // GroupID Set group id
-func (s *RemoveGroupOfCompetitionService) GroupID(groupID int64) *RemoveGroupOfCompetitionService {
+func (s *RemoveGroupOfCompetition) GroupID(groupID int64) *RemoveGroupOfCompetition {
 	s.groupID = groupID
 	return s
 }
 
 // Login Set login
-func (s *RemoveGroupOfCompetitionService) Login(login string) *RemoveGroupOfCompetitionService {
+func (s *RemoveGroupOfCompetition) Login(login string) *RemoveGroupOfCompetition {
 	s.body.Login = login
 	return s
 }
 
 // UID Set uid
-func (s *RemoveGroupOfCompetitionService) UID(uid int64) *RemoveGroupOfCompetitionService {
+func (s *RemoveGroupOfCompetition) UID(uid int64) *RemoveGroupOfCompetition {
 	s.body.Uid = uid
 	return s
 }
 
-func (s *RemoveGroupOfCompetitionService) validate() error {
+func (s *RemoveGroupOfCompetition) validate() error {
 	if s.groupID == 0 {
 		return requiredError("groupID")
 	}
@@ -197,7 +197,8 @@ func (s *RemoveGroupOfCompetitionService) validate() error {
 	return nil
 }
 
-func (s *RemoveGroupOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) error {
+// Do Send DELETE request
+func (s *RemoveGroupOfCompetition) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
 	}

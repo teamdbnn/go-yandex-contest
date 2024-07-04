@@ -7,19 +7,19 @@ import (
 	"net/http"
 )
 
-// GetParticipantsOfCompetitionService Get Participant list of competition
-type GetParticipantsOfCompetitionService struct {
+// GetParticipantsOfCompetition Get Participant list of competition
+type GetParticipantsOfCompetition struct {
 	c             *Client
 	competitionID int64
 }
 
 // CompetitionID Set competition id
-func (s *GetParticipantsOfCompetitionService) CompetitionID(competitionID int64) *GetParticipantsOfCompetitionService {
+func (s *GetParticipantsOfCompetition) CompetitionID(competitionID int64) *GetParticipantsOfCompetition {
 	s.competitionID = competitionID
 	return s
 }
 
-func (s *GetParticipantsOfCompetitionService) validate() error {
+func (s *GetParticipantsOfCompetition) validate() error {
 	if s.competitionID == 0 {
 		return requiredError("competitionID")
 	}
@@ -27,7 +27,7 @@ func (s *GetParticipantsOfCompetitionService) validate() error {
 }
 
 // Do Send GET request
-func (s *GetParticipantsOfCompetitionService) Do(ctx context.Context, opts ...RequestOption) (string, error) {
+func (s *GetParticipantsOfCompetition) Do(ctx context.Context, opts ...RequestOption) (string, error) {
 	if err := s.validate(); err != nil {
 		return "", err
 	}
@@ -44,8 +44,8 @@ func (s *GetParticipantsOfCompetitionService) Do(ctx context.Context, opts ...Re
 	return string(data), nil
 }
 
-// RegisterParticipantIntoCompetitionService Register Participant into competition
-type RegisterParticipantIntoCompetitionService struct {
+// RegisterParticipantIntoCompetition Register Participant into competition
+type RegisterParticipantIntoCompetition struct {
 	c             *Client
 	competitionID int64
 	body          struct {
@@ -54,18 +54,18 @@ type RegisterParticipantIntoCompetitionService struct {
 }
 
 // CompetitionID Set competition id
-func (s *RegisterParticipantIntoCompetitionService) CompetitionID(competitionID int64) *RegisterParticipantIntoCompetitionService {
+func (s *RegisterParticipantIntoCompetition) CompetitionID(competitionID int64) *RegisterParticipantIntoCompetition {
 	s.competitionID = competitionID
 	return s
 }
 
 // Users Set users
-func (s *RegisterParticipantIntoCompetitionService) Users(users []string) *RegisterParticipantIntoCompetitionService {
+func (s *RegisterParticipantIntoCompetition) Users(users []string) *RegisterParticipantIntoCompetition {
 	s.body.Users = users
 	return s
 }
 
-func (s *RegisterParticipantIntoCompetitionService) validate() error {
+func (s *RegisterParticipantIntoCompetition) validate() error {
 	if s.competitionID == 0 {
 		return requiredError("competitionID")
 	}
@@ -77,7 +77,7 @@ func (s *RegisterParticipantIntoCompetitionService) validate() error {
 }
 
 // Do Send POST request
-func (s *RegisterParticipantIntoCompetitionService) Do(ctx context.Context, opts ...RequestOption) (*CompetitionRegisterResponse, error) {
+func (s *RegisterParticipantIntoCompetition) Do(ctx context.Context, opts ...RequestOption) (*CompetitionRegisterResponse, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}

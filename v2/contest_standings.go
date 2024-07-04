@@ -86,7 +86,7 @@ func (s *GetContestStandings) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetContestStandings) Do(ctx context.Context, opts ...RequestOption) (*ContestStandings, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -214,7 +214,7 @@ func (s *GetContestStandingsExtended) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOption) (*ContestStandings, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -263,6 +263,7 @@ func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOpt
 	return res, nil
 }
 
+// GetYourPositionInContestStandings Get your position in contest standings
 type GetYourPositionInContestStandings struct {
 	c            *Client
 	contestID    int64
@@ -309,7 +310,7 @@ func (s *GetYourPositionInContestStandings) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetYourPositionInContestStandings) Do(ctx context.Context, opts ...RequestOption) (*ContestStandings, error) {
 	if err := s.validate(); err != nil {
 		return nil, err

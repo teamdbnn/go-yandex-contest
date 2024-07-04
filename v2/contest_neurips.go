@@ -58,7 +58,7 @@ func (s *GetAllSubmissionsForContest) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetAllSubmissionsForContest) Do(ctx context.Context, opts ...RequestOption) (*NeuripsSubmissionsReportResponse, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -104,6 +104,7 @@ func (s *GetAllSubmissionsForContest) Do(ctx context.Context, opts ...RequestOpt
 	return res, nil
 }
 
+// GetYourSubmissionsForContest Get your contest submissions
 type GetYourSubmissionsForContest struct {
 	c                *Client
 	contestID        int64
@@ -159,7 +160,7 @@ func (s *GetYourSubmissionsForContest) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetYourSubmissionsForContest) Do(ctx context.Context, opts ...RequestOption) (*NeuripsSubmissionsReportResponse, error) {
 	if err := s.validate(); err != nil {
 		return nil, err

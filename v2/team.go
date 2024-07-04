@@ -7,12 +7,12 @@ import (
 	"net/http"
 )
 
-// GetUserTeams Get User teams
+// GetUserTeams Get user teams
 type GetUserTeams struct {
 	c *Client
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetUserTeams) Do(ctx context.Context, opts ...RequestOption) ([]*TeamView, error) {
 	r := &request{
 		method:   http.MethodGet,

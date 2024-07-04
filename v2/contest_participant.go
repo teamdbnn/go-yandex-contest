@@ -8,27 +8,27 @@ import (
 	"strconv"
 )
 
-// GetListOfGroupsForContestService Get list of groups for contest
-type GetListOfGroupsForContestService struct {
+// GetListOfGroupsForContest Get list of groups for contest
+type GetListOfGroupsForContest struct {
 	c         *Client
 	contestID int64
 }
 
 // ContestID Set contest id
-func (s *GetListOfGroupsForContestService) ContestID(contestID int64) *GetListOfGroupsForContestService {
+func (s *GetListOfGroupsForContest) ContestID(contestID int64) *GetListOfGroupsForContest {
 	s.contestID = contestID
 	return s
 }
 
-func (s *GetListOfGroupsForContestService) validate() error {
+func (s *GetListOfGroupsForContest) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
 	return nil
 }
 
-// Do send req
-func (s *GetListOfGroupsForContestService) Do(ctx context.Context, opts ...RequestOption) ([]*ContestGroup, error) {
+// Do Send GET request
+func (s *GetListOfGroupsForContest) Do(ctx context.Context, opts ...RequestOption) ([]*ContestGroup, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -52,7 +52,8 @@ func (s *GetListOfGroupsForContestService) Do(ctx context.Context, opts ...Reque
 	return res, nil
 }
 
-type RegisterGroupForContestService struct {
+// RegisterGroupForContest Register group for contest
+type RegisterGroupForContest struct {
 	c         *Client
 	contestID int64
 	groupID   int64
@@ -62,24 +63,24 @@ type RegisterGroupForContestService struct {
 }
 
 // ContestID Set contest id
-func (s *RegisterGroupForContestService) ContestID(contestID int64) *RegisterGroupForContestService {
+func (s *RegisterGroupForContest) ContestID(contestID int64) *RegisterGroupForContest {
 	s.contestID = contestID
 	return s
 }
 
 // GroupID Set group Id
-func (s *RegisterGroupForContestService) GroupID(groupID int64) *RegisterGroupForContestService {
+func (s *RegisterGroupForContest) GroupID(groupID int64) *RegisterGroupForContest {
 	s.groupID = groupID
 	return s
 }
 
 // Roles Set roles
-func (s *RegisterGroupForContestService) Roles(roles []string) *RegisterGroupForContestService {
+func (s *RegisterGroupForContest) Roles(roles []string) *RegisterGroupForContest {
 	s.body.Roles = roles
 	return s
 }
 
-func (s *RegisterGroupForContestService) validate() error {
+func (s *RegisterGroupForContest) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
@@ -92,8 +93,8 @@ func (s *RegisterGroupForContestService) validate() error {
 	return nil
 }
 
-// Do send req
-func (s *RegisterGroupForContestService) Do(ctx context.Context, opts ...RequestOption) error {
+// Do Send POST request
+func (s *RegisterGroupForContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
 	}
@@ -111,26 +112,26 @@ func (s *RegisterGroupForContestService) Do(ctx context.Context, opts ...Request
 	return nil
 }
 
-// DeleteGroupFromContestService Delete group from contest
-type DeleteGroupFromContestService struct {
+// DeleteGroupFromContest Delete group from contest
+type DeleteGroupFromContest struct {
 	c         *Client
 	contestID int64
 	groupID   int64
 }
 
 // ContestID Set contest id
-func (s *DeleteGroupFromContestService) ContestID(contestID int64) *DeleteGroupFromContestService {
+func (s *DeleteGroupFromContest) ContestID(contestID int64) *DeleteGroupFromContest {
 	s.contestID = contestID
 	return s
 }
 
 // GroupID Set group id
-func (s *DeleteGroupFromContestService) GroupID(groupID int64) *DeleteGroupFromContestService {
+func (s *DeleteGroupFromContest) GroupID(groupID int64) *DeleteGroupFromContest {
 	s.groupID = groupID
 	return s
 }
 
-func (s *DeleteGroupFromContestService) validate() error {
+func (s *DeleteGroupFromContest) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
@@ -140,8 +141,8 @@ func (s *DeleteGroupFromContestService) validate() error {
 	return nil
 }
 
-// Do send req
-func (s *DeleteGroupFromContestService) Do(ctx context.Context, opts ...RequestOption) error {
+// Do Send DELETE request
+func (s *DeleteGroupFromContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
 	}
@@ -159,7 +160,8 @@ func (s *DeleteGroupFromContestService) Do(ctx context.Context, opts ...RequestO
 	return nil
 }
 
-type UpdateGroupForContestService struct {
+// UpdateGroupForContest Update group for contest
+type UpdateGroupForContest struct {
 	c         *Client
 	contestID int64
 	groupID   int64
@@ -169,24 +171,24 @@ type UpdateGroupForContestService struct {
 }
 
 // ContestID Set contest id
-func (s *UpdateGroupForContestService) ContestID(contestID int64) *UpdateGroupForContestService {
+func (s *UpdateGroupForContest) ContestID(contestID int64) *UpdateGroupForContest {
 	s.contestID = contestID
 	return s
 }
 
 // GroupID Set group Id
-func (s *UpdateGroupForContestService) GroupID(groupID int64) *UpdateGroupForContestService {
+func (s *UpdateGroupForContest) GroupID(groupID int64) *UpdateGroupForContest {
 	s.groupID = groupID
 	return s
 }
 
 // Roles Set roles
-func (s *UpdateGroupForContestService) Roles(roles []string) *UpdateGroupForContestService {
+func (s *UpdateGroupForContest) Roles(roles []string) *UpdateGroupForContest {
 	s.body.Roles = roles
 	return s
 }
 
-func (s *UpdateGroupForContestService) validate() error {
+func (s *UpdateGroupForContest) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
@@ -199,8 +201,8 @@ func (s *UpdateGroupForContestService) validate() error {
 	return nil
 }
 
-// Do send req
-func (s *UpdateGroupForContestService) Do(ctx context.Context, opts ...RequestOption) error {
+// Do Send PATCH request
+func (s *UpdateGroupForContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
 	}
@@ -218,8 +220,8 @@ func (s *UpdateGroupForContestService) Do(ctx context.Context, opts ...RequestOp
 	return nil
 }
 
-// GetParticipantsOfContestService Get contest participants
-type GetParticipantsOfContestService struct {
+// GetParticipantsOfContest Get contest participants
+type GetParticipantsOfContest struct {
 	c           *Client
 	contestID   int64
 	displayName string
@@ -227,32 +229,32 @@ type GetParticipantsOfContestService struct {
 }
 
 // ContestID Set contest id
-func (s *GetParticipantsOfContestService) ContestID(contestID int64) *GetParticipantsOfContestService {
+func (s *GetParticipantsOfContest) ContestID(contestID int64) *GetParticipantsOfContest {
 	s.contestID = contestID
 	return s
 }
 
 // DisplayName Set display name
-func (s *GetParticipantsOfContestService) DisplayName(displayName string) *GetParticipantsOfContestService {
+func (s *GetParticipantsOfContest) DisplayName(displayName string) *GetParticipantsOfContest {
 	s.displayName = displayName
 	return s
 }
 
 // Login Set login
-func (s *GetParticipantsOfContestService) Login(login string) *GetParticipantsOfContestService {
+func (s *GetParticipantsOfContest) Login(login string) *GetParticipantsOfContest {
 	s.login = login
 	return s
 }
 
-func (s *GetParticipantsOfContestService) validate() error {
+func (s *GetParticipantsOfContest) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestId")
 	}
 	return nil
 }
 
-// Do send req
-func (s *GetParticipantsOfContestService) Do(ctx context.Context, opts ...RequestOption) ([]*ParticipantInfo, error) {
+// Do Send GET request
+func (s *GetParticipantsOfContest) Do(ctx context.Context, opts ...RequestOption) ([]*ParticipantInfo, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -282,8 +284,8 @@ func (s *GetParticipantsOfContestService) Do(ctx context.Context, opts ...Reques
 	return res, nil
 }
 
-// RegisterParticipantForContestService Register participant for contest
-type RegisterParticipantForContestService struct {
+// RegisterParticipantForContest Register participant for contest
+type RegisterParticipantForContest struct {
 	c         *Client
 	contestID int64
 	login     string
@@ -291,24 +293,24 @@ type RegisterParticipantForContestService struct {
 }
 
 // ContestID Set contest id
-func (s *RegisterParticipantForContestService) ContestID(contestID int64) *RegisterParticipantForContestService {
+func (s *RegisterParticipantForContest) ContestID(contestID int64) *RegisterParticipantForContest {
 	s.contestID = contestID
 	return s
 }
 
 // Login Set login
-func (s *RegisterParticipantForContestService) Login(login string) *RegisterParticipantForContestService {
+func (s *RegisterParticipantForContest) Login(login string) *RegisterParticipantForContest {
 	s.login = login
 	return s
 }
 
 // UID Set uid
-func (s *RegisterParticipantForContestService) UID(uid int64) *RegisterParticipantForContestService {
+func (s *RegisterParticipantForContest) UID(uid int64) *RegisterParticipantForContest {
 	s.uid = uid
 	return s
 }
 
-func (s *RegisterParticipantForContestService) validate() error {
+func (s *RegisterParticipantForContest) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
@@ -318,8 +320,8 @@ func (s *RegisterParticipantForContestService) validate() error {
 	return nil
 }
 
-// Do send req
-func (s *RegisterParticipantForContestService) Do(ctx context.Context, opts ...RequestOption) (*int64, error) {
+// Do Send POST request
+func (s *RegisterParticipantForContest) Do(ctx context.Context, opts ...RequestOption) (*int64, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -379,7 +381,7 @@ func (s *GetInfoOfParticipant) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetInfoOfParticipant) Do(ctx context.Context, opts ...RequestOption) (*ParticipantStatus, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -433,7 +435,7 @@ func (s *StartContestForParticipant) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send PUT request
 func (s *StartContestForParticipant) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -452,26 +454,26 @@ func (s *StartContestForParticipant) Do(ctx context.Context, opts ...RequestOpti
 	return nil
 }
 
-// UnregisterParticipantFromContestService Unregister participant from contest
-type UnregisterParticipantFromContestService struct {
+// UnregisterParticipantFromContest Unregister participant from contest
+type UnregisterParticipantFromContest struct {
 	c             *Client
 	contestID     int64
 	participantID int64
 }
 
 // ContestID Set contest id
-func (s *UnregisterParticipantFromContestService) ContestID(contestID int64) *UnregisterParticipantFromContestService {
+func (s *UnregisterParticipantFromContest) ContestID(contestID int64) *UnregisterParticipantFromContest {
 	s.contestID = contestID
 	return s
 }
 
 // ParticipantID Set participant id
-func (s *UnregisterParticipantFromContestService) ParticipantID(participantID int64) *UnregisterParticipantFromContestService {
+func (s *UnregisterParticipantFromContest) ParticipantID(participantID int64) *UnregisterParticipantFromContest {
 	s.participantID = participantID
 	return s
 }
 
-func (s *UnregisterParticipantFromContestService) validate() error {
+func (s *UnregisterParticipantFromContest) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
@@ -481,8 +483,8 @@ func (s *UnregisterParticipantFromContestService) validate() error {
 	return nil
 }
 
-// Do send req
-func (s *UnregisterParticipantFromContestService) Do(ctx context.Context, opts ...RequestOption) error {
+// Do Send DELETE request
+func (s *UnregisterParticipantFromContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
 	}
@@ -500,8 +502,8 @@ func (s *UnregisterParticipantFromContestService) Do(ctx context.Context, opts .
 	return nil
 }
 
-// UpdateParticipantForContestService Update participant for contest
-type UpdateParticipantForContestService struct {
+// UpdateParticipantForContest Update participant for contest
+type UpdateParticipantForContest struct {
 	c         *Client
 	contestID int64
 	body      struct {
@@ -511,24 +513,24 @@ type UpdateParticipantForContestService struct {
 }
 
 // ContestID Set contest id
-func (s *UpdateParticipantForContestService) ContestID(contestID int64) *UpdateParticipantForContestService {
+func (s *UpdateParticipantForContest) ContestID(contestID int64) *UpdateParticipantForContest {
 	s.contestID = contestID
 	return s
 }
 
 // ParticipantID Set participant id
-func (s *UpdateParticipantForContestService) ParticipantID(participantID int64) *UpdateParticipantForContestService {
+func (s *UpdateParticipantForContest) ParticipantID(participantID int64) *UpdateParticipantForContest {
 	s.participantID = participantID
 	return s
 }
 
 // DisplayedName Set displayedName
-func (s *UpdateParticipantForContestService) DisplayedName(displayedName string) *UpdateParticipantForContestService {
+func (s *UpdateParticipantForContest) DisplayedName(displayedName string) *UpdateParticipantForContest {
 	s.body.DisplayedName = displayedName
 	return s
 }
 
-func (s *UpdateParticipantForContestService) validate() error {
+func (s *UpdateParticipantForContest) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
@@ -541,8 +543,8 @@ func (s *UpdateParticipantForContestService) validate() error {
 	return nil
 }
 
-// Do send req
-func (s *UpdateParticipantForContestService) Do(ctx context.Context, opts ...RequestOption) error {
+// Do Send PATCH request
+func (s *UpdateParticipantForContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
 	}
@@ -581,7 +583,7 @@ func (s *GetInfoOfYourParticipation) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetInfoOfYourParticipation) Do(ctx context.Context, opts ...RequestOption) (*ParticipantStatus, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -625,7 +627,7 @@ func (s *StartContest) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send PUT request
 func (s *StartContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -661,7 +663,7 @@ func (s *UnregisterYourselfFromContest) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send DELETE request
 func (s *UnregisterYourselfFromContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err

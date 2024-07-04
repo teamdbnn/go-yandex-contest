@@ -12,7 +12,7 @@ type GetCompilersList struct {
 	c *Client
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetCompilersList) Do(ctx context.Context, opts ...RequestOption) (*CompilerListResponse, error) {
 	r := &request{
 		method:   http.MethodGet,

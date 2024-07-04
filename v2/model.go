@@ -6,7 +6,6 @@ import (
 	"io"
 )
 
-// --------------------------
 type AdditionalSolutionCheckResult struct {
 	CheckerName  string `json:"checkerName,omitempty"`
 	ErrorMessage string `json:"errorMessage,omitempty"`

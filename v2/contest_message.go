@@ -33,7 +33,7 @@ func (s *GetJuryClarifications) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send GET request
 func (s *GetJuryClarifications) Do(ctx context.Context, opts ...RequestOption) (*Clarifications, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -61,27 +61,27 @@ func (s *GetJuryClarifications) Do(ctx context.Context, opts ...RequestOption) (
 	return res, nil
 }
 
-// GetContestMessagesService Get messages in contest by contest id
-type GetContestMessagesService struct {
+// GetContestMessages Get messages in contest by contest id
+type GetContestMessages struct {
 	c         *Client
 	contestID int64
 }
 
 // ContestID Set contest id
-func (s *GetContestMessagesService) ContestID(contestID int64) *GetContestMessagesService {
+func (s *GetContestMessages) ContestID(contestID int64) *GetContestMessages {
 	s.contestID = contestID
 	return s
 }
 
-func (s *GetContestMessagesService) validate() error {
+func (s *GetContestMessages) validate() error {
 	if s.contestID == 0 {
 		return requiredError("contestID")
 	}
 	return nil
 }
 
-// Do send req
-func (s *GetContestMessagesService) Do(ctx context.Context, opts ...RequestOption) (*Messages, error) {
+// Do Send GET request
+func (s *GetContestMessages) Do(ctx context.Context, opts ...RequestOption) (*Messages, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
@@ -149,7 +149,7 @@ func (s *SendQuestionToJury) validate() error {
 	return nil
 }
 
-// Do send req
+// Do Send POST request
 func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
