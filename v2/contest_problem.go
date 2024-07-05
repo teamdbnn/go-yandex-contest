@@ -53,9 +53,9 @@ func (s *GetContestProblems) Do(ctx context.Context, opts ...RequestOption) (*Co
 	if err != nil {
 		return nil, err
 	}
+
 	res := new(ContestProblems)
 	err = json.Unmarshal(data, &res)
-
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,6 @@ func (s *GetProblemStatement) Do(ctx context.Context, opts ...RequestOption) err
 		r.setParam("locale", s.locale)
 	}
 	r.setParam("type", s.types)
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return err
@@ -134,11 +133,11 @@ func (s *GetProblemStatement) Do(ctx context.Context, opts ...RequestOption) err
 	}
 
 	_, err = f.Write(data)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }
 
 // GetProblemFile Get Problem file
@@ -180,16 +179,15 @@ func (s *GetProblemFile) Do(ctx context.Context, opts ...RequestOption) (interfa
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/problems"),
 	}
-
 	r.setParam("path", s.path)
 	r.setParam("problemId", s.problemID)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
+
 	res := new(interface{})
 	err = json.Unmarshal(data, res)
-
 	if err != nil {
 		return nil, err
 	}

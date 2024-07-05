@@ -40,10 +40,12 @@ func (s *GetContestInfo) Do(ctx context.Context, opts ...RequestOption) (*Contes
 	if err != nil {
 		return nil, err
 	}
+
 	res := new(ContestDescription)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }

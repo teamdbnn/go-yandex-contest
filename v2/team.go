@@ -22,9 +22,9 @@ func (s *GetUserTeams) Do(ctx context.Context, opts ...RequestOption) ([]*TeamVi
 	if err != nil {
 		return nil, err
 	}
+
 	res := make([]*TeamView, 0)
 	err = json.Unmarshal(data, &res)
-
 	if err != nil {
 		return nil, err
 	}

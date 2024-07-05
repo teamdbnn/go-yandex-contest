@@ -91,11 +91,12 @@ func (s *RegisterParticipantIntoCompetition) Do(ctx context.Context, opts ...Req
 	if err != nil {
 		return nil, err
 	}
-	res := new(CompetitionRegisterResponse)
 
+	res := new(CompetitionRegisterResponse)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+	
 	return res, nil
 }

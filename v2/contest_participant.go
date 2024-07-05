@@ -37,18 +37,17 @@ func (s *GetListOfGroupsForContest) Do(ctx context.Context, opts ...RequestOptio
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/groups", s.contestID),
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := make([]*ContestGroup, 0)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -105,11 +104,11 @@ func (s *RegisterGroupForContest) Do(ctx context.Context, opts ...RequestOption)
 	}
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }
 
 // DeleteGroupFromContest Delete group from contest
@@ -151,13 +150,12 @@ func (s *DeleteGroupFromContest) Do(ctx context.Context, opts ...RequestOption) 
 		method:   http.MethodDelete,
 		endpoint: fmt.Sprintf("/contests/%v/groups/%v", s.contestID, s.groupID),
 	}
-
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }
 
 // UpdateGroupForContest Update group for contest
@@ -213,11 +211,11 @@ func (s *UpdateGroupForContest) Do(ctx context.Context, opts ...RequestOption) e
 	}
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }
 
 // GetParticipantsOfContest Get contest participants
@@ -269,18 +267,17 @@ func (s *GetParticipantsOfContest) Do(ctx context.Context, opts ...RequestOption
 	if s.login != "" {
 		r.setParam("login", s.login)
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := make([]*ParticipantInfo, 0)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -333,11 +330,9 @@ func (s *RegisterParticipantForContest) Do(ctx context.Context, opts ...RequestO
 	if s.login != "" {
 		r.setParam("login", s.login)
 	}
-
 	if s.uid != 0 {
 		r.setParam("uid", s.uid) // todo: Check usage
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
@@ -391,18 +386,17 @@ func (s *GetInfoOfParticipant) Do(ctx context.Context, opts ...RequestOption) (*
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestID, s.participantID),
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(ParticipantStatus)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -445,13 +439,12 @@ func (s *StartContestForParticipant) Do(ctx context.Context, opts ...RequestOpti
 		method:   http.MethodPut,
 		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestID, s.participantID),
 	}
-
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }
 
 // UnregisterParticipantFromContest Unregister participant from contest
@@ -493,13 +486,12 @@ func (s *UnregisterParticipantFromContest) Do(ctx context.Context, opts ...Reque
 		method:   http.MethodDelete,
 		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestID, s.participantID),
 	}
-
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }
 
 // UpdateParticipantForContest Update participant for contest
@@ -553,15 +545,13 @@ func (s *UpdateParticipantForContest) Do(ctx context.Context, opts ...RequestOpt
 		method:   http.MethodPatch,
 		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestID, s.participantID),
 	}
-
 	r.setJSONBody(s.body)
-
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }
 
 // GetInfoOfYourParticipation Get info of your participation
@@ -593,18 +583,17 @@ func (s *GetInfoOfYourParticipation) Do(ctx context.Context, opts ...RequestOpti
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestID),
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(ParticipantStatus)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -638,10 +627,11 @@ func (s *StartContest) Do(ctx context.Context, opts ...RequestOption) error {
 		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
-	return nil
+
+	return err
 }
 
 // UnregisterYourselfFromContest Unregister yourself from contest
@@ -674,9 +664,9 @@ func (s *UnregisterYourselfFromContest) Do(ctx context.Context, opts ...RequestO
 		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }

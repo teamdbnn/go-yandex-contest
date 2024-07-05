@@ -60,24 +60,22 @@ func (s *GetSubmissionsOfContest) Do(ctx context.Context, opts ...RequestOption)
 	} else {
 		r.setParam("page", s.page)
 	}
-
 	if s.pageSize == 0 && !s.pageSizeFuncCall {
 		r.setParam("pageSize", 100)
 	} else {
 		r.setParam("pageSize", s.pageSize)
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(Submissions)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -171,19 +169,17 @@ func (s *SendSubmission) Do(ctx context.Context, opts ...RequestOption) (*RunID,
 	}()
 
 	r.setFormParam("problem", s.problem)
-
 	data, err := s.c.callAPI(ctx, r, opts...)
-
 	if err != nil {
 		return nil, err
 	}
+
 	res := new(RunID)
-
 	err = json.Unmarshal(data, &res)
-
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -270,16 +266,16 @@ func (s *SendSubmissionFromURL) Do(ctx context.Context, opts ...RequestOption) (
 	}
 	r.setJSONBody(s.body)
 	data, err := s.c.callAPI(ctx, r, opts...)
-
 	if err != nil {
 		return nil, err
 	}
-	res := new(RunID)
 
+	res := new(RunID)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -304,7 +300,7 @@ func (s *GetReportForMultipleSubmissions) Locale(locale string) *GetReportForMul
 }
 
 // RunIds Set run ids
-func (s *GetReportForMultipleSubmissions) RunIds(runIDs []int) *GetReportForMultipleSubmissions {
+func (s *GetReportForMultipleSubmissions) RunIDs(runIDs []int) *GetReportForMultipleSubmissions {
 	s.runIDs = runIDs
 	return s
 }
@@ -344,11 +340,11 @@ func (s *GetReportForMultipleSubmissions) Do(ctx context.Context, opts ...Reques
 	}
 
 	res := make([]*MultiRunReport, 0)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -391,18 +387,17 @@ func (s *GetBriefReportForSubmission) Do(ctx context.Context, opts ...RequestOpt
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/submissions/%v", s.contestID, s.submissionID),
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(BriefRunReport)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -461,11 +456,11 @@ func (s *GetFullReportForSubmission) Do(ctx context.Context, opts ...RequestOpti
 	}
 
 	res := new(FullRunReport)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -508,7 +503,6 @@ func (s *GetSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption)
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/source", s.contestID, s.submissionID),
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return "", err
@@ -632,11 +626,11 @@ func (s *GetFullAnswerFileForTest) Do(ctx context.Context, opts ...RequestOption
 	}
 
 	_, err = f.Write(data)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }
 
 // GetFullInputFileForTest Get full input file for test
@@ -707,11 +701,11 @@ func (s *GetFullInputFileForTest) Do(ctx context.Context, opts ...RequestOption)
 	}
 
 	_, err = f.Write(data)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }
 
 // GetParticipantOutputForTest Get participant output for test
@@ -809,10 +803,9 @@ func (s *SubmissionRejudge) Do(ctx context.Context, opts ...RequestOption) error
 		endpoint: fmt.Sprintf("/submissions/%v/rejudge", s.submissionID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
-
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }

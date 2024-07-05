@@ -38,7 +38,6 @@ func (s *CreateGroupForCompetition) Do(ctx context.Context, opts ...RequestOptio
 		method:   http.MethodPost,
 		endpoint: fmt.Sprintf("/groups/"),
 	}
-
 	r.setJSONBody(s.body)
 	data, err := s.c.callAPI(ctx, r, opts...)
 
@@ -80,17 +79,17 @@ func (s *GetGroupInfoOfCompetition) Do(ctx context.Context, opts ...RequestOptio
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/groups/%v", s.groupID),
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
-	res := new(GroupInfo)
 
+	res := new(GroupInfo)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -145,15 +144,13 @@ func (s *AddGroupMemberForCompetition) Do(ctx context.Context, opts ...RequestOp
 		method:   http.MethodPost,
 		endpoint: fmt.Sprintf("/groups/%v/members", s.groupID),
 	}
-
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
-
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }
 
 // RemoveGroupOfCompetition Remove group of competition
@@ -209,8 +206,9 @@ func (s *RemoveGroupOfCompetition) Do(ctx context.Context, opts ...RequestOption
 	}
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
-	return nil
+
+	return err
 }

@@ -40,11 +40,12 @@ func (s *UserGeneratePassword) Do(ctx context.Context, opts ...RequestOption) (*
 	if err != nil {
 		return nil, err
 	}
-	res := new(UserWithPasswordResponse)
 
+	res := new(UserWithPasswordResponse)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }

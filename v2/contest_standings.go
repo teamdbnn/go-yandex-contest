@@ -103,13 +103,11 @@ func (s *GetContestStandings) Do(ctx context.Context, opts ...RequestOption) (*C
 	} else {
 		r.setParam("locale", s.locale)
 	}
-
 	if s.page == 0 && !s.pageFuncCall {
 		r.setParam("page", 1)
 	} else {
 		r.setParam("page", s.page)
 	}
-
 	if s.pageSize == 0 && !s.pageSizeFuncCall {
 		r.setParam("pageSize", 100)
 	} else {
@@ -117,9 +115,7 @@ func (s *GetContestStandings) Do(ctx context.Context, opts ...RequestOption) (*C
 	}
 
 	r.setParam("showExternal", s.showExternal)
-
 	r.setParam("showVirtual", s.showVirtual)
-
 	r.setParam("userGroupID", s.userGroupID)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
@@ -127,11 +123,11 @@ func (s *GetContestStandings) Do(ctx context.Context, opts ...RequestOption) (*C
 	}
 
 	res := new(ContestStandings)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -231,13 +227,11 @@ func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOpt
 	} else {
 		r.setParam("locale", s.locale)
 	}
-
 	if s.page == 0 && !s.pageFuncCall {
 		r.setParam("page", 1)
 	} else {
 		r.setParam("page", s.page)
 	}
-
 	if s.pageSize == 0 && !s.pageSizeFuncCall {
 		r.setParam("pageSize", 100)
 	} else {
@@ -245,9 +239,7 @@ func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOpt
 	}
 
 	r.setParam("showExternal", s.showExternal)
-
 	r.setParam("showVirtual", s.showVirtual)
-
 	r.setParam("userGroupID", s.userGroupID)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
@@ -255,11 +247,11 @@ func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOpt
 	}
 
 	res := new(ContestStandings)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -329,16 +321,17 @@ func (s *GetYourPositionInContestStandings) Do(ctx context.Context, opts ...Requ
 	}
 
 	r.setParam("showExternal", s.showExternal)
-
 	r.setParam("showVirtual", s.showVirtual)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
+
 	res := new(ContestStandings)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }

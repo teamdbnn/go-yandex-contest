@@ -22,9 +22,9 @@ func (s *GetCompilersList) Do(ctx context.Context, opts ...RequestOption) (*Comp
 	if err != nil {
 		return nil, err
 	}
+
 	res := new(CompilerListResponse)
 	err = json.Unmarshal(data, &res)
-
 	if err != nil {
 		return nil, err
 	}

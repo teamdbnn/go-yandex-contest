@@ -52,12 +52,13 @@ func (s *GetJuryClarifications) Do(ctx context.Context, opts ...RequestOption) (
 	if err != nil {
 		return nil, err
 	}
-	res := new(Clarifications)
 
+	res := new(Clarifications)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -94,12 +95,13 @@ func (s *GetContestMessages) Do(ctx context.Context, opts ...RequestOption) (*Me
 	if err != nil {
 		return nil, err
 	}
-	res := new(Messages)
 
+	res := new(Messages)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -154,6 +156,7 @@ func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) erro
 	if err := s.validate(); err != nil {
 		return err
 	}
+
 	r := &request{
 		method:   http.MethodPost,
 		endpoint: fmt.Sprintf("/contests/%v/messages", s.contestID),
@@ -167,11 +170,10 @@ func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) erro
 	if s.text != "" {
 		r.setFormParam("text", s.text)
 	}
-
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return err
+	if err == nil {
+		return nil
 	}
 
-	return nil
+	return err
 }

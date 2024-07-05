@@ -22,9 +22,9 @@ func (s *GetSubmissionsQueueCapacity) Do(ctx context.Context, opts ...RequestOpt
 	if err != nil {
 		return nil, err
 	}
+
 	res := new(ServiceCapacity)
 	err = json.Unmarshal(data, &res)
-
 	if err != nil {
 		return nil, err
 	}
@@ -47,9 +47,9 @@ func (s *GetAvailableScopes) Do(ctx context.Context, opts ...RequestOption) (*Se
 	if err != nil {
 		return nil, err
 	}
+
 	res := new(Service)
 	err = json.Unmarshal(data, &res)
-
 	if err != nil {
 		return nil, err
 	}

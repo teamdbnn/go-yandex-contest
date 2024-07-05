@@ -77,30 +77,27 @@ func (s *GetAllSubmissionsForContest) Do(ctx context.Context, opts ...RequestOpt
 	} else {
 		r.setParam("pageSize", s.pageSize)
 	}
-
 	if s.sortBy == "" {
 		r.setParam("sortBy", "ID")
 	} else {
 		r.setParam("sortBy", s.sortBy)
 	}
-
 	if s.sortDesc == "" {
 		r.setParam("sortDesc", "ASC")
 	} else {
 		r.setParam("sortDesc", s.sortDesc)
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(NeuripsSubmissionsReportResponse)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -179,29 +176,26 @@ func (s *GetYourSubmissionsForContest) Do(ctx context.Context, opts ...RequestOp
 	} else {
 		r.setParam("pageSize", s.pageSize)
 	}
-
 	if s.sortBy == "" {
 		r.setParam("sortBy", "ID")
 	} else {
 		r.setParam("sortBy", s.sortBy)
 	}
-
 	if s.sortDesc == "" {
 		r.setParam("sortDesc", "ASC")
 	} else {
 		r.setParam("sortDesc", s.sortDesc)
 	}
-
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(NeuripsSubmissionsReportResponse)
-
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
