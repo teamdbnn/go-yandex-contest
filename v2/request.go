@@ -27,7 +27,7 @@ func (r *request) addParam(key string, value interface{}) *request {
 		r.query = url.Values{}
 	}
 
-	r.query.Set(key, fmt.Sprintf("%v", value))
+	r.query.Add(key, fmt.Sprintf("%v", value))
 	return r
 }
 
@@ -81,7 +81,7 @@ func (r *request) validate() (err error) {
 	return nil
 }
 
-// RequestOption define optuin type for request
+// RequestOption define option type for request
 type RequestOption func(*request)
 
 // WithHeader set or add a header value to the request
