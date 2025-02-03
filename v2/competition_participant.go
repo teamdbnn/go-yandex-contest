@@ -21,12 +21,15 @@ func (s *GetParticipantsOfCompetition) CompetitionID(competitionID int64) *GetPa
 
 func (s *GetParticipantsOfCompetition) validate() error {
 	if s.competitionID == 0 {
-		return requiredError("competitionID")
+		return requiredFieldError("competitionID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get registered participants of competition
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/competition/listParticipantsUsingGET
+// meta:operation GET /competitions/{competitionId}/participants
 func (s *GetParticipantsOfCompetition) Do(ctx context.Context, opts ...RequestOption) (string, error) {
 	if err := s.validate(); err != nil {
 		return "", err
@@ -67,16 +70,19 @@ func (s *RegisterParticipantIntoCompetition) Users(users []string) *RegisterPart
 
 func (s *RegisterParticipantIntoCompetition) validate() error {
 	if s.competitionID == 0 {
-		return requiredError("competitionID")
+		return requiredFieldError("competitionID")
 	}
-	if s.body.Users == nil {
-		return requiredError("Users")
+	if len(s.body.Users) == 0 {
+		return requiredFieldError("Users")
 	}
 
 	return nil
 }
 
-// Do Send POST request
+// Do Register participants for competition
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/competition/registerParticipantsUsingPOST
+// meta:operation POST /competitions/{competitionId}/participants
 func (s *RegisterParticipantIntoCompetition) Do(ctx context.Context, opts ...RequestOption) (*CompetitionRegisterResponse, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -93,10 +99,9 @@ func (s *RegisterParticipantIntoCompetition) Do(ctx context.Context, opts ...Req
 	}
 
 	res := new(CompetitionRegisterResponse)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
-	
+
 	return res, nil
 }

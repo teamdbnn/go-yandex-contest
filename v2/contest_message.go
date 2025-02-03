@@ -28,12 +28,15 @@ func (s *GetJuryClarifications) Locale(locale string) *GetJuryClarifications {
 
 func (s *GetJuryClarifications) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get jury clarifications
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/message/getClarificationsUsingGET
+// meta:operation GET /contests/{contestId}/clarifications
 func (s *GetJuryClarifications) Do(ctx context.Context, opts ...RequestOption) (*Clarifications, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -44,18 +47,18 @@ func (s *GetJuryClarifications) Do(ctx context.Context, opts ...RequestOption) (
 		endpoint: fmt.Sprintf("/contests/%d/clarifications", s.contestID),
 	}
 	if s.locale == "" {
-		r.setParam("locale", "ru")
-	} else {
-		r.setParam("locale", s.locale)
+		s.locale = defaultLocale
 	}
+
+	r.setParam("locale", s.locale)
+
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(Clarifications)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -76,12 +79,15 @@ func (s *GetContestMessages) ContestID(contestID int64) *GetContestMessages {
 
 func (s *GetContestMessages) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get your questions and jury answers
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/message/getMessagesUsingGET
+// meta:operation GET /contests/{contestId}/messages
 func (s *GetContestMessages) Do(ctx context.Context, opts ...RequestOption) (*Messages, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -97,8 +103,7 @@ func (s *GetContestMessages) Do(ctx context.Context, opts ...RequestOption) (*Me
 	}
 
 	res := new(Messages)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -140,18 +145,21 @@ func (s *SendQuestionToJury) Text(text string) *SendQuestionToJury {
 
 func (s *SendQuestionToJury) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.subject == "" {
-		return requiredError("subject")
+		return requiredFieldError("subject")
 	}
 	if s.text == "" {
-		return requiredError("text")
+		return requiredFieldError("text")
 	}
 	return nil
 }
 
-// Do Send POST request
+// Do Send question to jury
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/message/sendQuestionUsingPOST
+// meta:operation POST /contests/{contestId}/messages
 func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -161,19 +169,14 @@ func (s *SendQuestionToJury) Do(ctx context.Context, opts ...RequestOption) erro
 		method:   http.MethodPost,
 		endpoint: fmt.Sprintf("/contests/%v/messages", s.contestID),
 	}
+	r.setFormParam("subject", s.subject)
+	r.setFormParam("text", s.text)
+
 	if s.problem != "" {
 		r.setFormParam("problem", s.problem)
 	}
-	if s.subject != "" {
-		r.setFormParam("subject", s.subject)
-	}
-	if s.text != "" {
-		r.setFormParam("text", s.text)
-	}
+
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
 }

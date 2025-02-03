@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func requiredError(fieldName string) error {
+func requiredFieldError(fieldName string) error {
 	return errors.Errorf("%s can not be empty", fieldName)
 }
 

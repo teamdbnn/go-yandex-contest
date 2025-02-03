@@ -12,7 +12,10 @@ type GetCompilersList struct {
 	c *Client
 }
 
-// Do Send GET request
+// Do Get compilers list
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/compilers/compilersListUsingGET
+// meta:operation GET /compilers
 func (s *GetCompilersList) Do(ctx context.Context, opts ...RequestOption) (*CompilerListResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
@@ -24,8 +27,7 @@ func (s *GetCompilersList) Do(ctx context.Context, opts ...RequestOption) (*Comp
 	}
 
 	res := new(CompilerListResponse)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 

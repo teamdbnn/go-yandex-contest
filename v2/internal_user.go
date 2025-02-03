@@ -21,12 +21,15 @@ func (s *UserGeneratePassword) UserID(userID int64) *UserGeneratePassword {
 
 func (s *UserGeneratePassword) validate() error {
 	if s.userID == 0 {
-		return requiredError("userID")
+		return requiredFieldError("userID")
 	}
 	return nil
 }
 
-// Do Send POST request
+// Do Generate new password for internal user
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/internal-user/generateInternalUserPasswordUsingPOST
+// meta:operation POST /user/{userId}/generate-password
 func (s *UserGeneratePassword) Do(ctx context.Context, opts ...RequestOption) (*UserWithPasswordResponse, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -42,8 +45,7 @@ func (s *UserGeneratePassword) Do(ctx context.Context, opts ...RequestOption) (*
 	}
 
 	res := new(UserWithPasswordResponse)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 

@@ -12,7 +12,10 @@ type GetUserTeams struct {
 	c *Client
 }
 
-// Do Send GET request
+// Do Get user teams
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/team/listTeamsUsingGET
+// meta:operation GET /teams
 func (s *GetUserTeams) Do(ctx context.Context, opts ...RequestOption) ([]*TeamView, error) {
 	r := &request{
 		method:   http.MethodGet,
@@ -24,8 +27,7 @@ func (s *GetUserTeams) Do(ctx context.Context, opts ...RequestOption) ([]*TeamVi
 	}
 
 	res := make([]*TeamView, 0)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, &res); err != nil {
 		return nil, err
 	}
 

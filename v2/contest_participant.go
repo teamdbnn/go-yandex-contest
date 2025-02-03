@@ -22,12 +22,15 @@ func (s *GetListOfGroupsForContest) ContestID(contestID int64) *GetListOfGroupsF
 
 func (s *GetListOfGroupsForContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do List groups registered for contest
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/groupsUsingGET
+// meta:operation GET /contests/{contestId}/groups
 func (s *GetListOfGroupsForContest) Do(ctx context.Context, opts ...RequestOption) ([]*ContestGroup, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -43,8 +46,7 @@ func (s *GetListOfGroupsForContest) Do(ctx context.Context, opts ...RequestOptio
 	}
 
 	res := make([]*ContestGroup, 0)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, &res); err != nil {
 		return nil, err
 	}
 
@@ -81,18 +83,21 @@ func (s *RegisterGroupForContest) Roles(roles []string) *RegisterGroupForContest
 
 func (s *RegisterGroupForContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.groupID == 0 {
-		return requiredError("groupID")
+		return requiredFieldError("groupID")
 	}
 	if s.body.Roles == nil {
-		return requiredError("Roles")
+		return requiredFieldError("Roles")
 	}
 	return nil
 }
 
-// Do Send POST request
+// Do Register group for contest
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/registerGroupUsingPOST
+// meta:operation POST /contests/{contestId}/groups/{groupId}
 func (s *RegisterGroupForContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -104,9 +109,6 @@ func (s *RegisterGroupForContest) Do(ctx context.Context, opts ...RequestOption)
 	}
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
 }
@@ -132,15 +134,18 @@ func (s *DeleteGroupFromContest) GroupID(groupID int64) *DeleteGroupFromContest 
 
 func (s *DeleteGroupFromContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.groupID == 0 {
-		return requiredError("groupID")
+		return requiredFieldError("groupID")
 	}
 	return nil
 }
 
-// Do Send DELETE request
+// Do Delete group from contest
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/deleteGroupUsingDELETE
+// meta:operation DELETE /contests/{contestId}/groups/{groupId}
 func (s *DeleteGroupFromContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -151,9 +156,6 @@ func (s *DeleteGroupFromContest) Do(ctx context.Context, opts ...RequestOption) 
 		endpoint: fmt.Sprintf("/contests/%v/groups/%v", s.contestID, s.groupID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
 }
@@ -188,18 +190,21 @@ func (s *UpdateGroupForContest) Roles(roles []string) *UpdateGroupForContest {
 
 func (s *UpdateGroupForContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.groupID == 0 {
-		return requiredError("groupID")
+		return requiredFieldError("groupID")
 	}
-	if s.body.Roles == nil {
-		return requiredError("Roles")
+	if len(s.body.Roles) == 0 {
+		return requiredFieldError("Roles")
 	}
 	return nil
 }
 
-// Do Send PATCH request
+// Do Change group registration info
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/updateGroupUsingPATCH
+// meta:operation PATCH /contests/{contestId}/groups/{groupId}
 func (s *UpdateGroupForContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -211,9 +216,6 @@ func (s *UpdateGroupForContest) Do(ctx context.Context, opts ...RequestOption) e
 	}
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
 }
@@ -246,12 +248,15 @@ func (s *GetParticipantsOfContest) Login(login string) *GetParticipantsOfContest
 
 func (s *GetParticipantsOfContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestId")
+		return requiredFieldError("contestId")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get contest participants
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/getParticipantsUsingGET
+// meta:operation GET /contests/{contestId}/participants
 func (s *GetParticipantsOfContest) Do(ctx context.Context, opts ...RequestOption) ([]*ParticipantInfo, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -273,8 +278,7 @@ func (s *GetParticipantsOfContest) Do(ctx context.Context, opts ...RequestOption
 	}
 
 	res := make([]*ParticipantInfo, 0)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, &res); err != nil {
 		return nil, err
 	}
 
@@ -309,18 +313,21 @@ func (s *RegisterParticipantForContest) UID(uid int64) *RegisterParticipantForCo
 
 func (s *RegisterParticipantForContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.login == "" {
-		return requiredError("login")
+		return requiredFieldError("login")
 	}
 	return nil
 }
 
-// Do Send POST request
-func (s *RegisterParticipantForContest) Do(ctx context.Context, opts ...RequestOption) (*int64, error) {
+// Do Register for contest
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/registerForContestUsingPOST
+// meta:operation POST /contests/{contestId}/participants
+func (s *RegisterParticipantForContest) Do(ctx context.Context, opts ...RequestOption) (int64, error) {
 	if err := s.validate(); err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	r := &request{
@@ -335,16 +342,15 @@ func (s *RegisterParticipantForContest) Do(ctx context.Context, opts ...RequestO
 	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	res := string(data)
-	i, err := strconv.ParseInt(res, 10, 64)
+	i, err := strconv.ParseInt(string(data), 10, 64)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	return &i, nil
+	return i, nil
 }
 
 // GetInfoOfParticipant Get info about participant
@@ -368,15 +374,18 @@ func (s *GetInfoOfParticipant) ParticipantID(participantID int64) *GetInfoOfPart
 
 func (s *GetInfoOfParticipant) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.participantID == 0 {
-		return requiredError("participantID")
+		return requiredFieldError("participantID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get information about participant
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/getParticipantStatusUsingGET
+// meta:operation GET /contests/{contestId}/participants/{participantId}
 func (s *GetInfoOfParticipant) Do(ctx context.Context, opts ...RequestOption) (*ParticipantStatus, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -392,8 +401,7 @@ func (s *GetInfoOfParticipant) Do(ctx context.Context, opts ...RequestOption) (*
 	}
 
 	res := new(ParticipantStatus)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -421,15 +429,18 @@ func (s *StartContestForParticipant) ParticipantID(participantID int64) *StartCo
 
 func (s *StartContestForParticipant) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.participantID == 0 {
-		return requiredError("participantID")
+		return requiredFieldError("participantID")
 	}
 	return nil
 }
 
-// Do Send PUT request
+// Do Start the contest for participant
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/startContestForParticipantUsingPUT
+// meta:operation PUT /contests/{contestId}/participants/{participantId}
 func (s *StartContestForParticipant) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -440,9 +451,6 @@ func (s *StartContestForParticipant) Do(ctx context.Context, opts ...RequestOpti
 		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestID, s.participantID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
 }
@@ -468,15 +476,18 @@ func (s *UnregisterParticipantFromContest) ParticipantID(participantID int64) *U
 
 func (s *UnregisterParticipantFromContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.participantID == 0 {
-		return requiredError("participantID")
+		return requiredFieldError("participantID")
 	}
 	return nil
 }
 
-// Do Send DELETE request
+// Do Unregister participant from contest
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/unregisterFromContestUsingDELETE
+// meta:operation DELETE /contests/{contestId}/participants/{participantId}
 func (s *UnregisterParticipantFromContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -487,9 +498,6 @@ func (s *UnregisterParticipantFromContest) Do(ctx context.Context, opts ...Reque
 		endpoint: fmt.Sprintf("/contests/%v/participants/%v", s.contestID, s.participantID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
 }
@@ -524,18 +532,21 @@ func (s *UpdateParticipantForContest) DisplayedName(displayedName string) *Updat
 
 func (s *UpdateParticipantForContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.participantID == 0 {
-		return requiredError("participantID")
+		return requiredFieldError("participantID")
 	}
 	if s.body.DisplayedName == "" {
-		return requiredError("DisplayedName")
+		return requiredFieldError("DisplayedName")
 	}
 	return nil
 }
 
 // Do Send PATCH request
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/updateParticipantUsingPATCH
+// meta:operation PATCH /contests/{contestId}/participants/{participantId}
 func (s *UpdateParticipantForContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -547,11 +558,63 @@ func (s *UpdateParticipantForContest) Do(ctx context.Context, opts ...RequestOpt
 	}
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
+}
+
+// GetParticipantsStats Get participant statistics
+type GetParticipantsStats struct {
+	c             *Client
+	contestID     int64
+	participantID int64
+}
+
+// ContestID Set contest id
+func (s *GetParticipantsStats) ContestID(contestID int64) *GetParticipantsStats {
+	s.contestID = contestID
+	return s
+}
+
+// ParticipantID Set participant id
+func (s *GetParticipantsStats) ParticipantID(participantID int64) *GetParticipantsStats {
+	s.participantID = participantID
+	return s
+}
+
+func (s *GetParticipantsStats) validate() error {
+	if s.contestID == 0 {
+		return requiredFieldError("contestID")
+	}
+	if s.participantID == 0 {
+		return requiredFieldError("participantID")
+	}
+	return nil
+}
+
+// Do Get participant statistics
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/getParticipantStatsUsingGET
+// meta:operation GET /contests/{contestId}/participants/{participantId}/stats
+func (s *GetParticipantsStats) Do(ctx context.Context, opts ...RequestOption) (*ParticipantStats, error) {
+	if err := s.validate(); err != nil {
+		return nil, err
+	}
+
+	r := &request{
+		method:   http.MethodGet,
+		endpoint: fmt.Sprintf("/contests/%v/participants/%v/stats", s.contestID, s.participantID),
+	}
+	data, err := s.c.callAPI(ctx, r, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	res := new(ParticipantStats)
+	if err = json.Unmarshal(data, res); err != nil {
+		return nil, err
+	}
+
+	return res, err
 }
 
 // GetInfoOfYourParticipation Get info of your participation
@@ -568,12 +631,15 @@ func (s *GetInfoOfYourParticipation) ContestID(contestID int64) *GetInfoOfYourPa
 
 func (s *GetInfoOfYourParticipation) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get information about your participation
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/getYourStatusUsingGET
+// meta:operation GET /contests/{contestId}/participation
 func (s *GetInfoOfYourParticipation) Do(ctx context.Context, opts ...RequestOption) (*ParticipantStatus, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -589,8 +655,7 @@ func (s *GetInfoOfYourParticipation) Do(ctx context.Context, opts ...RequestOpti
 	}
 
 	res := new(ParticipantStatus)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -611,12 +676,15 @@ func (s *StartContest) ContestID(contestID int64) *StartContest {
 
 func (s *StartContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send PUT request
+// Do Start the contest
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/startContestUsingPUT
+// meta:operation PUT /contests/{contestId}/participation
 func (s *StartContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -627,9 +695,6 @@ func (s *StartContest) Do(ctx context.Context, opts ...RequestOption) error {
 		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
 }
@@ -648,12 +713,15 @@ func (s *UnregisterYourselfFromContest) ContestID(contestID int64) *UnregisterYo
 
 func (s *UnregisterYourselfFromContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send DELETE request
+// Do Unregister yourself from contest
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/participant/unregisterYourselfFromContestUsingDELETE
+// meta:operation DELETE /contests/{contestId}/participation
 func (s *UnregisterYourselfFromContest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -664,9 +732,6 @@ func (s *UnregisterYourselfFromContest) Do(ctx context.Context, opts ...RequestO
 		endpoint: fmt.Sprintf("/contests/%v/participation", s.contestID),
 	}
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
 }

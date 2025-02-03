@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+const defaultContestPageSize = 100
+
 // GetContestStandings Get contest standings
 type GetContestStandings struct {
 	c                 *Client
@@ -14,9 +16,7 @@ type GetContestStandings struct {
 	forJudge          bool
 	locale            string
 	page              int32
-	pageFuncCall      bool
 	pageSize          int32
-	pageSizeFuncCall  bool
 	participantSearch string
 	showExternal      bool
 	showVirtual       bool
@@ -44,14 +44,12 @@ func (s *GetContestStandings) Locale(locale string) *GetContestStandings {
 // Page Set page, default 1
 func (s *GetContestStandings) Page(page int32) *GetContestStandings {
 	s.page = page
-	s.pageFuncCall = true
 	return s
 }
 
 // PageSize Set page size, default 100
 func (s *GetContestStandings) PageSize(pageSize int32) *GetContestStandings {
 	s.pageSize = pageSize
-	s.pageSizeFuncCall = true
 	return s
 }
 
@@ -81,12 +79,15 @@ func (s *GetContestStandings) UserGroupID(userGroupID int64) *GetContestStanding
 
 func (s *GetContestStandings) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get contest standings
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/standings/getContestStandingsUsingGET
+// meta:operation GET /contests/{contestId}/standings
 func (s *GetContestStandings) Do(ctx context.Context, opts ...RequestOption) (*ContestStandings, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -96,24 +97,23 @@ func (s *GetContestStandings) Do(ctx context.Context, opts ...RequestOption) (*C
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/standings", s.contestID),
 	}
-	r.setParam("forJudge", s.forJudge)
 
 	if s.locale == "" {
-		r.setParam("locale", "ru")
-	} else {
-		r.setParam("locale", s.locale)
-	}
-	if s.page == 0 && !s.pageFuncCall {
-		r.setParam("page", 1)
-	} else {
-		r.setParam("page", s.page)
-	}
-	if s.pageSize == 0 && !s.pageSizeFuncCall {
-		r.setParam("pageSize", 100)
-	} else {
-		r.setParam("pageSize", s.pageSize)
+		s.locale = defaultLocale
 	}
 
+	if s.page <= 0 {
+		s.page = defaultPage
+	}
+
+	if s.pageSize <= 0 {
+		s.pageSize = defaultContestPageSize
+	}
+
+	r.setParam("forJudge", s.forJudge)
+	r.setParam("locale", s.locale)
+	r.setParam("page", s.page)
+	r.setParam("pageSize", s.pageSize)
 	r.setParam("showExternal", s.showExternal)
 	r.setParam("showVirtual", s.showVirtual)
 	r.setParam("userGroupID", s.userGroupID)
@@ -123,7 +123,7 @@ func (s *GetContestStandings) Do(ctx context.Context, opts ...RequestOption) (*C
 	}
 
 	res := new(ContestStandings)
-	err = json.Unmarshal(data, &res)
+	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
 	}
@@ -138,9 +138,7 @@ type GetContestStandingsExtended struct {
 	forJudge          bool
 	locale            string
 	page              int32
-	pageFuncCall      bool
 	pageSize          int32
-	pageSizeFuncCall  bool
 	participantSearch string
 	showExternal      bool
 	showVirtual       bool
@@ -168,14 +166,12 @@ func (s *GetContestStandingsExtended) Locale(locale string) *GetContestStandings
 // Page Set page, default 1
 func (s *GetContestStandingsExtended) Page(page int32) *GetContestStandingsExtended {
 	s.page = page
-	s.pageFuncCall = true
 	return s
 }
 
 // PageSize Set page size, default 100
 func (s *GetContestStandingsExtended) PageSize(pageSize int32) *GetContestStandingsExtended {
 	s.pageSize = pageSize
-	s.pageSizeFuncCall = true
 	return s
 }
 
@@ -197,20 +193,23 @@ func (s *GetContestStandingsExtended) ShowVirtual(showVirtual bool) *GetContestS
 	return s
 }
 
-// UserGroupId User group id
-func (s *GetContestStandingsExtended) UserGroupId(userGroupID int64) *GetContestStandingsExtended {
+// UserGroupID User group id
+func (s *GetContestStandingsExtended) UserGroupID(userGroupID int64) *GetContestStandingsExtended {
 	s.userGroupID = userGroupID
 	return s
 }
 
 func (s *GetContestStandingsExtended) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get contest standings
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/standings/getContestStandingsExtendedUsingGET
+// meta:operation GET /contests/{contestId}/standings-extended
 func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOption) (*ContestStandings, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -220,24 +219,21 @@ func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOpt
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/standings-extended", s.contestID),
 	}
-	r.setParam("forJudge", s.forJudge)
 
 	if s.locale == "" {
-		r.setParam("locale", "ru")
-	} else {
-		r.setParam("locale", s.locale)
+		s.locale = defaultLocale
 	}
-	if s.page == 0 && !s.pageFuncCall {
-		r.setParam("page", 1)
-	} else {
-		r.setParam("page", s.page)
+	if s.page == 0 {
+		s.page = defaultPage
 	}
-	if s.pageSize == 0 && !s.pageSizeFuncCall {
-		r.setParam("pageSize", 100)
-	} else {
-		r.setParam("pageSize", s.pageSize)
+	if s.pageSize == 0 {
+		s.pageSize = defaultContestPageSize
 	}
 
+	r.setParam("pageSize", s.pageSize)
+	r.setParam("page", s.page)
+	r.setParam("locale", s.locale)
+	r.setParam("forJudge", s.forJudge)
 	r.setParam("showExternal", s.showExternal)
 	r.setParam("showVirtual", s.showVirtual)
 	r.setParam("userGroupID", s.userGroupID)
@@ -247,8 +243,7 @@ func (s *GetContestStandingsExtended) Do(ctx context.Context, opts ...RequestOpt
 	}
 
 	res := new(ContestStandings)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -297,12 +292,15 @@ func (s *GetYourPositionInContestStandings) ShowVirtual(showVirtual bool) *GetYo
 
 func (s *GetYourPositionInContestStandings) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get your position in contest standings
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/standings/getMyStandingsUsingGET
+// meta:operation GET /contests/{contestId}/standings/my
 func (s *GetYourPositionInContestStandings) Do(ctx context.Context, opts ...RequestOption) (*ContestStandings, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -312,14 +310,13 @@ func (s *GetYourPositionInContestStandings) Do(ctx context.Context, opts ...Requ
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/standings/my", s.contestID),
 	}
-	r.setParam("forJudge", s.forJudge)
 
 	if s.locale != "" {
-		r.setParam("locale", s.locale)
-	} else {
-		r.setParam("locale", "ru")
+		s.locale = defaultLocale
 	}
 
+	r.setParam("forJudge", s.forJudge)
+	r.setParam("locale", s.locale)
 	r.setParam("showExternal", s.showExternal)
 	r.setParam("showVirtual", s.showVirtual)
 	data, err := s.c.callAPI(ctx, r, opts...)
@@ -328,8 +325,7 @@ func (s *GetYourPositionInContestStandings) Do(ctx context.Context, opts ...Requ
 	}
 
 	res := new(ContestStandings)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 

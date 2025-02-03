@@ -21,12 +21,14 @@ func (s *GetContestInfo) ContestID(contestID int64) *GetContestInfo {
 
 func (s *GetContestInfo) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get information about contest
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/contest/getContestInfoUsingGET
+// meta:operation GET /contests/{contestId}
 func (s *GetContestInfo) Do(ctx context.Context, opts ...RequestOption) (*ContestDescription, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -42,8 +44,7 @@ func (s *GetContestInfo) Do(ctx context.Context, opts ...RequestOption) (*Contes
 	}
 
 	res := new(ContestDescription)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 

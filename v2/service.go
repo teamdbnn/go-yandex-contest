@@ -13,6 +13,9 @@ type GetSubmissionsQueueCapacity struct {
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetSubmissionsQueueCapacity) Do(ctx context.Context, opts ...RequestOption) (*ServiceCapacity, error) {
 	r := &request{
 		method:   http.MethodGet,
@@ -24,8 +27,7 @@ func (s *GetSubmissionsQueueCapacity) Do(ctx context.Context, opts ...RequestOpt
 	}
 
 	res := new(ServiceCapacity)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -38,6 +40,9 @@ type GetAvailableScopes struct {
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetAvailableScopes) Do(ctx context.Context, opts ...RequestOption) (*Service, error) {
 	r := &request{
 		method:   http.MethodGet,
@@ -49,8 +54,7 @@ func (s *GetAvailableScopes) Do(ctx context.Context, opts ...RequestOption) (*Se
 	}
 
 	res := new(Service)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 

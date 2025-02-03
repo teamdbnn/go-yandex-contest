@@ -27,25 +27,26 @@ func (s *GetSubmissionsOfContest) ContestID(contestID int64) *GetSubmissionsOfCo
 // Page Set page, default 1
 func (s *GetSubmissionsOfContest) Page(page int32) *GetSubmissionsOfContest {
 	s.page = page
-	s.pageFuncCall = true
 	return s
 }
 
 // PageSize Set page size, default 100
 func (s *GetSubmissionsOfContest) PageSize(pageSize int32) *GetSubmissionsOfContest {
 	s.pageSize = pageSize
-	s.pageSizeFuncCall = true
 	return s
 }
 
 func (s *GetSubmissionsOfContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetSubmissionsOfContest) Do(ctx context.Context, opts ...RequestOption) (*Submissions, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -55,24 +56,21 @@ func (s *GetSubmissionsOfContest) Do(ctx context.Context, opts ...RequestOption)
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/%v/submissions", s.contestID),
 	}
-	if s.page == 0 && !s.pageFuncCall {
-		r.setParam("page", 1)
-	} else {
-		r.setParam("page", s.page)
+	if s.page == 0 {
+		s.page = defaultPage
 	}
-	if s.pageSize == 0 && !s.pageSizeFuncCall {
-		r.setParam("pageSize", 100)
-	} else {
-		r.setParam("pageSize", s.pageSize)
+	if s.pageSize == 0 {
+		s.pageSize = defaultSubmissionPageSize
 	}
+	r.setParam("pageSize", s.pageSize)
+	r.setParam("page", s.page)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(Submissions)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -128,21 +126,24 @@ func (s *SendSubmission) ContestID(contestID int64) *SendSubmission {
 
 func (s *SendSubmission) validate() error {
 	if s.compiler == "" {
-		return requiredError("compiler")
+		return requiredFieldError("compiler")
 	}
 	if s.file == "" {
-		return requiredError("file")
+		return requiredFieldError("file")
 	}
 	if s.problem == "" {
-		return requiredError("problem")
+		return requiredFieldError("problem")
 	}
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
 // Do Send POST request
+//
+// Docs:
+// meta:operation
 func (s *SendSubmission) Do(ctx context.Context, opts ...RequestOption) (*RunID, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -152,14 +153,11 @@ func (s *SendSubmission) Do(ctx context.Context, opts ...RequestOption) (*RunID,
 		method:   http.MethodPost,
 		endpoint: fmt.Sprintf("/contests/%v/submissions", s.contestID),
 	}
-	r.setFormParam("compiler", s.compiler)
 
 	f, err := os.Open(s.file)
 	if err != nil {
 		return nil, err
 	}
-
-	r.setFormParam("file", f)
 
 	defer func() {
 		cerr := f.Close()
@@ -168,6 +166,9 @@ func (s *SendSubmission) Do(ctx context.Context, opts ...RequestOption) (*RunID,
 		}
 	}()
 
+	// todo: check file uploads
+	r.setFormParam("file", f)
+	r.setFormParam("compiler", s.compiler)
 	r.setFormParam("problem", s.problem)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
@@ -175,8 +176,7 @@ func (s *SendSubmission) Do(ctx context.Context, opts ...RequestOption) (*RunID,
 	}
 
 	res := new(RunID)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -234,27 +234,30 @@ func (s *SendSubmissionFromURL) Meta(meta string) *SendSubmissionFromURL {
 
 func (s *SendSubmissionFromURL) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.body.FileUrl == "" {
-		return requiredError("FileUrl")
+		return requiredFieldError("FileUrl")
 	}
 	if s.body.FileName == "" {
-		return requiredError("FileName")
+		return requiredFieldError("FileName")
 	}
 	if s.body.ProblemAlias == "" {
-		return requiredError("ProblemAlias")
+		return requiredFieldError("ProblemAlias")
 	}
 	if s.body.CompilerID == "" {
-		return requiredError("CompilerID")
+		return requiredFieldError("CompilerID")
 	}
 	if s.body.Meta == "" {
-		return requiredError("Meta")
+		return requiredFieldError("Meta")
 	}
 	return nil
 }
 
 // Do Send POST request
+//
+// Docs:
+// meta:operation
 func (s *SendSubmissionFromURL) Do(ctx context.Context, opts ...RequestOption) (*RunID, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -271,8 +274,7 @@ func (s *SendSubmissionFromURL) Do(ctx context.Context, opts ...RequestOption) (
 	}
 
 	res := new(RunID)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -299,7 +301,7 @@ func (s *GetReportForMultipleSubmissions) Locale(locale string) *GetReportForMul
 	return s
 }
 
-// RunIds Set run ids
+// RunIDs Set run ids
 func (s *GetReportForMultipleSubmissions) RunIDs(runIDs []int) *GetReportForMultipleSubmissions {
 	s.runIDs = runIDs
 	return s
@@ -307,15 +309,18 @@ func (s *GetReportForMultipleSubmissions) RunIDs(runIDs []int) *GetReportForMult
 
 func (s *GetReportForMultipleSubmissions) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.runIDs == nil {
-		return requiredError("runIDs")
+		return requiredFieldError("runIDs")
 	}
 	return nil
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetReportForMultipleSubmissions) Do(ctx context.Context, opts ...RequestOption) ([]*MultiRunReport, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -326,11 +331,10 @@ func (s *GetReportForMultipleSubmissions) Do(ctx context.Context, opts ...Reques
 		endpoint: fmt.Sprintf("/contests/%v/submissions/multiple", s.contestID),
 	}
 	if s.locale == "" {
-		r.setParam("locale", "ru")
-	} else {
-		r.setParam("locale", s.locale)
+		s.locale = defaultLocale
 	}
 
+	r.setParam("locale", s.locale)
 	for i := 0; i < len(s.runIDs); i++ {
 		r.addParam("runIds", s.runIDs[i])
 	}
@@ -340,8 +344,7 @@ func (s *GetReportForMultipleSubmissions) Do(ctx context.Context, opts ...Reques
 	}
 
 	res := make([]*MultiRunReport, 0)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, &res); err != nil {
 		return nil, err
 	}
 
@@ -369,15 +372,18 @@ func (s *GetBriefReportForSubmission) SubmissionID(submissionID int64) *GetBrief
 
 func (s *GetBriefReportForSubmission) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.submissionID == 0 {
-		return requiredError("submissionID")
+		return requiredFieldError("submissionID")
 	}
 	return nil
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetBriefReportForSubmission) Do(ctx context.Context, opts ...RequestOption) (*BriefRunReport, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -393,8 +399,7 @@ func (s *GetBriefReportForSubmission) Do(ctx context.Context, opts ...RequestOpt
 	}
 
 	res := new(BriefRunReport)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -427,15 +432,18 @@ func (s *GetFullReportForSubmission) Locale(locale string) *GetFullReportForSubm
 
 func (s *GetFullReportForSubmission) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.submissionID == 0 {
-		return requiredError("submissionID")
+		return requiredFieldError("submissionID")
 	}
 	return nil
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetFullReportForSubmission) Do(ctx context.Context, opts ...RequestOption) (*FullRunReport, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -446,18 +454,16 @@ func (s *GetFullReportForSubmission) Do(ctx context.Context, opts ...RequestOpti
 		endpoint: fmt.Sprintf("/contests/%v/submissions/%v/full", s.contestID, s.submissionID),
 	}
 	if s.locale == "" {
-		r.setParam("locale", "ru")
-	} else {
-		r.setParam("locale", s.locale)
+		s.locale = defaultLocale
 	}
+	r.setParam("locale", s.locale)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(FullRunReport)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -485,15 +491,18 @@ func (s *GetSubmissionSourceCode) SubmissionID(submissionID int64) *GetSubmissio
 
 func (s *GetSubmissionSourceCode) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.submissionID == 0 {
-		return requiredError("submissionID")
+		return requiredFieldError("submissionID")
 	}
 	return nil
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption) (string, error) {
 	if err := s.validate(); err != nil {
 		return "", err
@@ -532,15 +541,18 @@ func (s *GetMetadataOfSubmissionSourceCode) SubmissionID(submissionID int64) *Ge
 
 func (s *GetMetadataOfSubmissionSourceCode) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.submissionID == 0 {
-		return requiredError("submissionID")
+		return requiredFieldError("submissionID")
 	}
 	return nil
 }
 
 // Do Send HEAD request
+//
+// Docs:
+// meta:operation
 func (s *GetMetadataOfSubmissionSourceCode) Do(ctx context.Context, opts ...RequestOption) (string, error) {
 	if err := s.validate(); err != nil {
 		return "", err
@@ -594,18 +606,21 @@ func (s *GetFullAnswerFileForTest) UseReportSettings(useReportSettings bool) *Ge
 
 func (s *GetFullAnswerFileForTest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.submissionID == 0 {
-		return requiredError("submissionID")
+		return requiredFieldError("submissionID")
 	}
 	if s.testName == "" {
-		return requiredError("testName")
+		return requiredFieldError("testName")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Send GET request todo: check file download
+//
+// Docs:
+// meta:operation
 func (s *GetFullAnswerFileForTest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -668,18 +683,21 @@ func (s *GetFullInputFileForTest) UseReportSettings(useReportSettings bool) *Get
 
 func (s *GetFullInputFileForTest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.submissionID == 0 {
-		return requiredError("submissionID")
+		return requiredFieldError("submissionID")
 	}
 	if s.testName == "" {
-		return requiredError("testName")
+		return requiredFieldError("testName")
 	}
 	return nil
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetFullInputFileForTest) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -743,18 +761,21 @@ func (s *GetParticipantOutputForTest) UseReportSettings(useReportSettings bool) 
 
 func (s *GetParticipantOutputForTest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.submissionID == 0 {
-		return requiredError("submissionID")
+		return requiredFieldError("submissionID")
 	}
 	if s.testName == "" {
-		return requiredError("testName")
+		return requiredFieldError("testName")
 	}
 	return nil
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetParticipantOutputForTest) Do(ctx context.Context, opts ...RequestOption) (string, error) {
 	if err := s.validate(); err != nil {
 		return "", err
@@ -787,12 +808,15 @@ func (s *SubmissionRejudge) SubmissionID(submissionID int64) *SubmissionRejudge 
 
 func (s *SubmissionRejudge) validate() error {
 	if s.submissionID == 0 {
-		return requiredError("submissionID")
+		return requiredFieldError("submissionID")
 	}
 	return nil
 }
 
 // Do Send POST request
+//
+// Docs:
+// meta:operation
 func (s *SubmissionRejudge) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err

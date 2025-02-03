@@ -1,9 +1,11 @@
 package yacontest
 
 import (
-	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"io"
+)
+
+const (
+	defaultPage = 1
 )
 
 type AdditionalSolutionCheckResult struct {
@@ -14,16 +16,20 @@ type AdditionalSolutionCheckResult struct {
 }
 
 type BriefRunReport struct {
-	CompileLog     *string `json:"compileLog"`
-	Compiler       *string `json:"compiler"`
-	Diff           *string `json:"diff"`
-	ProblemAlias   *string `json:"problemAlias"`
-	ProblemId      *string `json:"problemId"`
-	Score          float64 `json:"score"`
-	Source         *string `json:"source"`
-	SubmissionTime *string `json:"submissionTime"`
-	TimeFromStart  *int64  `json:"timeFromStart"`
-	Verdict        *string `json:"verdict"`
+	AuthorId       string  `json:"authorId"`
+	CompileLog     string  `json:"compileLog"`
+	Compiler       string  `json:"compiler"`
+	Diff           string  `json:"diff,omitempty"`
+	MaxMemoryUsage int64   `json:"maxMemoryUsage"`
+	MaxTimeUsage   int64   `json:"maxTimeUsage"`
+	ProblemAlias   string  `json:"problemAlias"`
+	ProblemId      string  `json:"problemId"`
+	Score          float64 `json:"score,omitempty"`
+	Source         string  `json:"source,omitempty"`
+	SubmissionTime string  `json:"submissionTime"`
+	TestNumber     int64   `json:"testNumber"`
+	TimeFromStart  int64   `json:"timeFromStart"`
+	Verdict        string  `json:"verdict"`
 }
 
 type Clarification struct {
@@ -46,12 +52,14 @@ type CompilerLimit struct {
 	OutputLimit   int64  `json:"outputLimit,omitempty"`
 	TimeLimit     int64  `json:"timeLimit,omitempty"`
 }
+
 type PublicCompilerInfo struct {
 	ID         *string `json:"id"`
 	Name       *string `json:"name"`
 	Deprecated *bool   `json:"deprecated"`
 	Style      *string `json:"style"`
 }
+
 type CompilerListResponse struct {
 	Compilers []*PublicCompilerInfo `json:"compilers"`
 }
@@ -99,13 +107,6 @@ type ContestProblem struct {
 
 type ContestProblems struct {
 	Problems []*ContestProblem `json:"problems"`
-}
-
-type ContestSettings struct {
-	ContestName string     `json:"contestName,omitempty"`
-	ContestType string     `json:"contestType,omitempty"`
-	Duration    string     `json:"duration,omitempty"`
-	Languages   []Language `json:"languages"`
 }
 
 type ContestStandings struct {
@@ -167,6 +168,7 @@ type Message struct {
 type Messages struct {
 	Messages []*Message `json:"messages"`
 }
+
 type ContestStandingsRow struct {
 	ParticipantInfo *ParticipantInfo `json:"participantInfo,omitempty"`
 	PlaceFrom       *int32           `json:"placeFrom,omitempty"`
@@ -274,29 +276,31 @@ type ParticipantInfo struct {
 }
 
 type ParticipantStats struct {
-	ContestID           *int64           `json:"contestId"`
-	FirstSubmissionTime string           `json:"firstSubmissionTime,omitempty"`
-	ID                  *int64           `json:"id"`
-	Login               *string          `json:"login"`
-	Name                *string          `json:"name"`
-	Runs                []*FullRunReport `json:"runs"`
-	StartedAt           string           `json:"startedAt,omitempty"`
+	ContestID           int64             `json:"contestId"`
+	FirstSubmissionTime string            `json:"firstSubmissionTime,omitempty"`
+	ID                  int64             `json:"id"`
+	Login               string            `json:"login"`
+	Name                string            `json:"name"`
+	Runs                []*BriefRunReport `json:"runs"`
+	StartedAt           string            `json:"startedAt,omitempty"`
 }
 
 type ParticipantStatus struct {
-	ContestDuration           string   `json:"contestDuration,omitempty"`
-	ContestFinishTime         string   `json:"contestFinishTime,omitempty"`
-	ContestInfinite           bool     `json:"contestInfinite,omitempty"`
-	ContestStartTime          string   `json:"contestStartTime,omitempty"`
-	ContestState              string   `json:"contestState,omitempty"`
-	ParticipantFinishTime     string   `json:"participantFinishTime,omitempty"`
+	ContestDuration       string `json:"contestDuration,omitempty"`
+	ContestFinishTime     string `json:"contestFinishTime,omitempty"`
+	ContestInfinite       bool   `json:"contestInfinite,omitempty"`
+	ContestStartTime      string `json:"contestStartTime,omitempty"`
+	ContestState          string `json:"contestState,omitempty"`
+	ParticipantFinishTime string `json:"participantFinishTime,omitempty"`
+	// Deprecated. Switch to participantLeftTimeMillis.
 	ParticipantLeftTime       string   `json:"participantLeftTime,omitempty"`
 	ParticipantLeftTimeMillis int64    `json:"ParticipantLeftTimeMillis,omitempty"`
 	ParticipantName           string   `json:"participantName,omitempty"`
 	ParticipantStartTime      string   `json:"participantStartTime,omitempty"`
 	Roles                     []string `json:"roles"`
-	TeamID                    int64    `json:"teamId,omitempty"`
-	UpsolvingAllowed          bool     `json:"upsolvingAllowed,omitempty"`
+	// This property is null unless contestant is participating in a team.
+	TeamID           int64 `json:"teamId,omitempty"`
+	UpsolvingAllowed bool  `json:"upsolvingAllowed,omitempty"`
 }
 
 type ProblemResult struct {
@@ -325,285 +329,57 @@ type Statement struct {
 }
 
 type Submission struct {
-	Author         *string `json:"author"`
-	AuthorID       *int64  `json:"authorId"`
-	Compiler       *string `json:"compiler"`
-	ID             *int64  `json:"id"`
-	Memory         *int64  `json:"memory"`
-	ProblemAlias   *string `json:"problemAlias"`
-	ProblemID      *string `json:"problemId"`
+	Author         string  `json:"author"`
+	AuthorID       int64   `json:"authorId"`
+	Compiler       string  `json:"compiler"`
+	ID             int64   `json:"id"`
+	Memory         int64   `json:"memory"`
+	ProblemAlias   string  `json:"problemAlias"`
+	ProblemID      string  `json:"problemId"`
 	Score          float64 `json:"score,omitempty"`
-	SubmissionTime *string `json:"submissionTime"`
-	Test           *int32  `json:"test"`
-	Time           *int64  `json:"time"`
-	TimeFromStart  int64   `json:"timeFromStart,omitempty"`
-	Verdict        *string `json:"verdict"`
+	SubmissionTime string  `json:"submissionTime"`
+	Test           int64   `json:"test"`
+	Time           int64   `json:"time"`
+	// time of submission, in milliseconds from participant start time
+	TimeFromStart int64  `json:"timeFromStart,omitempty"`
+	Verdict       string `json:"verdict"`
 }
 
 type Submissions struct {
-	Count       *int32        `json:"count"`
+	Count       int64         `json:"count"`
 	Submissions []*Submission `json:"submissions"`
 }
 
 type TeamView struct {
-	ID   *int64  `json:"id"`
-	Name *string `json:"name"`
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
 }
 
 type TestLog struct {
-	Answer         *string `json:"answer"`
-	CheckerError   *string `json:"checkerError"`
-	Error          *string `json:"error"`
-	Input          *string `json:"input"`
-	IsSample       *bool   `json:"isSample"`
-	MemoryUsed     *int64  `json:"memoryUsed"`
-	Message        *string `json:"message"`
-	Output         *string `json:"output"`
-	RunningTime    *int64  `json:"runningTime"`
-	SequenceNumber *int32  `json:"sequenceNumber"`
-	TestName       *string `json:"testName"`
-	TestsetIdx     *int32  `json:"testsetIdx"`
-	Verdict        *string `json:"verdict"`
+	Answer         string `json:"answer"`
+	CheckerError   string `json:"checkerError"`
+	Error          string `json:"error"`
+	Input          string `json:"input"`
+	IsSample       bool   `json:"isSample"`
+	MemoryUsed     int64  `json:"memoryUsed"`
+	Message        string `json:"message"`
+	Output         string `json:"output"`
+	RunningTime    int64  `json:"runningTime"`
+	SequenceNumber int32  `json:"sequenceNumber"`
+	TestName       string `json:"testName"`
+	TestsetIdx     int32  `json:"testsetIdx"`
+	Verdict        string `json:"verdict"`
 }
 
 type TokenInfo struct {
-	Active *bool   `json:"active"`
-	Scope  *string `json:"scope"`
-}
-
-type UpdateGroupParticipantRequest struct {
-	Roles *[]string `json:"roles"`
-}
-
-type UpdateParticipantRequest struct {
-	DisplayedName string `json:"displayedName,omitempty"`
-}
-
-type UserIdentifier struct {
-	Login string `json:"login,omitempty"`
-	UID   int64  `json:"uid,omitempty"`
+	Active bool   `json:"active"`
+	Scope  string `json:"scope"`
 }
 
 type UserWithPasswordResponse struct {
-	Login    *string `json:"login"`
-	Password *string `json:"password"`
-	UserID   *int64  `json:"userId"`
-}
-
-// ----------------------------
-
-type AccessLevel struct {
-	ID                                 *int64  `json:"id"`
-	CheckerSetingsModificationAllowed  *bool   `json:"checkerSettingsModificationAllowed"`
-	ContestLimit                       int32   `json:"contestLimit,omitempty"`
-	FileSizeUploadLimit                int64   `json:"fileSizeUploadLimit,omitempty"`
-	IsGroupCreationAllowed             *bool   `json:"isGroupCreationAllowed"`
-	IsProblemsetModificationAllowed    *bool   `json:"isProblemsetModificationAllowed"`
-	Name                               *string `json:"name"`
-	ParticipantLimit                   int32   `json:"participantLimit,omitempty"`
-	ProblemLimit                       int32   `json:"problemLimit,omitempty"`
-	ProblemsetLimit                    int32   `json:"problemsetLimit,omitempty"`
-	TestsetTemplateModificationAllowed *bool   `json:"testsetTemplateModificationAllowed"`
-	TotalSizeUploadLimit               int64   `json:"totalSizeUploadLimit,omitempty"`
-}
-
-type AdditionalSolutionCheck struct {
-	CheckerFilesField FileSystemPackage `json:"checkerFilesField,omitempty"`
-	CompilerID        string            `json:"compilerId,omitempty"`
-	MainFilename      string            `json:"mainFilename,omitempty"`
-}
-
-type Annotation interface{}
-
-type Contest struct {
-	ID              *int64                  `json:"id"`
-	Compilers       []string                `json:"compilers"`
-	Duration        *Duration               `json:"duration,omitempty"`
-	Enabled         bool                    `json:"enabled,omitempty"`
-	EndTime         strfmt.DateTime         `json:"endTime,omitempty"`
-	Finished        bool                    `json:"finished,omitempty"`
-	Infinite        bool                    `json:"infinite,omitempty"`
-	Monitor         *MonitorConfiguration   `json:"monitor,omitempty"`
-	MonitorPlugin   string                  `json:"monitorPlugin,omitempty"`
-	Name            string                  `json:"name,omitempty"`
-	Owner           *User                   `json:"owner,omitempty"`
-	ProblemSetID    string                  `json:"problemSetId,omitempty"`
-	StartTime       strfmt.DateTime         `json:"startTime,omitempty"`
-	TestingSettings *ContestTestingSettings `json:"testingSettings,omitempty"`
-	TimeControlType string                  `json:"timeControlType,omitempty"`
-	TimeLimited     bool                    `json:"timeLimited,omitempty"`
-}
-
-type ContestLog struct {
-	Events         []*Event         `json:"events"`
-	GenerationTime strfmt.DateTime  `json:"generationTime,omitempty"`
-	Problems       []Problem        `json:"problems"`
-	Settings       *ContestSettings `json:"settings,omitempty"`
-	Users          []*User          `json:"users"`
-}
-
-type Statistic struct {
-	LastSubmit  []*LastSuccessOrSubmit `json:"lastSubmit"`
-	LastSuccess []*LastSuccessOrSubmit `json:"lastSuccess"`
-}
-
-type LastSuccessOrSubmit struct {
-	ParticipantId   *int64 `json:"participantId"`
-	ParticipantName string `json:"participantName,omitempty"`
-	ProblemTitle    string `json:"problemTitle,omitempty"`
-	SubmitTime      int64  `json:"submitTime,omitempty"`
-}
-
-type ContestTestingSettings struct {
-	Contest            *Contest                   `json:"contest,omitempty"`
-	ID                 *int64                     `json:"id"`
-	PrecompileCheckers []*AdditionalSolutionCheck `json:"precompileCheckers"`
-}
-
-type DetailedRunReport struct {
-	CompileLog     *string `json:"compileLog"`
-	Compiler       *string `json:"compiler"`
-	Diff           *string `json:"diff"`
-	ProblemAlias   *string `json:"problemAlias"`
-	ProblemID      *string `json:"problemId"`
-	Source         *string `json:"source"`
-	SubmissionTime *string `json:"submissionTime"`
-	Verdict        *string `json:"verdict"`
-}
-
-type DirectoryPackageAllOf1 struct {
-	Name          string `json:"name,omitempty"`
-	packagesField []FileSystemPackage
-}
-
-type DirectoryPackage struct {
-	nameField string
-	DirectoryPackageAllOf1
-}
-
-type Duration struct {
-	Millis          int64 `json:"millis,omitempty"`
-	StandardDays    int64 `json:"standardDays,omitempty"`
-	StandardHours   int64 `json:"standardHours,omitempty"`
-	StandardMinutes int64 `json:"standardMinutes,omitempty"`
-	StandardSeconds int64 `json:"standardSeconds,omitempty"`
-}
-
-type Empty interface{}
-
-type Event struct {
-	AbsoluteTime int64 `json:"absoluteTime,omitempty"`
-	ContestTime  int64 `json:"contestTime,omitempty"`
-}
-
-type ExtendedRole struct {
-	Metas     []*RoleMeta `json:"metas"`
-	Principal *Principal  `json:"principal"`
-	Resource  *Resource   `json:"resource,omitempty"`
-	Role      *Role       `json:"role"`
-}
-
-type ExternalID struct {
-	ClientID *string `json:"clientId"`
-	Empty    *bool   `json:"empty"`
-	ID       string  `json:"id,omitempty"`
-}
-
-type ExternalLog struct {
-	ContestLog        *ContestLog     `json:"contestLog,omitempty"`
-	ContestLogKey     []string        `json:"contestLogKey"`
-	DownloadStartTime strfmt.DateTime `json:"downloadStartTime,omitempty"`
-	Dynamic           bool            `json:"dynamic,omitempty"`
-	DynamicURL        string          `json:"dynamicUrl,omitempty"`
-	EventsCount       int32           `json:"eventsCount,omitempty"`
-	ID                *int64          `json:"id"`
-
-	LastUpdate        strfmt.DateTime `json:"lastUpdate,omitempty"`
-	LastUpdateAttempt strfmt.DateTime `json:"lastUpdateAttempt,omitempty"`
-	LastUpdateError   []string        `json:"lastUpdateError"`
-	OwnerID           []int64         `json:"ownerId"`
-	RawXMLLog         strfmt.Base64   `json:"rawXmlLog,omitempty"`
-	Title             string          `json:"title,omitempty"`
-	XMLLogKey         []string        `json:"xmlLogKey"`
-}
-
-type FilePackageAllOf1 struct {
-	Data io.ReadCloser `json:"data,omitempty"`
-	Name string        `json:"name,omitempty"`
-}
-
-type FilePackage struct {
-	nameField string
-	FilePackageAllOf1
-}
-
-type FileSystemPackage interface {
-	runtime.Validatable
-	runtime.ContextValidatable
-	Name() string
-	SetName(string)
-}
-type fileSystemPackage struct {
-	nameField string
-}
-
-func (m *fileSystemPackage) Name() string {
-	return m.nameField
-}
-func (m *fileSystemPackage) SetName(val string) {
-	m.nameField = val
-}
-
-type GrantResponse struct {
-	Roles []*ExtendedRole `json:"roles"`
-}
-
-type HTTPEntity struct {
-	Body interface{} `json:"body,omitempty"`
-}
-
-type IDPrincipal struct {
-	CheckedID            *int64           `json:"checkedId"`
-	CheckedRawExternalID *string          `json:"checkedRawExternalId"`
-	ExternalID           *ExternalID      `json:"externalId"`
-	ID                   int64            `json:"id,omitempty"`
-	Model                *KClassPrincipal `json:"model"`
-	New                  *bool            `json:"new"`
-	RawExternalID        string           `json:"rawExternalId,omitempty"`
-	UID                  strfmt.UUID      `json:"uid,omitempty"`
-}
-
-type IDResource struct {
-	CheckedID            *int64          `json:"checkedId"`
-	CheckedRawExternalID *string         `json:"checkedRawExternalId"`
-	ExternalID           *ExternalID     `json:"externalId"`
-	ID                   int64           `json:"id,omitempty"`
-	Model                *KClassResource `json:"model"`
-	New                  *bool           `json:"new"`
-	RawExternalID        string          `json:"rawExternalId,omitempty"`
-	UID                  strfmt.UUID     `json:"uid,omitempty"`
-}
-
-type IDRole struct {
-	CheckedID            *int64      `json:"checkedId"`
-	CheckedRawExternalID *string     `json:"checkedRawExternalId"`
-	ExternalID           *ExternalID `json:"externalId"`
-	ID                   int64       `json:"id,omitempty"`
-	Model                *KClassRole `json:"model"`
-	New                  *bool       `json:"new"`
-	RawExternalID        string      `json:"rawExternalId,omitempty"`
-	UID                  strfmt.UUID `json:"uid,omitempty"`
-}
-
-type IDRoleMeta struct {
-	CheckedID            *int64          `json:"checkedId"`
-	CheckedRawExternalID *string         `json:"checkedRawExternalId"`
-	ExternalID           *ExternalID     `json:"externalId"`
-	ID                   int64           `json:"id,omitempty"`
-	Model                *KClassRoleMeta `json:"model"`
-	New                  *bool           `json:"new"`
-	RawExternalID        string          `json:"rawExternalId,omitempty"`
-	UID                  strfmt.UUID     `json:"uid,omitempty"`
+	Login    string `json:"login"`
+	Password string `json:"password"`
+	UserID   int64  `json:"userId"`
 }
 
 type JSONNode struct {
@@ -629,346 +405,4 @@ type JSONNode struct {
 	Short               bool   `json:"short,omitempty"`
 	Textual             bool   `json:"textual,omitempty"`
 	ValueNode           bool   `json:"valueNode,omitempty"`
-}
-
-type KCallableObject struct {
-	Abstract       *bool             `json:"abstract"`
-	Annotations    []Annotation      `json:"annotations"`
-	Final          *bool             `json:"final"`
-	Name           *string           `json:"name"`
-	Open           *bool             `json:"open"`
-	Parameters     []*KParameter     `json:"parameters"`
-	ReturnType     *KType            `json:"returnType"`
-	Suspend        *bool             `json:"suspend"`
-	TypeParameters []*KTypeParameter `json:"typeParameters"`
-	Visibility     string            `json:"visibility,omitempty"`
-}
-
-type KClassifier interface{}
-
-type KClassObject struct {
-	Abstract         *bool              `json:"abstract"`
-	Annotations      []Annotation       `json:"annotations"`
-	Companion        *bool              `json:"companion"`
-	Constructors     []*KFunctionObject `json:"constructors"`
-	Data             *bool              `json:"data"`
-	Final            *bool              `json:"final"`
-	Inner            *bool              `json:"inner"`
-	Members          []*KCallableObject `json:"members"`
-	NestedClasses    []*KClassObject    `json:"nestedClasses"`
-	ObjectInstance   interface{}        `json:"objectInstance,omitempty"`
-	Open             *bool              `json:"open"`
-	QualifiedName    string             `json:"qualifiedName,omitempty"`
-	Sealed           *bool              `json:"sealed"`
-	SealedSubclasses []*KClassObject    `json:"sealedSubclasses"`
-	SimpleName       string             `json:"simpleName,omitempty"`
-	Supertypes       []*KType           `json:"supertypes"`
-	TypeParameters   []*KTypeParameter  `json:"typeParameters"`
-	Visibility       string             `json:"visibility,omitempty"`
-}
-
-type KClassPrincipal struct {
-	Abstract         *bool                 `json:"abstract"`
-	Annotations      []Annotation          `json:"annotations"`
-	Companion        *bool                 `json:"companion"`
-	Constructors     []*KFunctionPrincipal `json:"constructors"`
-	Data             *bool                 `json:"data"`
-	Final            *bool                 `json:"final"`
-	Inner            *bool                 `json:"inner"`
-	Members          []*KCallableObject    `json:"members"`
-	NestedClasses    []*KClassObject       `json:"nestedClasses"`
-	ObjectInstance   *Principal            `json:"objectInstance,omitempty"`
-	Open             *bool                 `json:"open"`
-	QualifiedName    string                `json:"qualifiedName,omitempty"`
-	Sealed           *bool                 `json:"sealed"`
-	SealedSubclasses []*KClassPrincipal    `json:"sealedSubclasses"`
-	SimpleName       string                `json:"simpleName,omitempty"`
-	Supertypes       []*KType              `json:"supertypes"`
-	TypeParameters   []*KTypeParameter     `json:"typeParameters"`
-	Visibility       string                `json:"visibility,omitempty"`
-}
-
-type KClassResource struct {
-	Abstract         *bool                `json:"abstract"`
-	Annotations      []Annotation         `json:"annotations"`
-	Companion        *bool                `json:"companion"`
-	Constructors     []*KFunctionResource `json:"constructors"`
-	Data             *bool                `json:"data"`
-	Final            *bool                `json:"final"`
-	Inner            *bool                `json:"inner"`
-	Members          []*KCallableObject   `json:"members"`
-	NestedClasses    []*KClassObject      `json:"nestedClasses"`
-	ObjectInstance   *Resource            `json:"objectInstance,omitempty"`
-	Open             *bool                `json:"open"`
-	QualifiedName    string               `json:"qualifiedName,omitempty"`
-	Sealed           *bool                `json:"sealed"`
-	SealedSubclasses []*KClassResource    `json:"sealedSubclasses"`
-	SimpleName       string               `json:"simpleName,omitempty"`
-	Supertypes       []*KType             `json:"supertypes"`
-	TypeParameters   []*KTypeParameter    `json:"typeParameters"`
-	Visibility       string               `json:"visibility,omitempty"`
-}
-
-type KClassRole struct {
-	Abstract         *bool              `json:"abstract"`
-	Annotations      []Annotation       `json:"annotations"`
-	Companion        *bool              `json:"companion"`
-	Constructors     []*KFunctionRole   `json:"constructors"`
-	Data             *bool              `json:"data"`
-	Final            *bool              `json:"final"`
-	Inner            *bool              `json:"inner"`
-	Members          []*KCallableObject `json:"members"`
-	NestedClasses    []*KClassObject    `json:"nestedClasses"`
-	ObjectInstance   *Role              `json:"objectInstance,omitempty"`
-	Open             *bool              `json:"open"`
-	QualifiedName    string             `json:"qualifiedName,omitempty"`
-	Sealed           *bool              `json:"sealed"`
-	SealedSubclasses []*KClassRole      `json:"sealedSubclasses"`
-	SimpleName       string             `json:"simpleName,omitempty"`
-	Supertypes       []*KType           `json:"supertypes"`
-	TypeParameters   []*KTypeParameter  `json:"typeParameters"`
-	Visibility       string             `json:"visibility,omitempty"`
-}
-
-type KClassRoleMeta struct {
-	Abstract         *bool                `json:"abstract"`
-	Annotations      []Annotation         `json:"annotations"`
-	Companion        *bool                `json:"companion"`
-	Constructors     []*KFunctionRoleMeta `json:"constructors"`
-	Data             *bool                `json:"data"`
-	Final            *bool                `json:"final"`
-	Inner            *bool                `json:"inner"`
-	Members          []*KCallableObject   `json:"members"`
-	NestedClasses    []*KClassObject      `json:"nestedClasses"`
-	ObjectInstance   *RoleMeta            `json:"objectInstance,omitempty"`
-	Open             *bool                `json:"open"`
-	QualifiedName    string               `json:"qualifiedName,omitempty"`
-	Sealed           *bool                `json:"sealed"`
-	SealedSubclasses []*KClassRoleMeta    `json:"sealedSubclasses"`
-	SimpleName       string               `json:"simpleName,omitempty"`
-	Supertypes       []*KType             `json:"supertypes"`
-	TypeParameters   []*KTypeParameter    `json:"typeParameters"`
-	Visibility       string               `json:"visibility,omitempty"`
-}
-
-type KFunctionObject struct {
-	Abstract       *bool             `json:"abstract"`
-	Annotations    []Annotation      `json:"annotations"`
-	External       *bool             `json:"external"`
-	Final          *bool             `json:"final"`
-	Infix          *bool             `json:"infix"`
-	Inline         *bool             `json:"inline"`
-	Name           *string           `json:"name"`
-	Open           *bool             `json:"open"`
-	Operator       *bool             `json:"operator"`
-	Parameters     []*KParameter     `json:"parameters"`
-	ReturnType     *KType            `json:"returnType"`
-	Suspend        *bool             `json:"suspend"`
-	TypeParameters []*KTypeParameter `json:"typeParameters"`
-	Visibility     string            `json:"visibility,omitempty"`
-}
-
-type KFunctionPrincipal struct {
-	Abstract       *bool             `json:"abstract"`
-	Annotations    []Annotation      `json:"annotations"`
-	External       *bool             `json:"external"`
-	Final          *bool             `json:"final"`
-	Infix          *bool             `json:"infix"`
-	Inline         *bool             `json:"inline"`
-	Name           *string           `json:"name"`
-	Open           *bool             `json:"open"`
-	Operator       *bool             `json:"operator"`
-	Parameters     []*KParameter     `json:"parameters"`
-	ReturnType     *KType            `json:"returnType"`
-	Suspend        *bool             `json:"suspend"`
-	TypeParameters []*KTypeParameter `json:"typeParameters"`
-	Visibility     string            `json:"visibility,omitempty"`
-}
-
-type KFunctionResource struct {
-	Abstract       *bool             `json:"abstract"`
-	Annotations    []Annotation      `json:"annotations"`
-	External       *bool             `json:"external"`
-	Final          *bool             `json:"final"`
-	Infix          *bool             `json:"infix"`
-	Inline         *bool             `json:"inline"`
-	Name           *string           `json:"name"`
-	Open           *bool             `json:"open"`
-	Operator       *bool             `json:"operator"`
-	Parameters     []*KParameter     `json:"parameters"`
-	ReturnType     *KType            `json:"returnType"`
-	Suspend        *bool             `json:"suspend"`
-	TypeParameters []*KTypeParameter `json:"typeParameters"`
-	Visibility     string            `json:"visibility,omitempty"`
-}
-
-type KFunctionRole struct {
-	Abstract       *bool             `json:"abstract"`
-	Annotations    []Annotation      `json:"annotations"`
-	External       *bool             `json:"external"`
-	Final          *bool             `json:"final"`
-	Infix          *bool             `json:"infix"`
-	Inline         *bool             `json:"inline"`
-	Name           *string           `json:"name"`
-	Open           *bool             `json:"open"`
-	Operator       *bool             `json:"operator"`
-	Parameters     []*KParameter     `json:"parameters"`
-	ReturnType     *KType            `json:"returnType"`
-	Suspend        *bool             `json:"suspend"`
-	TypeParameters []*KTypeParameter `json:"typeParameters"`
-	Visibility     string            `json:"visibility,omitempty"`
-}
-
-type KFunctionRoleMeta struct {
-	Abstract       *bool             `json:"abstract"`
-	Annotations    []Annotation      `json:"annotations"`
-	External       *bool             `json:"external"`
-	Final          *bool             `json:"final"`
-	Infix          *bool             `json:"infix"`
-	Inline         *bool             `json:"inline"`
-	Name           *string           `json:"name"`
-	Open           *bool             `json:"open"`
-	Operator       *bool             `json:"operator"`
-	Parameters     []*KParameter     `json:"parameters"`
-	ReturnType     *KType            `json:"returnType"`
-	Suspend        *bool             `json:"suspend"`
-	TypeParameters []*KTypeParameter `json:"typeParameters"`
-	Visibility     string            `json:"visibility,omitempty"`
-}
-
-type KParameter struct {
-	Annotations []Annotation `json:"annotations"`
-	Index       *int32       `json:"index"`
-	Kind        *string      `json:"kind"`
-	Name        string       `json:"name,omitempty"`
-	Optional    *bool        `json:"optional"`
-	Type        *KType       `json:"type"`
-	Vararg      *bool        `json:"vararg"`
-}
-
-type KType struct {
-	Annotations    []Annotation       `json:"annotations"`
-	Arguments      []*KTypeProjection `json:"arguments"`
-	Classifier     KClassifier        `json:"classifier,omitempty"`
-	MarkedNullable *bool              `json:"markedNullable"`
-}
-
-type KTypeParameter struct {
-	Name        *string  `json:"name"`
-	Reified     *bool    `json:"reified"`
-	UpperBounds []*KType `json:"upperBounds"`
-	Variance    *string  `json:"variance"`
-}
-
-type KTypeProjection struct {
-	Type     *KType `json:"type,omitempty"`
-	Variance string `json:"variance,omitempty"`
-}
-
-type Language interface{}
-
-type MonitorConfiguration struct {
-	ExternalLogs []*ExternalLog `json:"externalLogs"`
-	ID           *int64         `json:"id"`
-}
-
-type Principal struct {
-	CheckedID            int64            `json:"checkedId,omitempty"`
-	CheckedRawExternalID string           `json:"checkedRawExternalId,omitempty"`
-	CreatedAt            *strfmt.DateTime `json:"createdAt"`
-	Deleted              *bool            `json:"deleted"`
-	ID                   *IDPrincipal     `json:"id"`
-	ModifiedAt           *strfmt.DateTime `json:"modifiedAt"`
-	NotDeleted           *bool            `json:"notDeleted"`
-	RawExternalID        string           `json:"rawExternalId,omitempty"`
-	State                *State           `json:"state"`
-	Title                *PrincipalTitle  `json:"title"`
-}
-
-type PrincipalTitle struct {
-	Title *string `json:"title"`
-}
-
-type Problem interface{}
-
-type Resource struct {
-	CheckedID            int64            `json:"checkedId,omitempty"`
-	CheckedRawExternalID string           `json:"checkedRawExternalId,omitempty"`
-	CreatedAt            *strfmt.DateTime `json:"createdAt"`
-	Deleted              *bool            `json:"deleted"`
-	ID                   *IDResource      `json:"id"`
-	ModifiedAt           *strfmt.DateTime `json:"modifiedAt"`
-	NotDeleted           *bool            `json:"notDeleted"`
-	RawExternalID        string           `json:"rawExternalId,omitempty"`
-	State                *State           `json:"state"`
-	Title                *ResourceTitle   `json:"title"`
-}
-
-type ResourceTitle struct {
-	Title *string `json:"title"`
-}
-
-type ResponseEntity struct {
-	Body            interface{} `json:"body,omitempty"`
-	StatusCode      string      `json:"statusCode,omitempty"`
-	StatusCodeValue int32       `json:"statusCodeValue,omitempty"`
-}
-
-type Role struct {
-	CheckedID            int64            `json:"checkedId,omitempty"`
-	CheckedRawExternalID string           `json:"checkedRawExternalId,omitempty"`
-	CreatedAt            *strfmt.DateTime `json:"createdAt"`
-	Deleted              *bool            `json:"deleted"`
-	ID                   *IDRole          `json:"id"`
-	ModifiedAt           *strfmt.DateTime `json:"modifiedAt"`
-	NotDeleted           *bool            `json:"notDeleted"`
-	PrincipalID          *IDPrincipal     `json:"principalId"`
-	RawExternalID        string           `json:"rawExternalId,omitempty"`
-	ResourceID           *IDResource      `json:"resourceId"`
-	Roles                []*IDRoleMeta    `json:"roles"`
-	State                *State           `json:"state"`
-}
-
-type RoleMeta struct {
-	CheckedID            int64       `json:"checkedId,omitempty"`
-	CheckedRawExternalID string      `json:"checkedRawExternalId,omitempty"`
-	Content              *JSONNode   `json:"content,omitempty"`
-	ID                   *IDRoleMeta `json:"id"`
-	RawExternalID        string      `json:"rawExternalId,omitempty"`
-}
-
-type RunReport struct {
-	RunID int64 `json:"runId,omitempty"`
-}
-
-type State struct {
-	Name *string `json:"name"`
-}
-
-type User struct {
-	AccessLevel          *AccessLevel `json:"accessLevel,omitempty"`
-	CreationTime         []int64      `json:"creationTime"`
-	Creator              *User        `json:"creator,omitempty"`
-	CreatorID            []int64      `json:"creatorId"`
-	DisplayedName        string       `json:"displayedName,omitempty"`
-	Guest                bool         `json:"guest,omitempty"`
-	ID                   *int64       `json:"id"`
-	Login                string       `json:"login,omitempty"`
-	PasswordHash         string       `json:"passwordHash,omitempty"`
-	Salt                 string       `json:"salt,omitempty"`
-	StudentsGroup        *UserGroup   `json:"studentsGroup,omitempty"`
-	StudentsInvitesGroup *UserGroup   `json:"studentsInvitesGroup,omitempty"`
-	UID                  string       `json:"uid,omitempty"`
-	UIDAsLong            int64        `json:"uidAsLong,omitempty"`
-	UserType             string       `json:"userType,omitempty"`
-}
-
-type UserGroup struct {
-	Global     bool              `json:"global,omitempty"`
-	ID         *int64            `json:"id"`
-	Name       string            `json:"name,omitempty"`
-	Owner      *User             `json:"owner,omitempty"`
-	System     bool              `json:"system,omitempty"`
-	UserAccess map[string]string `json:"userAccess,omitempty"`
-	Users      []*User           `json:"users"`
 }

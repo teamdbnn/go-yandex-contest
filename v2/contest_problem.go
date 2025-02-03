@@ -29,12 +29,15 @@ func (s *GetContestProblems) Locale(locale string) *GetContestProblems {
 
 func (s *GetContestProblems) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetContestProblems) Do(ctx context.Context, opts ...RequestOption) (*ContestProblems, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -55,8 +58,7 @@ func (s *GetContestProblems) Do(ctx context.Context, opts ...RequestOption) (*Co
 	}
 
 	res := new(ContestProblems)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, &res); err != nil {
 		return nil, err
 	}
 
@@ -98,15 +100,18 @@ func (s *GetProblemStatement) Type(types string) *GetProblemStatement {
 
 func (s *GetProblemStatement) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	if s.alias == "" {
-		return requiredError("alias")
+		return requiredFieldError("alias")
 	}
 	return nil
 }
 
 // Do Send GET request
+//
+// Docs:
+// meta:operation
 func (s *GetProblemStatement) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -161,15 +166,18 @@ func (s *GetProblemFile) ProblemID(problemID string) *GetProblemFile {
 
 func (s *GetProblemFile) validate() error {
 	if s.path == "" {
-		return requiredError("path")
+		return requiredFieldError("path")
 	}
 	if s.problemID == "" {
-		return requiredError("ProblemID")
+		return requiredFieldError("ProblemID")
 	}
 	return nil
 }
 
 // Do Send GET request          todo: File ouput?
+//
+// Docs:
+// meta:operation
 func (s *GetProblemFile) Do(ctx context.Context, opts ...RequestOption) (interface{}, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -187,8 +195,7 @@ func (s *GetProblemFile) Do(ctx context.Context, opts ...RequestOption) (interfa
 	}
 
 	res := new(interface{})
-	err = json.Unmarshal(data, res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 

@@ -23,12 +23,14 @@ func (s *CreateGroupForCompetition) Name(name string) *CreateGroupForCompetition
 
 func (s *CreateGroupForCompetition) validate() error {
 	if s.body.Name == "" {
-		return requiredError("Name")
+		return requiredFieldError("Name")
 	}
 	return nil
 }
 
-// Do Send POST request
+// Do Create a new group
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/group/createGroupUsingPOST
+// meta:operation POST /groups/
 func (s *CreateGroupForCompetition) Do(ctx context.Context, opts ...RequestOption) (*GroupID, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -42,8 +44,7 @@ func (s *CreateGroupForCompetition) Do(ctx context.Context, opts ...RequestOptio
 	data, err := s.c.callAPI(ctx, r, opts...)
 
 	res := new(GroupID)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -64,12 +65,14 @@ func (s *GetGroupInfoOfCompetition) GroupID(groupID int64) *GetGroupInfoOfCompet
 
 func (s *GetGroupInfoOfCompetition) validate() error {
 	if s.groupID == 0 {
-		return requiredError("groupID")
+		return requiredFieldError("groupID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do View group
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/group/getGroupUsingGET
+// meta:operation GET /groups/{groupId}
 func (s *GetGroupInfoOfCompetition) Do(ctx context.Context, opts ...RequestOption) (*GroupInfo, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -85,8 +88,7 @@ func (s *GetGroupInfoOfCompetition) Do(ctx context.Context, opts ...RequestOptio
 	}
 
 	res := new(GroupInfo)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -123,18 +125,20 @@ func (s *AddGroupMemberForCompetition) UID(Uid int64) *AddGroupMemberForCompetit
 
 func (s *AddGroupMemberForCompetition) validate() error {
 	if s.groupID == 0 {
-		return requiredError("groupID")
+		return requiredFieldError("groupID")
 	}
 	if s.body.Login == "" {
-		return requiredError("Login")
+		return requiredFieldError("Login")
 	}
 	if s.body.Uid == 0 {
-		return requiredError("Uid")
+		return requiredFieldError("Uid")
 	}
 	return nil
 }
 
-// Do Send POST request
+// Do Add group member
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/group/addMemberUsingPOST
+// meta:operation POST /groups/{groupId}/members
 func (s *AddGroupMemberForCompetition) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -146,9 +150,6 @@ func (s *AddGroupMemberForCompetition) Do(ctx context.Context, opts ...RequestOp
 	}
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
 }
@@ -183,18 +184,20 @@ func (s *RemoveGroupOfCompetition) UID(uid int64) *RemoveGroupOfCompetition {
 
 func (s *RemoveGroupOfCompetition) validate() error {
 	if s.groupID == 0 {
-		return requiredError("groupID")
+		return requiredFieldError("groupID")
 	}
 	if s.body.Login == "" {
-		return requiredError("Login")
+		return requiredFieldError("Login")
 	}
 	if s.body.Uid == 0 {
-		return requiredError("Uid")
+		return requiredFieldError("Uid")
 	}
 	return nil
 }
 
-// Do Send DELETE request
+// Do Remove group member
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/group/deleteMemberUsingDELETE
+// meta:operation DELETE /groups/{groupId}/members
 func (s *RemoveGroupOfCompetition) Do(ctx context.Context, opts ...RequestOption) error {
 	if err := s.validate(); err != nil {
 		return err
@@ -206,9 +209,6 @@ func (s *RemoveGroupOfCompetition) Do(ctx context.Context, opts ...RequestOption
 	}
 	r.setJSONBody(s.body)
 	_, err := s.c.callAPI(ctx, r, opts...)
-	if err == nil {
-		return nil
-	}
 
 	return err
 }

@@ -7,16 +7,21 @@ import (
 	"net/http"
 )
 
-// GetAllSubmissionsForContest Get all contest submissions
+const (
+	defaultSubmissionPageSize  = 30
+	defaultSubmissionSortField = "ID"
+	defaultSubmissionSortDesc  = "ASC"
+)
+
+// GetAllSubmissionsForContest Get all submissions for contest
 type GetAllSubmissionsForContest struct {
-	c                *Client
-	contestID        int64
-	onlyFinished     bool
-	pageNumber       int32
-	pageSize         int32
-	pageSizeFuncCall bool
-	sortBy           string
-	sortDesc         string
+	c            *Client
+	contestID    int64
+	onlyFinished bool
+	pageNumber   int64
+	pageSize     int64
+	sortBy       string
+	sortDesc     string
 }
 
 // ContestID Set contest id
@@ -32,15 +37,14 @@ func (s *GetAllSubmissionsForContest) OnlyFinished(onlyFinished bool) *GetAllSub
 }
 
 // PageNumber Set page number, default 0
-func (s *GetAllSubmissionsForContest) PageNumber(pageNumber int32) *GetAllSubmissionsForContest {
+func (s *GetAllSubmissionsForContest) PageNumber(pageNumber int64) *GetAllSubmissionsForContest {
 	s.pageNumber = pageNumber
 	return s
 }
 
 // PageSize Set page size, default 30
-func (s *GetAllSubmissionsForContest) PageSize(pageSize int32) *GetAllSubmissionsForContest {
+func (s *GetAllSubmissionsForContest) PageSize(pageSize int64) *GetAllSubmissionsForContest {
 	s.pageSize = pageSize
-	s.pageSizeFuncCall = true
 	return s
 }
 
@@ -53,12 +57,15 @@ func (s *GetAllSubmissionsForContest) Sort(field, direction string) *GetAllSubmi
 
 func (s *GetAllSubmissionsForContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get all submissions for contest
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/neurips/getAllNeuripsSubmissionsReportsUsingGET
+// meta:operation GET /contests/neurips/{contestId}/submissions/all
 func (s *GetAllSubmissionsForContest) Do(ctx context.Context, opts ...RequestOption) (*NeuripsSubmissionsReportResponse, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -68,33 +75,33 @@ func (s *GetAllSubmissionsForContest) Do(ctx context.Context, opts ...RequestOpt
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/neurips/%v/submissions/all", s.contestID),
 	}
-	const pageSizeDefault int32 = 30
-	r.setParam("onlyFinished", s.onlyFinished)
-	r.setParam("pageNumber", s.pageNumber)
 
-	if s.pageSize == 0 && !s.pageSizeFuncCall {
-		r.setParam("pageSize", pageSizeDefault)
-	} else {
-		r.setParam("pageSize", s.pageSize)
+	if s.pageSize <= 0 {
+		s.pageSize = defaultSubmissionPageSize
 	}
 	if s.sortBy == "" {
-		r.setParam("sortBy", "ID")
-	} else {
-		r.setParam("sortBy", s.sortBy)
+		s.sortBy = defaultSubmissionSortField
 	}
 	if s.sortDesc == "" {
-		r.setParam("sortDesc", "ASC")
-	} else {
-		r.setParam("sortDesc", s.sortDesc)
+		s.sortDesc = defaultSubmissionSortDesc
 	}
+	if s.pageNumber <= 0 {
+		s.pageNumber = 1
+	}
+
+	r.setParam("onlyFinished", s.onlyFinished)
+	r.setParam("pageNumber", s.pageNumber)
+	r.setParam("pageSize", s.pageSize)
+	r.setParam("sortBy", s.sortBy)
+	r.setParam("sortDesc", s.sortDesc)
+
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(NeuripsSubmissionsReportResponse)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 
@@ -103,14 +110,13 @@ func (s *GetAllSubmissionsForContest) Do(ctx context.Context, opts ...RequestOpt
 
 // GetYourSubmissionsForContest Get your contest submissions
 type GetYourSubmissionsForContest struct {
-	c                *Client
-	contestID        int64
-	onlyFinished     bool
-	pageNumber       int32
-	pageSize         int32
-	sortBy           string
-	sortDesc         string
-	pageSizeFuncCall bool
+	c            *Client
+	contestID    int64
+	onlyFinished bool
+	pageNumber   int64
+	pageSize     int64
+	sortBy       string
+	sortDesc     string
 }
 
 // ContestID Set contest id
@@ -126,15 +132,14 @@ func (s *GetYourSubmissionsForContest) OnlyFinished(onlyFinished bool) *GetYourS
 }
 
 // PageNumber Set page number, default 0
-func (s *GetYourSubmissionsForContest) PageNumber(pageNumber int32) *GetYourSubmissionsForContest {
+func (s *GetYourSubmissionsForContest) PageNumber(pageNumber int64) *GetYourSubmissionsForContest {
 	s.pageNumber = pageNumber
 	return s
 }
 
 // PageSize Set page size, default 30
-func (s *GetYourSubmissionsForContest) PageSize(pageSize int32) *GetYourSubmissionsForContest {
+func (s *GetYourSubmissionsForContest) PageSize(pageSize int64) *GetYourSubmissionsForContest {
 	s.pageSize = pageSize
-	s.pageSizeFuncCall = true
 	return s
 }
 
@@ -152,12 +157,15 @@ func (s *GetYourSubmissionsForContest) SortDesc(sortDesc string) *GetYourSubmiss
 
 func (s *GetYourSubmissionsForContest) validate() error {
 	if s.contestID == 0 {
-		return requiredError("contestID")
+		return requiredFieldError("contestID")
 	}
 	return nil
 }
 
-// Do Send GET request
+// Do Get your submissions for contest
+//
+// Docs: https://api.contest.yandex.net/api/public/swagger-ui.html#/neurips/getMyNeuripsSubmissionsReportsUsingGET
+// meta:operation GET /contests/neurips/{contestId}/submissions/my
 func (s *GetYourSubmissionsForContest) Do(ctx context.Context, opts ...RequestOption) (*NeuripsSubmissionsReportResponse, error) {
 	if err := s.validate(); err != nil {
 		return nil, err
@@ -167,33 +175,32 @@ func (s *GetYourSubmissionsForContest) Do(ctx context.Context, opts ...RequestOp
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/contests/neurips/%v/submissions/my", s.contestID),
 	}
-	const pageSizeDefault int32 = 30
-	r.setParam("onlyFinished", s.onlyFinished)
-	r.setParam("pageNumber", s.pageNumber)
-
-	if s.pageSize == 0 && !s.pageSizeFuncCall {
-		r.setParam("pageSize", pageSizeDefault)
-	} else {
-		r.setParam("pageSize", s.pageSize)
+	if s.pageSize <= 0 {
+		s.pageSize = defaultSubmissionPageSize
 	}
 	if s.sortBy == "" {
-		r.setParam("sortBy", "ID")
-	} else {
-		r.setParam("sortBy", s.sortBy)
+		s.sortBy = defaultSubmissionSortField
 	}
 	if s.sortDesc == "" {
-		r.setParam("sortDesc", "ASC")
-	} else {
-		r.setParam("sortDesc", s.sortDesc)
+		s.sortDesc = defaultSubmissionSortDesc
 	}
+	if s.pageNumber <= 0 {
+		s.pageNumber = 1
+	}
+
+	r.setParam("onlyFinished", s.onlyFinished)
+	r.setParam("pageNumber", s.pageNumber)
+	r.setParam("pageSize", s.pageSize)
+	r.setParam("sortBy", s.sortBy)
+	r.setParam("sortDesc", s.sortDesc)
+
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	res := new(NeuripsSubmissionsReportResponse)
-	err = json.Unmarshal(data, &res)
-	if err != nil {
+	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 

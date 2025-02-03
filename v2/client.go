@@ -5,8 +5,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
+)
+
+const (
+	mediaTypeApplicationJSON = "application/json"
+	mediaTypeForm            = "application/x-www-form-urlencoded"
+
+	defaultLocale = "ru"
 )
 
 // Client Define API client
@@ -21,7 +28,7 @@ type Client struct {
 	do         doFunc
 }
 type doFunc func(req *http.Request) (*http.Response, error)
-type logger func(format string, v ...interface{})
+type logger func(format string, v ...any)
 
 const (
 	baseAPIMainURL = "https://api.contest.yandex.net/api/public/v2"
@@ -29,11 +36,15 @@ const (
 
 // NewClient Create new http client
 func NewClient(oauthToken string) *Client {
+	return NewWithCustomClient(oauthToken, http.DefaultClient)
+}
+
+func NewWithCustomClient(oauthToken string, client *http.Client) *Client {
 	return &Client{
 		OAuthToken: oauthToken,
 		BaseURL:    baseAPIMainURL,
 		UserAgent:  "Yandex-Contest/golang",
-		HTTPClient: http.DefaultClient,
+		HTTPClient: client,
 	}
 }
 
@@ -71,10 +82,10 @@ func (c *Client) parseRequest(r *request, opts ...RequestOption) (err error) {
 	}
 
 	if bodyString != "" {
-		header.Set("Content-Type", "application/x-www-form-urlencoded")
+		header.Set("Content-Type", mediaTypeForm)
 		body = bytes.NewBufferString(bodyString)
 	} else if r.json != nil {
-		header.Set("Content-Type", "application/json")
+		header.Set("Content-Type", mediaTypeApplicationJSON)
 		jsonString, _ := json.Marshal(r.json)
 		body = bytes.NewBuffer(jsonString)
 	}
@@ -111,7 +122,7 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 	if err != nil {
 		return []byte{}, err
 	}
-	data, err = ioutil.ReadAll(res.Body)
+	data, err = io.ReadAll(res.Body)
 	if err != nil {
 		return []byte{}, err
 	}
