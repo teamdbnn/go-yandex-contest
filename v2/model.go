@@ -54,10 +54,10 @@ type CompilerLimit struct {
 }
 
 type PublicCompilerInfo struct {
-	ID         *string `json:"id"`
-	Name       *string `json:"name"`
-	Deprecated *bool   `json:"deprecated"`
-	Style      *string `json:"style"`
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Deprecated bool   `json:"deprecated"`
+	Style      string `json:"style"`
 }
 
 type CompilerListResponse struct {
@@ -67,7 +67,7 @@ type CompilerListResponse struct {
 type ContestDescription struct {
 	Duration           int64                  `json:"duration,omitempty"`
 	FreezeTime         int64                  `json:"freezeTime,omitempty"`
-	Name               *string                `json:"name"`
+	Name               string                 `json:"name"`
 	StartTime          string                 `json:"startTime,omitempty"`
 	Type               string                 `json:"type,omitempty"`
 	UpsolvingAllowance string                 `json:"upsolvingAllowance,omitempty"`
@@ -75,34 +75,34 @@ type ContestDescription struct {
 }
 
 type ContestReportSettings struct {
-	ShowAnswer               *string `json:"showAnswer"`
-	ShowCheckerOutput        *string `json:"showCheckerOutput"`
-	ShowInput                *string `json:"showInput"`
-	ShowLightweightInterface *bool   `json:"showLightweightInterface"`
-	ShowOutput               *string `json:"showOutput"`
-	ShowPostprocessOutput    *string `json:"showPostprocessOutput"`
-	ShowReport               *bool   `json:"showReport"`
-	ShowScore                *string `json:"showScore"`
-	ShowStderr               *string `json:"showStderr"`
-	ShowTestNumber           *bool   `json:"showTestNumber"`
-	ShowUsedResources        *string `json:"showUsedResources"`
-	ShowVerdict              *string `json:"showVerdict"`
-	StopOnFirstFail          *bool   `json:"stopOnFirstFail"`
-	StopOnFirstFailInTestSet *bool   `json:"stopOnFirstFailInTestSet"`
-	StopOnSampleFail         *bool   `json:"stopOnSampleFail"`
-	TestOnlySamples          *bool   `json:"testOnlySamples"`
-	YseAcNotOk               *bool   `json:"useAcNotOk"`
+	ShowAnswer               string `json:"showAnswer"`
+	ShowCheckerOutput        string `json:"showCheckerOutput"`
+	ShowInput                string `json:"showInput"`
+	ShowLightweightInterface bool   `json:"showLightweightInterface"`
+	ShowOutput               string `json:"showOutput"`
+	ShowPostprocessOutput    string `json:"showPostprocessOutput"`
+	ShowReport               bool   `json:"showReport"`
+	ShowScore                string `json:"showScore"`
+	ShowStderr               string `json:"showStderr"`
+	ShowTestNumber           bool   `json:"showTestNumber"`
+	ShowUsedResources        string `json:"showUsedResources"`
+	ShowVerdict              string `json:"showVerdict"`
+	StopOnFirstFail          bool   `json:"stopOnFirstFail"`
+	StopOnFirstFailInTestSet bool   `json:"stopOnFirstFailInTestSet"`
+	StopOnSampleFail         bool   `json:"stopOnSampleFail"`
+	TestOnlySamples          bool   `json:"testOnlySamples"`
+	YseAcNotOk               bool   `json:"useAcNotOk"`
 }
 
 type ContestProblem struct {
-	ID          *string          `json:"id"`
-	Name        *string          `json:"name"`
-	Alias       *string          `json:"alias"`
+	ID          string           `json:"id"`
+	Name        string           `json:"name"`
+	Alias       string           `json:"alias"`
 	Compilers   []string         `json:"compilers"`
 	Statements  []*Statement     `json:"statements"`
 	Limits      []*CompilerLimit `json:"limits"`
-	TestCount   int32            `json:"testCount"`
-	ProblemType *string          `json:"problemType"`
+	TestCount   int64            `json:"testCount"`
+	ProblemType string           `json:"problemType"`
 }
 
 type ContestProblems struct {
@@ -121,41 +121,41 @@ type ContestStatistics struct {
 }
 
 type SubmitInfo struct {
-	ParticipantId   *int64  `json:"participantId"`
-	ParticipantName *string `json:"participantName"`
-	ProblemTitle    *string `json:"problemTitle"`
-	SubmitTime      *int64  `json:"submitTime"`
+	ParticipantId   int64  `json:"participantId"`
+	ParticipantName string `json:"participantName"`
+	ProblemTitle    string `json:"problemTitle"`
+	SubmitTime      int64  `json:"submitTime"`
 }
 
 type ContestStandingsTitle struct {
-	Name  string  `json:"name,omitempty"`
-	Title *string `json:"title"`
+	Name  string `json:"name,omitempty"`
+	Title string `json:"title"`
 }
 
 type FullRunReport struct {
 	CheckerLog       []*TestLog                       `json:"checkerLog"`
-	CompileLog       *string                          `json:"compileLog"`
-	Compiler         *string                          `json:"compiler"`
-	ContestID        *int64                           `json:"contestId"`
-	ContestName      *string                          `json:"contestName"`
-	Diff             *string                          `json:"diff"`
-	FinalScore       *string                          `json:"finalScore"`
+	CompileLog       string                           `json:"compileLog"`
+	Compiler         string                           `json:"compiler"`
+	ContestID        int64                            `json:"contestId"`
+	ContestName      string                           `json:"contestName"`
+	Diff             string                           `json:"diff"`
+	FinalScore       string                           `json:"finalScore"`
 	IP               string                           `json:"ip,omitempty"`
-	MaxMemoryUsage   *int64                           `json:"maxMemoryUsage"`
-	MaxTimeUsage     *int64                           `json:"maxTimeUsage"`
+	MaxMemoryUsage   int64                            `json:"maxMemoryUsage"`
+	MaxTimeUsage     int64                            `json:"maxTimeUsage"`
 	Participant      *ParticipantInfo                 `json:"participant"`
 	PrecompileChecks []*AdditionalSolutionCheckResult `json:"precompileChecks"`
-	PreliminaryScore *string                          `json:"preliminaryScore"`
-	ProblemAlias     *string                          `json:"problemAlias"`
-	ProblemID        *string                          `json:"problemId"`
-	ProblemName      *string                          `json:"problemName"`
-	RunID            *int64                           `json:"runId"`
-	Source           *string                          `json:"source"`
-	Status           *string                          `json:"status"`
-	SubmissionTime   *string                          `json:"submissionTime"`
-	TestFileType     *string                          `json:"testFileType"`
-	TimeFromStart    *int64                           `json:"timeFromStart"`
-	Verdict          *string                          `json:"verdict"`
+	PreliminaryScore string                           `json:"preliminaryScore"`
+	ProblemAlias     string                           `json:"problemAlias"`
+	ProblemID        string                           `json:"problemId"`
+	ProblemName      string                           `json:"problemName"`
+	RunID            int64                            `json:"runId"`
+	Source           string                           `json:"source"`
+	Status           string                           `json:"status"`
+	SubmissionTime   string                           `json:"submissionTime"`
+	TestFileType     string                           `json:"testFileType"`
+	TimeFromStart    int64                            `json:"timeFromStart"`
+	Verdict          string                           `json:"verdict"`
 }
 
 type Message struct {
@@ -171,29 +171,29 @@ type Messages struct {
 
 type ContestStandingsRow struct {
 	ParticipantInfo *ParticipantInfo `json:"participantInfo,omitempty"`
-	PlaceFrom       *int32           `json:"placeFrom,omitempty"`
-	PlaceTo         *int32           `json:"placeTo,omitempty"`
+	PlaceFrom       *int64           `json:"placeFrom,omitempty"`
+	PlaceTo         *int64           `json:"placeTo,omitempty"`
 	ProblemResults  []*ProblemResult `json:"problemResults"`
-	Score           *string          `json:"score,omitempty"`
+	Score           string           `json:"score,omitempty"`
 }
 
 type GroupInfo struct {
-	Name        *string `json:"name,omitempty"`
-	MemberCount *int64  `json:"memberCount,omitempty"`
+	Name        string `json:"name,omitempty"`
+	MemberCount int64  `json:"memberCount,omitempty"`
 }
 
 type ContestGroup struct {
-	ID    *int64   `json:"id"`
-	Name  *string  `json:"name"`
+	ID    int64    `json:"id"`
+	Name  string   `json:"name"`
 	Roles []string `json:"roles,omitempty"`
 }
 
 type CreateGroupRequest struct {
-	Name *string `json:"name"`
+	Name string `json:"name"`
 }
 
 type GroupID struct {
-	ID *int64 `json:"id"`
+	ID int64 `json:"id"`
 }
 
 type Service struct {
@@ -205,35 +205,35 @@ type InputStream struct {
 }
 
 type LazySubmissionRequest struct {
-	FileUrl      *string `json:"fileUrl"`
-	FileName     *string `json:"fileName"`
-	ProblemAlias *string `json:"problemAlias"`
-	CompilerId   *string `json:"compilerId"`
-	Meta         *string `json:"meta,omitempty"`
+	FileUrl      string `json:"fileUrl"`
+	FileName     string `json:"fileName"`
+	ProblemAlias string `json:"problemAlias"`
+	CompilerId   string `json:"compilerId"`
+	Meta         string `json:"meta,omitempty"`
 }
 
 type MultiRunReport struct {
-	CompileLog           *string                          `json:"compileLog"`
-	Compiler             *string                          `json:"compiler"`
-	ContestID            *int64                           `json:"contestId"`
-	ContestName          *string                          `json:"contestName"`
-	FinalScore           *string                          `json:"finalScore"`
+	CompileLog           string                           `json:"compileLog"`
+	Compiler             string                           `json:"compiler"`
+	ContestID            int64                            `json:"contestId"`
+	ContestName          string                           `json:"contestName"`
+	FinalScore           string                           `json:"finalScore"`
 	Ip                   string                           `json:"ip,omitempty"`
-	MaxMemoryUsage       *int64                           `json:"maxMemoryUsage"`
-	MaxTimeUsage         *int64                           `json:"MaxTimeUsage"`
+	MaxMemoryUsage       int64                            `json:"maxMemoryUsage"`
+	MaxTimeUsage         int64                            `json:"MaxTimeUsage"`
 	ParticipantInfo      *ParticipantInfo                 `json:"ParticipantInfo"`
 	PostprocessorMessage string                           `json:"postprocessorMessage,omitempty"`
 	PrecompileChecks     *[]AdditionalSolutionCheckResult `json:"precompileChecks"`
-	PreliminaryScore     *string                          `json:"preliminaryScore"`
-	ProblemAlias         *string                          `json:"problemAlias"`
-	ProblemID            *string                          `json:"problemId"`
-	RunId                *int64                           `json:"runId"`
+	PreliminaryScore     string                           `json:"preliminaryScore"`
+	ProblemAlias         string                           `json:"problemAlias"`
+	ProblemID            string                           `json:"problemId"`
+	RunId                int64                            `json:"runId"`
 	Status               string                           `json:"status,omitempty"`
-	SubmissionTime       *string                          `json:"submissionTime"`
-	TestFileType         *string                          `json:"testFileType"`
+	SubmissionTime       string                           `json:"submissionTime"`
+	TestFileType         string                           `json:"testFileType"`
 	Tests                *[]TestLog                       `json:"tests"`
-	TimeFromStart        *int64                           `json:"TimeFromStart"`
-	Verdict              *string                          `json:"verdict"`
+	TimeFromStart        int64                            `json:"TimeFromStart"`
+	Verdict              string                           `json:"verdict"`
 }
 
 type NeuripsSubmissionDetails struct {
@@ -241,30 +241,30 @@ type NeuripsSubmissionDetails struct {
 }
 
 type NeuripsSubmissionReport struct {
-	Compiler            *string                 `json:"compiler"`
-	ContestID           *int64                  `json:"contestId"`
-	CreateAt            *strfmt.DateTime        `json:"createAt"`
-	Meta                string                  `json:"meta,omitempty"`
-	ParticipantName     *string                 `json:"participantName"`
-	ProblemID           *string                 `json:"problemId"`
-	Rank                *int32                  `json:"rank"`
-	Result              NeuripsSubmissionResult `json:"result,omitempty"`
-	RunID               *int64                  `json:"runId"`
-	Status              string                  `json:"status,omitempty"`
-	TimeFromStartMillis *int64                  `json:"timeFromStartMillis"`
+	Compiler            string                   `json:"compiler"`
+	ContestID           int64                    `json:"contestId"`
+	CreateAt            *strfmt.DateTime         `json:"createAt"`
+	Meta                string                   `json:"meta,omitempty"`
+	ParticipantName     string                   `json:"participantName"`
+	ProblemID           string                   `json:"problemId"`
+	Rank                int64                    `json:"rank"`
+	Result              *NeuripsSubmissionResult `json:"result,omitempty"`
+	RunID               int64                    `json:"runId"`
+	Status              string                   `json:"status,omitempty"`
+	TimeFromStartMillis int64                    `json:"timeFromStartMillis"`
 }
 
 type NeuripsSubmissionResult struct {
-	Details         NeuripsSubmissionDetails `json:"details,omitempty"`
-	Score           float64                  `json:"score,omitempty"` // number(double)?
-	UsedMemoryBytes int64                    `json:"usedMemoryBytes,omitempty"`
-	UsedTimeMillis  int64                    `json:"UsedTimeMillis,omitempty"`
-	Verdict         *string                  `json:"verdict"`
+	Details         *NeuripsSubmissionDetails `json:"details,omitempty"`
+	Score           float64                   `json:"score,omitempty"` // number(double)?
+	UsedMemoryBytes int64                     `json:"usedMemoryBytes,omitempty"`
+	UsedTimeMillis  int64                     `json:"UsedTimeMillis,omitempty"`
+	Verdict         string                    `json:"verdict"`
 }
 
 type NeuripsSubmissionsReportResponse struct {
 	Submissions *[]NeuripsSubmissionReport `json:"submissions"`
-	TotalCount  *int32                     `json:"totalCount"`
+	TotalCount  *int64                     `json:"totalCount"`
 }
 
 type ParticipantInfo struct {
@@ -315,11 +315,11 @@ type RegisterGroupRequest struct {
 }
 
 type RunID struct {
-	RunID *int64 `json:"runId"`
+	RunID int64 `json:"runId"`
 }
 
 type ServiceCapacity struct {
-	SubmissionsCount *int64 `json:"submissionsCount"`
+	SubmissionsCount int64 `json:"submissionsCount"`
 }
 
 type Statement struct {
@@ -365,9 +365,9 @@ type TestLog struct {
 	Message        string `json:"message"`
 	Output         string `json:"output"`
 	RunningTime    int64  `json:"runningTime"`
-	SequenceNumber int32  `json:"sequenceNumber"`
+	SequenceNumber int64  `json:"sequenceNumber"`
 	TestName       string `json:"testName"`
-	TestsetIdx     int32  `json:"testsetIdx"`
+	TestsetIdx     int64  `json:"testsetIdx"`
 	Verdict        string `json:"verdict"`
 }
 
