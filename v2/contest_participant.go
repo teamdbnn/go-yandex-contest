@@ -58,9 +58,7 @@ type RegisterGroupForContest struct {
 	c         *Client
 	contestID int64
 	groupID   int64
-	body      struct {
-		Roles []string `json:"roles"`
-	}
+	body      RegisterGroupRequest
 }
 
 // ContestID Set contest id
@@ -165,9 +163,7 @@ type UpdateGroupForContest struct {
 	c         *Client
 	contestID int64
 	groupID   int64
-	body      struct {
-		Roles []string `json:"roles"`
-	}
+	body      UpdateGroupParticipationRequest
 }
 
 // ContestID Set contest id
@@ -291,6 +287,7 @@ type RegisterParticipantForContest struct {
 	contestID int64
 	login     string
 	uid       int64
+	teamID    int64
 }
 
 // ContestID Set contest id
@@ -308,6 +305,12 @@ func (s *RegisterParticipantForContest) Login(login string) *RegisterParticipant
 // UID Set uid
 func (s *RegisterParticipantForContest) UID(uid int64) *RegisterParticipantForContest {
 	s.uid = uid
+	return s
+}
+
+// TeamID Set uid
+func (s *RegisterParticipantForContest) TeamID(teamID int64) *RegisterParticipantForContest {
+	s.teamID = teamID
 	return s
 }
 
@@ -338,7 +341,10 @@ func (s *RegisterParticipantForContest) Do(ctx context.Context, opts ...RequestO
 		r.setParam("login", s.login)
 	}
 	if s.uid != 0 {
-		r.setParam("uid", s.uid) // todo: Check usage
+		r.setParam("uid", s.uid)
+	}
+	if s.teamID != 0 {
+		r.setParam("teamId", s.teamID)
 	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
@@ -504,11 +510,9 @@ func (s *UnregisterParticipantFromContest) Do(ctx context.Context, opts ...Reque
 
 // UpdateParticipantForContest Update participant for contest
 type UpdateParticipantForContest struct {
-	c         *Client
-	contestID int64
-	body      struct {
-		DisplayedName string `json:"displayedName"`
-	}
+	c             *Client
+	contestID     int64
+	body          UpdateParticipantRequest
 	participantID int64
 }
 

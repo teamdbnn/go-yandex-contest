@@ -10,9 +10,7 @@ import (
 // CreateGroupForCompetition Create group for competition
 type CreateGroupForCompetition struct {
 	c    *Client
-	body struct {
-		Name string `json:"name"`
-	}
+	body CreateGroupRequest
 }
 
 // Name Set name
@@ -99,10 +97,7 @@ func (s *GetGroupInfoOfCompetition) Do(ctx context.Context, opts ...RequestOptio
 type AddGroupMemberForCompetition struct {
 	c       *Client
 	groupID int64
-	body    struct {
-		Login string `json:"login"`
-		Uid   int64  `json:"uid"`
-	}
+	body    UserIdentifier
 }
 
 // GroupID Set group id
@@ -119,7 +114,7 @@ func (s *AddGroupMemberForCompetition) Login(Login string) *AddGroupMemberForCom
 
 // UID Set uid
 func (s *AddGroupMemberForCompetition) UID(Uid int64) *AddGroupMemberForCompetition {
-	s.body.Uid = Uid
+	s.body.UID = Uid
 	return s
 }
 
@@ -130,7 +125,7 @@ func (s *AddGroupMemberForCompetition) validate() error {
 	if s.body.Login == "" {
 		return requiredFieldError("Login")
 	}
-	if s.body.Uid == 0 {
+	if s.body.UID == 0 {
 		return requiredFieldError("Uid")
 	}
 	return nil
@@ -158,10 +153,7 @@ func (s *AddGroupMemberForCompetition) Do(ctx context.Context, opts ...RequestOp
 type RemoveGroupOfCompetition struct {
 	c       *Client
 	groupID int64
-	body    struct {
-		Login string `json:"login"`
-		Uid   int64  `json:"uid"`
-	}
+	body    UserIdentifier
 }
 
 // GroupID Set group id
@@ -178,7 +170,7 @@ func (s *RemoveGroupOfCompetition) Login(login string) *RemoveGroupOfCompetition
 
 // UID Set uid
 func (s *RemoveGroupOfCompetition) UID(uid int64) *RemoveGroupOfCompetition {
-	s.body.Uid = uid
+	s.body.UID = uid
 	return s
 }
 
@@ -189,7 +181,7 @@ func (s *RemoveGroupOfCompetition) validate() error {
 	if s.body.Login == "" {
 		return requiredFieldError("Login")
 	}
-	if s.body.Uid == 0 {
+	if s.body.UID == 0 {
 		return requiredFieldError("Uid")
 	}
 	return nil

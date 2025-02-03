@@ -43,7 +43,7 @@ type GetAvailableScopes struct {
 //
 // Docs:
 // meta:operation
-func (s *GetAvailableScopes) Do(ctx context.Context, opts ...RequestOption) (*Service, error) {
+func (s *GetAvailableScopes) Do(ctx context.Context, opts ...RequestOption) (*TokenInfo, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("/service/introspect"),
@@ -53,7 +53,7 @@ func (s *GetAvailableScopes) Do(ctx context.Context, opts ...RequestOption) (*Se
 		return nil, err
 	}
 
-	res := new(Service)
+	res := new(TokenInfo)
 	if err = json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}

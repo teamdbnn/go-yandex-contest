@@ -187,13 +187,7 @@ func (s *SendSubmission) Do(ctx context.Context, opts ...RequestOption) (*RunID,
 type SendSubmissionFromURL struct {
 	c         *Client
 	contestID int64
-	body      struct {
-		FileUrl      string `json:"fileUrl"`
-		FileName     string `json:"fileName"`
-		ProblemAlias string `json:"problemAlias"`
-		CompilerID   string `json:"compilerID"`
-		Meta         string `json:"meta"`
-	}
+	body      LazySubmissionRequest
 }
 
 // ContestID Set contest id
@@ -202,9 +196,9 @@ func (s *SendSubmissionFromURL) ContestID(contestID int64) *SendSubmissionFromUR
 	return s
 }
 
-// FileUrl Set file URL
-func (s *SendSubmissionFromURL) FileUrl(fileUrl string) *SendSubmissionFromURL {
-	s.body.FileUrl = fileUrl
+// FileURL Set file URL
+func (s *SendSubmissionFromURL) FileURL(fileUrl string) *SendSubmissionFromURL {
+	s.body.FileURL = fileUrl
 	return s
 }
 
@@ -236,8 +230,8 @@ func (s *SendSubmissionFromURL) validate() error {
 	if s.contestID == 0 {
 		return requiredFieldError("contestID")
 	}
-	if s.body.FileUrl == "" {
-		return requiredFieldError("FileUrl")
+	if s.body.FileURL == "" {
+		return requiredFieldError("FileURL")
 	}
 	if s.body.FileName == "" {
 		return requiredFieldError("FileName")

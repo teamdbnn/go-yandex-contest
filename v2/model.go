@@ -12,18 +12,19 @@ type AdditionalSolutionCheckResult struct {
 	CheckerName  string `json:"checkerName,omitempty"`
 	ErrorMessage string `json:"errorMessage,omitempty"`
 	Message      string `json:"message,omitempty"`
-	Verdict      string `json:"verdict,omitempty"`
+	Verdict      string `json:"verdict,omitempty"` // Enum: ["OK","FAILED"]
 }
 
 type BriefRunReport struct {
-	AuthorId       string  `json:"authorId"`
+	AuthorID       int64   `json:"authorId"`
 	CompileLog     string  `json:"compileLog"`
 	Compiler       string  `json:"compiler"`
 	Diff           string  `json:"diff,omitempty"`
 	MaxMemoryUsage int64   `json:"maxMemoryUsage"`
 	MaxTimeUsage   int64   `json:"maxTimeUsage"`
 	ProblemAlias   string  `json:"problemAlias"`
-	ProblemId      string  `json:"problemId"`
+	ProblemID      string  `json:"problemId"`
+	RunID          int64   `json:"runId"`
 	Score          float64 `json:"score,omitempty"`
 	Source         string  `json:"source,omitempty"`
 	SubmissionTime string  `json:"submissionTime"`
@@ -53,45 +54,49 @@ type CompilerLimit struct {
 	TimeLimit     int64  `json:"timeLimit,omitempty"`
 }
 
-type PublicCompilerInfo struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	Deprecated bool   `json:"deprecated"`
-	Style      string `json:"style"`
-}
-
 type CompilerListResponse struct {
 	Compilers []*PublicCompilerInfo `json:"compilers"`
 }
 
 type ContestDescription struct {
-	Duration           int64                  `json:"duration,omitempty"`
-	FreezeTime         int64                  `json:"freezeTime,omitempty"`
-	Name               string                 `json:"name"`
-	StartTime          string                 `json:"startTime,omitempty"`
-	Type               string                 `json:"type,omitempty"`
-	UpsolvingAllowance string                 `json:"upsolvingAllowance,omitempty"`
-	ContestSettings    *ContestReportSettings `json:"contestSettings,omitempty"`
+	ContestSettings *ContestReportSettings `json:"contestSettings,omitempty"`
+	Duration        int64                  `json:"duration,omitempty"`
+	FreezeTime      int64                  `json:"freezeTime,omitempty"`
+	Name            string                 `json:"name"`
+	StartTime       string                 `json:"startTime,omitempty"`
+	Type            string                 `json:"type,omitempty"`
+	// Upsolving settings
+	//  - `ALLOWED_AFTER_PARTICIPATION_ENDS` — participant can upsolve after their participation ends
+	//  - `ALLOWED_AFTER_CONTEST_ENDS` — participant can upsolve after contest is finished for everyone
+	//  - `PROHIBITED` — participant can not upsolve
+	// Enum: ["ALLOWED_AFTER_PARTICIPATION_ENDS","ALLOWED_AFTER_CONTEST_ENDS","PROHIBITED"]
+	UpsolvingAllowance string `json:"upsolvingAllowance,omitempty"`
 }
 
 type ContestReportSettings struct {
-	ShowAnswer               string `json:"showAnswer"`
-	ShowCheckerOutput        string `json:"showCheckerOutput"`
-	ShowInput                string `json:"showInput"`
+	ShowAnswer               string `json:"showAnswer"`        // Enum: ["NEVER","ALL_FAILED","FIRST_FAILED","ALL_PASSED","ALL","ONLY_SAMPLES"]
+	ShowCheckerOutput        string `json:"showCheckerOutput"` // Enum: ["NEVER","ALL_FAILED","FIRST_FAILED","ALL_PASSED","ALL","ONLY_SAMPLES"]
+	ShowInput                string `json:"showInput"`         // Enum: ["NEVER","ALL_FAILED","FIRST_FAILED","ALL_PASSED","ALL","ONLY_SAMPLES"]
 	ShowLightweightInterface bool   `json:"showLightweightInterface"`
-	ShowOutput               string `json:"showOutput"`
-	ShowPostprocessOutput    string `json:"showPostprocessOutput"`
+	ShowOutput               string `json:"showOutput"`            // Enum: ["NEVER","ALL_FAILED","FIRST_FAILED","ALL_PASSED","ALL","ONLY_SAMPLES"]
+	ShowPostprocessOutput    string `json:"showPostprocessOutput"` // Enum: ["NEVER","ALL_FAILED","FIRST_FAILED","ALL_PASSED","ALL","ONLY_SAMPLES"]
 	ShowReport               bool   `json:"showReport"`
-	ShowScore                string `json:"showScore"`
-	ShowStderr               string `json:"showStderr"`
+	ShowScore                string `json:"showScore"`  // Enum: ["NEVER","SCORED_TESTS","SCORED_TESTS_AND_SAMPLES"]
+	ShowStderr               string `json:"showStderr"` // Enum: ["NEVER","ALL_FAILED","FIRST_FAILED","ALL_PASSED","ALL","ONLY_SAMPLES"]
 	ShowTestNumber           bool   `json:"showTestNumber"`
-	ShowUsedResources        string `json:"showUsedResources"`
-	ShowVerdict              string `json:"showVerdict"`
+	ShowUsedResources        string `json:"showUsedResources"` // Enum: ["NEVER","ALL_FAILED","FIRST_FAILED","ALL_PASSED","ALL","ONLY_SAMPLES"]
+	ShowVerdict              string `json:"showVerdict"`       // Enum: ["NEVER","ALL_FAILED","FIRST_FAILED","ALL_PASSED","ALL","ONLY_SAMPLES"]
 	StopOnFirstFail          bool   `json:"stopOnFirstFail"`
 	StopOnFirstFailInTestSet bool   `json:"stopOnFirstFailInTestSet"`
 	StopOnSampleFail         bool   `json:"stopOnSampleFail"`
 	TestOnlySamples          bool   `json:"testOnlySamples"`
-	YseAcNotOk               bool   `json:"useAcNotOk"`
+	UseAcNotOk               bool   `json:"useAcNotOk"`
+}
+
+type ContestGroup struct {
+	ID    int64    `json:"id"`
+	Name  string   `json:"name"`
+	Roles []string `json:"roles"`
 }
 
 type ContestProblem struct {
@@ -101,7 +106,7 @@ type ContestProblem struct {
 	Compilers   []string         `json:"compilers"`
 	Statements  []*Statement     `json:"statements"`
 	Limits      []*CompilerLimit `json:"limits"`
-	TestCount   int64            `json:"testCount"`
+	TestCount   int64            `json:"testCount,omitempty"`
 	ProblemType string           `json:"problemType"`
 }
 
@@ -115,21 +120,27 @@ type ContestStandings struct {
 	Statistics *ContestStatistics       `json:"statistics"`
 }
 
-type ContestStatistics struct {
-	LastSubmit  *SubmitInfo `json:"lastSubmit"`
-	LastSuccess *SubmitInfo `json:"lastSuccess"`
-}
-
-type SubmitInfo struct {
-	ParticipantId   int64  `json:"participantId"`
-	ParticipantName string `json:"participantName"`
-	ProblemTitle    string `json:"problemTitle"`
-	SubmitTime      int64  `json:"submitTime"`
+type ContestStandingsRow struct {
+	ParticipantInfo *ParticipantInfo `json:"participantInfo"`
+	PlaceFrom       []int64          `json:"placeFrom"`
+	PlaceTo         []int64          `json:"placeTo"`
+	ProblemResults  []*ProblemResult `json:"problemResults"`
+	Score           string           `json:"score"`
 }
 
 type ContestStandingsTitle struct {
+	ID    string `json:"id,omitempty"`
 	Name  string `json:"name,omitempty"`
 	Title string `json:"title"`
+}
+
+type ContestStatistics struct {
+	LastSubmit  *SubmitInfo `json:"lastSubmit,omitempty"`
+	LastSuccess *SubmitInfo `json:"lastSuccess,omitempty"`
+}
+
+type CreateGroupRequest struct {
+	Name string `json:"name"`
 }
 
 type FullRunReport struct {
@@ -140,10 +151,11 @@ type FullRunReport struct {
 	ContestName      string                           `json:"contestName"`
 	Diff             string                           `json:"diff"`
 	FinalScore       string                           `json:"finalScore"`
+	GlobalError      string                           `json:"globalError,omitempty"` // Enum: ["NO_TESTS_IN_PROBLEM","NO_CHECKER_IN_PROBLEM","GLOBAL_TL"]
 	IP               string                           `json:"ip,omitempty"`
 	MaxMemoryUsage   int64                            `json:"maxMemoryUsage"`
 	MaxTimeUsage     int64                            `json:"maxTimeUsage"`
-	Participant      *ParticipantInfo                 `json:"participant"`
+	ParticipantInfo  *ParticipantInfo                 `json:"participantInfo"`
 	PrecompileChecks []*AdditionalSolutionCheckResult `json:"precompileChecks"`
 	PreliminaryScore string                           `json:"preliminaryScore"`
 	ProblemAlias     string                           `json:"problemAlias"`
@@ -151,11 +163,30 @@ type FullRunReport struct {
 	ProblemName      string                           `json:"problemName"`
 	RunID            int64                            `json:"runId"`
 	Source           string                           `json:"source"`
-	Status           string                           `json:"status"`
+	Status           string                           `json:"status"` // Enum: ["WAITING","FAILED","RUNNING","FINISHED"]
 	SubmissionTime   string                           `json:"submissionTime"`
-	TestFileType     string                           `json:"testFileType"`
+	TestFileType     string                           `json:"testFileType"` // Enum: ["BINARY","TEXT"]
 	TimeFromStart    int64                            `json:"timeFromStart"`
 	Verdict          string                           `json:"verdict"`
+}
+
+type GroupID struct {
+	ID int64 `json:"id"`
+}
+
+type GroupInfo struct {
+	MemberCount int64  `json:"memberCount"`
+	Name        string `json:"name"`
+}
+
+type JSONNode any
+
+type LazySubmissionRequest struct {
+	FileURL      string `json:"fileUrl"`
+	FileName     string `json:"fileName"`
+	ProblemAlias string `json:"problemAlias"`
+	CompilerID   string `json:"compilerId"`
+	Meta         string `json:"meta,omitempty"`
 }
 
 type Message struct {
@@ -169,70 +200,28 @@ type Messages struct {
 	Messages []*Message `json:"messages"`
 }
 
-type ContestStandingsRow struct {
-	ParticipantInfo *ParticipantInfo `json:"participantInfo,omitempty"`
-	PlaceFrom       *int64           `json:"placeFrom,omitempty"`
-	PlaceTo         *int64           `json:"placeTo,omitempty"`
-	ProblemResults  []*ProblemResult `json:"problemResults"`
-	Score           string           `json:"score,omitempty"`
-}
-
-type GroupInfo struct {
-	Name        string `json:"name,omitempty"`
-	MemberCount int64  `json:"memberCount,omitempty"`
-}
-
-type ContestGroup struct {
-	ID    int64    `json:"id"`
-	Name  string   `json:"name"`
-	Roles []string `json:"roles,omitempty"`
-}
-
-type CreateGroupRequest struct {
-	Name string `json:"name"`
-}
-
-type GroupID struct {
-	ID int64 `json:"id"`
-}
-
-type Service struct {
-	Scope  string `json:"scope,omitempty"`
-	Active bool   `json:"active,omitempty"`
-}
-
-type InputStream struct {
-}
-
-type LazySubmissionRequest struct {
-	FileUrl      string `json:"fileUrl"`
-	FileName     string `json:"fileName"`
-	ProblemAlias string `json:"problemAlias"`
-	CompilerId   string `json:"compilerId"`
-	Meta         string `json:"meta,omitempty"`
-}
-
 type MultiRunReport struct {
 	CompileLog           string                           `json:"compileLog"`
 	Compiler             string                           `json:"compiler"`
 	ContestID            int64                            `json:"contestId"`
 	ContestName          string                           `json:"contestName"`
 	FinalScore           string                           `json:"finalScore"`
-	Ip                   string                           `json:"ip,omitempty"`
+	GlobalError          string                           `json:"globalError,omitempty"` // Enum: ["NO_TESTS_IN_PROBLEM","NO_CHECKER_IN_PROBLEM","GLOBAL_TL"]
+	IP                   string                           `json:"ip,omitempty"`
 	MaxMemoryUsage       int64                            `json:"maxMemoryUsage"`
-	MaxTimeUsage         int64                            `json:"MaxTimeUsage"`
-	ParticipantInfo      *ParticipantInfo                 `json:"ParticipantInfo"`
+	MaxTimeUsage         int64                            `json:"maxTimeUsage"`
+	ParticipantInfo      *ParticipantInfo                 `json:"participantInfo"`
 	PostprocessorMessage string                           `json:"postprocessorMessage,omitempty"`
-	PrecompileChecks     *[]AdditionalSolutionCheckResult `json:"precompileChecks"`
+	PrecompileChecks     []*AdditionalSolutionCheckResult `json:"precompileChecks"`
 	PreliminaryScore     string                           `json:"preliminaryScore"`
 	ProblemAlias         string                           `json:"problemAlias"`
 	ProblemID            string                           `json:"problemId"`
-	RunId                int64                            `json:"runId"`
-	Status               string                           `json:"status,omitempty"`
+	RunID                int64                            `json:"runId"`
+	Status               string                           `json:"status,omitempty"` // Enum: ["WAITING","FAILED","RUNNING","FINISHED"]
 	SubmissionTime       string                           `json:"submissionTime"`
-	TestFileType         string                           `json:"testFileType"`
-	Tests                *[]TestLog                       `json:"tests"`
-	TimeFromStart        int64                            `json:"TimeFromStart"`
+	TestFileType         string                           `json:"testFileType"` // Enum: ["BINARY","TEXT"]
+	Tests                []*TestLog                       `json:"tests"`
+	TimeFromStart        int64                            `json:"timeFromStart"`
 	Verdict              string                           `json:"verdict"`
 }
 
@@ -250,21 +239,21 @@ type NeuripsSubmissionReport struct {
 	Rank                int64                    `json:"rank"`
 	Result              *NeuripsSubmissionResult `json:"result,omitempty"`
 	RunID               int64                    `json:"runId"`
-	Status              string                   `json:"status,omitempty"`
-	TimeFromStartMillis int64                    `json:"timeFromStartMillis"`
+	Status              string                   `json:"status,omitempty"` // Enum: ["WAITING","FAILED","RUNNING","FINISHED"]
+	TimeFromStartMillis int64                    `json:"timeFromStartMillis,omitempty"`
 }
 
 type NeuripsSubmissionResult struct {
 	Details         *NeuripsSubmissionDetails `json:"details,omitempty"`
-	Score           float64                   `json:"score,omitempty"` // number(double)?
+	Score           float64                   `json:"score,omitempty"`
 	UsedMemoryBytes int64                     `json:"usedMemoryBytes,omitempty"`
-	UsedTimeMillis  int64                     `json:"UsedTimeMillis,omitempty"`
+	UsedTimeMillis  int64                     `json:"usedTimeMillis,omitempty"`
 	Verdict         string                    `json:"verdict"`
 }
 
 type NeuripsSubmissionsReportResponse struct {
-	Submissions *[]NeuripsSubmissionReport `json:"submissions"`
-	TotalCount  *int64                     `json:"totalCount"`
+	Submissions []*NeuripsSubmissionReport `json:"submissions"`
+	TotalCount  int64                      `json:"totalCount"`
 }
 
 type ParticipantInfo struct {
@@ -286,20 +275,20 @@ type ParticipantStats struct {
 }
 
 type ParticipantStatus struct {
-	ContestDuration       string `json:"contestDuration,omitempty"`
-	ContestFinishTime     string `json:"contestFinishTime,omitempty"`
+	ContestDuration       string `json:"contestDuration,omitempty"`   // Example: PT4H30M
+	ContestFinishTime     string `json:"contestFinishTime,omitempty"` // Example: 2022-01-31T09:00:00.000Z
 	ContestInfinite       bool   `json:"contestInfinite,omitempty"`
-	ContestStartTime      string `json:"contestStartTime,omitempty"`
-	ContestState          string `json:"contestState,omitempty"`
-	ParticipantFinishTime string `json:"participantFinishTime,omitempty"`
-	// Deprecated. Switch to participantLeftTimeMillis.
-	ParticipantLeftTime       string   `json:"participantLeftTime,omitempty"`
-	ParticipantLeftTimeMillis int64    `json:"ParticipantLeftTimeMillis,omitempty"`
+	ContestStartTime      string `json:"contestStartTime,omitempty"`      // Example: 2021-12-16T17:00:00.000Z
+	ContestState          string `json:"contestState,omitempty"`          // Enum: ["FINISHED","NOT_STARTED","IN_PROGRESS"]
+	ParticipantFinishTime string `json:"participantFinishTime,omitempty"` // Example: 2022-01-01T16:30:00.000Z
+	// Deprecated. Switch to `participantLeftTimeMillis`.
+	ParticipantLeftTime       string   `json:"participantLeftTime,omitempty"`       // Example: PT5M4.123S
+	ParticipantLeftTimeMillis int64    `json:"participantLeftTimeMillis,omitempty"` // Example: 304123
 	ParticipantName           string   `json:"participantName,omitempty"`
-	ParticipantStartTime      string   `json:"participantStartTime,omitempty"`
+	ParticipantStartTime      string   `json:"participantStartTime,omitempty"` // Example: 2022-01-01T12:00:00.000Z
 	Roles                     []string `json:"roles"`
-	// This property is null unless contestant is participating in a team.
-	TeamID           int64 `json:"teamId,omitempty"`
+	// This property is `null` unless contestant is participating in a team.
+	TeamID           int64 `json:"teamId,omitempty"` // Example: 10
 	UpsolvingAllowed bool  `json:"upsolvingAllowed,omitempty"`
 }
 
@@ -310,8 +299,15 @@ type ProblemResult struct {
 	SubmitDelay     int64  `json:"submitDelay,omitempty"`
 }
 
+type PublicCompilerInfo struct {
+	Deprecated bool   `json:"deprecated"`
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Style      string `json:"style"`
+}
+
 type RegisterGroupRequest struct {
-	Roles *[]string `json:"roles"`
+	Roles []string `json:"roles"`
 }
 
 type RunID struct {
@@ -325,7 +321,7 @@ type ServiceCapacity struct {
 type Statement struct {
 	Locale string `json:"locale,omitempty"`
 	Path   string `json:"path,omitempty"`
-	Type   string `json:"type,omitempty"`
+	Type   string `json:"type,omitempty"` // Enum: ["TEX","PDF","BINARY","MARKDOWN"]
 }
 
 type Submission struct {
@@ -340,7 +336,7 @@ type Submission struct {
 	SubmissionTime string  `json:"submissionTime"`
 	Test           int64   `json:"test"`
 	Time           int64   `json:"time"`
-	// time of submission, in milliseconds from participant start time
+	// Time of submission, in milliseconds from participant start time
 	TimeFromStart int64  `json:"timeFromStart,omitempty"`
 	Verdict       string `json:"verdict"`
 }
@@ -348,6 +344,13 @@ type Submission struct {
 type Submissions struct {
 	Count       int64         `json:"count"`
 	Submissions []*Submission `json:"submissions"`
+}
+
+type SubmitInfo struct {
+	ParticipantID   int64  `json:"participantId"`
+	ParticipantName string `json:"participantName"`
+	ProblemTitle    string `json:"problemTitle"`
+	SubmitTime      int64  `json:"submitTime"`
 }
 
 type TeamView struct {
@@ -376,33 +379,22 @@ type TokenInfo struct {
 	Scope  string `json:"scope"`
 }
 
+type UpdateGroupParticipationRequest struct {
+	Roles []string `json:"roles"`
+}
+
+type UpdateParticipantRequest struct {
+	DisplayedName string `json:"displayedName,omitempty"`
+}
+
+type UserIdentifier struct {
+	Login string `json:"login,omitempty"`
+
+	UID int64 `json:"uid,omitempty"`
+}
+
 type UserWithPasswordResponse struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
 	UserID   int64  `json:"userId"`
-}
-
-type JSONNode struct {
-	Array               bool   `json:"array,omitempty"`
-	BigDecimal          bool   `json:"bigDecimal,omitempty"`
-	BigInteger          bool   `json:"bigInteger,omitempty"`
-	Binary              bool   `json:"binary,omitempty"`
-	Boolean             bool   `json:"boolean,omitempty"`
-	ContainerNode       bool   `json:"containerNode,omitempty"`
-	Double              bool   `json:"double,omitempty"`
-	Empty               bool   `json:"empty,omitempty"`
-	Float               bool   `json:"float,omitempty"`
-	FloatingPointNumber bool   `json:"floatingPointNumber,omitempty"`
-	Int                 bool   `json:"int,omitempty"`
-	IntegralNumber      bool   `json:"integralNumber,omitempty"`
-	Long                bool   `json:"long,omitempty"`
-	MissingNode         bool   `json:"missingNode,omitempty"`
-	NodeType            string `json:"nodeType,omitempty"`
-	Null                bool   `json:"null,omitempty"`
-	Number              bool   `json:"number,omitempty"`
-	Object              bool   `json:"object,omitempty"`
-	Pojo                bool   `json:"pojo,omitempty"`
-	Short               bool   `json:"short,omitempty"`
-	Textual             bool   `json:"textual,omitempty"`
-	ValueNode           bool   `json:"valueNode,omitempty"`
 }
